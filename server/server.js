@@ -1,9 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -267,32 +267,28 @@ const seedDatabase = async () => {
 
 // Database Connection
 const connectDB = async () => {
-    let mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/stylora';
+    const mongoUri = process.env.MONGO_URI;
+
+    if (!mongoUri) {
+        console.error('CRITICAL ERROR: MONGO_URI environment variable is missing.');
+        console.error('The application requires a valid MONGO_URI to connect to the database.');
+        process.exit(1);
+    }
 
     try {
+        console.log('Connecting to MongoDB database...');
         await mongoose.connect(mongoUri);
         console.log('MongoDB connection successful');
+        
         await seedDatabase();
+        
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
     } catch (err) {
-        console.error('MongoDB database connection error: ', err);
-        try {
-            console.log('Attempting fallback to MongoDB Memory Server...');
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const mongoServer = await MongoMemoryServer.create();
-            const fallbackUri = mongoServer.getUri();
-            console.log('MongoDB Memory Server started at:', fallbackUri);
-            await mongoose.connect(fallbackUri);
-            console.log('MongoDB connection successful (Memory Server Fallback)');
-            await seedDatabase();
-            app.listen(PORT, () => {
-                console.log(`Server is running on port ${PORT}`);
-            });
-        } catch (fallbackErr) {
-            console.error('All database connection attempts failed: ', fallbackErr);
-        }
+        console.error('CRITICAL ERROR: MongoDB database connection failed:');
+        console.error(err);
+        process.exit(1);
     }
 };
 
