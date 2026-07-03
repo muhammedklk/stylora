@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - STYLORA</title>
+    <!-- Geist Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Transparent Header -->
+    <header class="header">
+        <div class="container">
+            <!-- Left Side: Navigation Menu Links -->
+            <ul class="nav-links">
+                <li class="has-dropdown">
+                    <a href="#">Men <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#">Accessories <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo -->
+            <div class="logo">
+                <a href="index.html">STYLEORA</a>
+            </div>
+
+            <!-- Right Side: Utility Icons -->
+            <div class="nav-utilities">
+                <a href="account.html" class="utility-icon" title="Account">
+                    <img src="assets/account-icon 1.svg" alt="Account">
+                </a>
+                <div class="search-container" id="search-container">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search">
+                </div>
+                <a href="#" class="utility-icon search-btn" id="search-btn" title="Search">
+                    <img src="assets/Search.svg" alt="Search">
+                </a>
+                <a href="cart.html" class="utility-icon active" title="Shopping Cart">
+                    <img src="assets/Shopping cart.svg" alt="Cart">
+                </a>
+                <a href="#" class="utility-icon menu-toggle" title="Menu Toggle">
+                    <img src="assets/menu-bar-icon.svg" alt="Menu">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="cart-main">
+        <!-- Cart Hero/Header Section -->
+        <section class="shop-hero">
+            <div class="shop-hero-overlay"></div>
+            <div class="shop-hero-content">
+                <span class="shop-hero-tag">[ Your Bag ]</span>
+                <h1 class="shop-hero-title">Shopping Cart</h1>
+                <p class="shop-hero-subtitle">Review details of selected essential wear before proceeding to checkout.</p>
+            </div>
+        </section>
+
+        <!-- Cart Content Section -->
+        <section class="cart-section">
+            <div class="container" id="cart-content-wrapper">
+                <div class="row cart-grid">
+                    <!-- Left: Cart Items List -->
+                    <div class="col-md-8 cart-items-column">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-items-tbody">
+                                <!-- Cart Item 1 -->
+                                <tr class="cart-item" data-id="16" data-price="899">
+                                    <td class="cart-product-cell">
+                                        <div class="cart-product-img-frame">
+                                            <img src="assets/essential-Hoodie-(pr-1).png" alt="Essential Hoodie">
+                                        </div>
+                                        <div class="cart-product-details">
+                                            <h3 class="cart-item-title"><a href="product.html?id=16">Essential Hoodie</a></h3>
+                                            <p class="cart-item-meta">Size: M | Color: Black</p>
+                                        </div>
+                                    </td>
+                                    <td class="cart-price-cell">₹899</td>
+                                    <td class="cart-qty-cell">
+                                        <div class="quantity-selector">
+                                            <button class="qty-btn minus-btn">−</button>
+                                            <input type="number" class="qty-input" value="1" min="1" readonly>
+                                            <button class="qty-btn plus-btn">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="cart-subtotal-cell">₹899</td>
+                                    <td class="cart-remove-cell">
+                                        <button class="remove-item-btn" title="Remove Item">&times;</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Cart Item 2 -->
+                                <tr class="cart-item" data-id="1" data-price="12499">
+                                    <td class="cart-product-cell">
+                                        <div class="cart-product-img-frame">
+                                            <img src="assets/find-section-img-1.png" alt="Classic Wool Coat">
+                                        </div>
+                                        <div class="cart-product-details">
+                                            <h3 class="cart-item-title"><a href="product.html?id=1">Classic Wool Coat</a></h3>
+                                            <p class="cart-item-meta">Size: L | Color: Dark Gray</p>
+                                        </div>
+                                    </td>
+                                    <td class="cart-price-cell">₹12,499</td>
+                                    <td class="cart-qty-cell">
+                                        <div class="quantity-selector">
+                                            <button class="qty-btn minus-btn">−</button>
+                                            <input type="number" class="qty-input" value="1" min="1" readonly>
+                                            <button class="qty-btn plus-btn">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="cart-subtotal-cell">₹12,499</td>
+                                    <td class="cart-remove-cell">
+                                        <button class="remove-item-btn" title="Remove Item">&times;</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Promo Code & Actions Block -->
+                        <div class="cart-actions-row">
+                            <form class="promo-code-form" id="coupon-form" onsubmit="event.preventDefault(); applyCoupon();">
+                                <input type="text" id="coupon-input" placeholder="Promo Code" class="promo-input" required>
+                                <button type="submit" class="promo-btn">APPLY</button>
+                            </form>
+                            <span class="coupon-status-msg" id="coupon-status"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Order Summary Column -->
+                    <div class="col-md-4 cart-summary-column">
+                        <div class="summary-box">
+                            <h2 class="summary-title">Order Summary</h2>
+                            
+                            <div class="summary-rows">
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span id="summary-subtotal">₹13,398</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Shipping</span>
+                                    <span class="free-shipping">FREE</span>
+                                </div>
+                                <div class="summary-row discount-row" id="summary-discount-row" style="display: none;">
+                                    <span>Discount (10%)</span>
+                                    <span id="summary-discount">-₹0</span>
+                                </div>
+                                <div class="summary-divider"></div>
+                                <div class="summary-row total-row">
+                                    <span>Estimated Total</span>
+                                    <span id="summary-total">₹13,398</span>
+                                </div>
+                            </div>
+
+                            <button class="checkout-btn" onclick="alert('Proceeding to checkout...');">PROCEED TO CHECKOUT</button>
+
+                            <!-- Security Badges Footer -->
+                            <div class="summary-security-badges">
+                                <p class="security-text">🔒 Secure Checkout Guaranteed</p>
+                                <div class="payment-methods-row">
+                                    <span class="payment-icon">Visa</span>
+                                    <span class="payment-icon">MC</span>
+                                    <span class="payment-icon">UPI</span>
+                                    <span class="payment-icon">GPay</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Top Footer: 5 Columns -->
+            <div class="footer-top">
+                <!-- Column 1: Quick Links -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">QUICK LINKS</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                        <li><a href="#">Blogs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Policies -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">POLICIES</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Shipping & Delivery</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Styleora Description -->
+                <div class="footer-column brand-col">
+                    <h4 class="footer-heading">STYLEORA</h4>
+                    <p class="brand-desc">We deliver thoughtfully designed pieces that blend comfort and edge — made to move with you and crafted to help you stand out, every day.</p>
+                    <a href="#" class="find-stores">Find Store Locations</a>
+                </div>
+
+                <!-- Column 4: Newsletter -->
+                <div class="footer-column newsletter-col">
+                    <h4 class="footer-heading">NEWS LETTER</h4>
+                    <p class="newsletter-text">Sign up to our newsletter to receive exclusive offers.</p>
+                    <p class="newsletter-text highlight-text">Get 10% OFF on your first order</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="E-mail" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+                    </form>
+                </div>
+
+                <!-- Column 5: Popular Searches -->
+                <div class="footer-column searches-col">
+                    <h4 class="footer-heading">POPULAR SEARCHES</h4>
+                    <p class="searches-text">Shirts, T Shirts, Pyjamas, Cargos, Jeans, Joggers, Shorts, Trousers, Wacths</p>
+                    <a href="contact.html" class="footer-contact-btn">Contact Us</a>
+                </div>
+            </div>
+
+            <!-- Divider Line -->
+            <div class="footer-divider"></div>
+
+            <!-- Bottom Footer: Copyright, Socials, Credits -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Styleora India Pvt Ltd. All rights reserved.</p>
+                
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                    <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                    <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+                </div>
+                
+                <p class="credits">Designed By kmuhammed</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll behavior
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Search toggle interaction
+        const searchBtn = document.getElementById('search-btn');
+        const searchContainer = document.getElementById('search-container');
+        const searchInput = document.getElementById('search-input');
+
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+            }
+        });
+
+        // Close search when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchContainer.contains(e.target) && !searchBtn.contains(e.target)) {
+                searchContainer.classList.remove('active');
+            }
+        });
+
+        // Dynamic Cart Calculations
+        const tbody = document.getElementById('cart-items-tbody');
+        const subtotalEl = document.getElementById('summary-subtotal');
+        const totalEl = document.getElementById('summary-total');
+        const discountRow = document.getElementById('summary-discount-row');
+        const discountEl = document.getElementById('summary-discount');
+        const couponStatus = document.getElementById('coupon-status');
+        const couponInput = document.getElementById('coupon-input');
+
+        let isDiscountApplied = false;
+
+        function updateCartTotals() {
+            const items = document.querySelectorAll('.cart-item');
+            if (items.length === 0) {
+                document.getElementById('cart-content-wrapper').innerHTML = `
+                    <div class="product-error-message" style="padding: 100px 0;">
+                        <h2>Your Cart is Empty</h2>
+                        <p>Discover our essentials and find your perfect look. <a href="shop.html">Shop Men</a> or <a href="accessories.html">Shop Accessories</a></p>
+                    </div>
+                `;
+                return;
+            }
+
+            let subtotal = 0;
+            items.forEach(item => {
+                const price = parseInt(item.getAttribute('data-price'));
+                const qtyInput = item.querySelector('.qty-input');
+                const qty = parseInt(qtyInput.value);
+                const itemSubtotal = price * qty;
+                
+                // Update item subtotal cell
+                item.querySelector('.cart-subtotal-cell').textContent = `₹${itemSubtotal.toLocaleString('en-IN')}`;
+                subtotal += itemSubtotal;
+            });
+
+            // Update subtotal display
+            subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+
+            // Calculate discount
+            let discount = 0;
+            if (isDiscountApplied) {
+                discount = Math.round(subtotal * 0.1);
+                discountRow.style.display = 'flex';
+                discountEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+
+            // Update final total
+            const finalTotal = subtotal - discount;
+            totalEl.textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+        }
+
+        // Add quantity listeners
+        tbody.addEventListener('click', (e) => {
+            const target = e.target;
+            const itemRow = target.closest('.cart-item');
+            if (!itemRow) return;
+
+            const qtyInput = itemRow.querySelector('.qty-input');
+            let currentVal = parseInt(qtyInput.value);
+
+            if (target.classList.contains('plus-btn')) {
+                qtyInput.value = currentVal + 1;
+                updateCartTotals();
+            } else if (target.classList.contains('minus-btn')) {
+                if (currentVal > 1) {
+                    qtyInput.value = currentVal - 1;
+                    updateCartTotals();
+                }
+            } else if (target.classList.contains('remove-item-btn')) {
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    itemRow.remove();
+                    updateCartTotals();
+                }
+            }
+        });
+
+        // Apply Promo Code
+        function applyCoupon() {
+            const code = couponInput.value.trim().toUpperCase();
+            if (code === 'STYLE10') {
+                isDiscountApplied = true;
+                couponStatus.textContent = '10% discount applied successfully!';
+                couponStatus.style.color = '#1b5e20';
+                updateCartTotals();
+            } else {
+                isDiscountApplied = false;
+                couponStatus.textContent = 'Invalid promo code. Try STYLE10.';
+                couponStatus.style.color = '#c62828';
+                updateCartTotals();
+            }
+        }
+
+        // Initial execution
+        updateCartTotals();
+
+        // Sidebar drawer toggles
+        window.addEventListener('DOMContentLoaded', () => {
+            const menuToggleBtn = document.querySelector('.menu-toggle');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+
+            if (menuToggleBtn && sidebarOverlay && sidebarDrawer && sidebarCloseBtn) {
+                menuToggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sidebarOverlay.classList.add('active');
+                    sidebarDrawer.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                const closeSidebar = () => {
+                    sidebarOverlay.classList.remove('active');
+                    sidebarDrawer.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                sidebarCloseBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Sidebar submenus accordion
+            const submenuToggles = document.querySelectorAll('.sidebar-submenu-toggle');
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const parentLi = toggle.closest('.sidebar-has-submenu');
+                    const submenu = parentLi.querySelector('.sidebar-submenu');
+                    
+                    if (parentLi.classList.contains('open')) {
+                        parentLi.classList.remove('open');
+                        submenu.style.maxHeight = null;
+                    } else {
+                        // close other open submenus
+                        document.querySelectorAll('.sidebar-has-submenu.open').forEach(openLi => {
+                            openLi.classList.remove('open');
+                            openLi.querySelector('.sidebar-submenu').style.maxHeight = null;
+                        });
+                        
+                        parentLi.classList.add('open');
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Slide-in Sidebar Navigation Menu -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar-drawer" id="sidebar-drawer">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">STYLEORA</span>
+            <button class="sidebar-close-btn" id="sidebar-close-btn">&times;</button>
+        </div>
+        
+        <div class="sidebar-search-wrapper">
+            <form action="shop.html" method="GET" class="sidebar-search-form">
+                <input type="text" name="search" placeholder="Search products..." class="sidebar-search-input">
+                <button type="submit" class="sidebar-search-submit">
+                    <img src="assets/Search.svg" alt="Search">
+                </button>
+            </form>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="sidebar-links">
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Men <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Accessories <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Shopping Bag</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-socials">
+                <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+            </div>
+            <p class="sidebar-signature">Designed By kmuhammed</p>
+        </div>
+    </div>
+</body>
+</html>

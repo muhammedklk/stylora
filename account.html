@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - STYLORA</title>
+    <!-- Geist Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Transparent Header -->
+    <header class="header">
+        <div class="container">
+            <!-- Left Side: Navigation Menu Links -->
+            <ul class="nav-links">
+                <li class="has-dropdown">
+                    <a href="#">Men <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#">Accessories <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo -->
+            <div class="logo">
+                <a href="index.html">STYLEORA</a>
+            </div>
+
+            <!-- Right Side: Utility Icons -->
+            <div class="nav-utilities">
+                <a href="account.html" class="utility-icon active" title="Account">
+                    <img src="assets/account-icon 1.svg" alt="Account">
+                </a>
+                <div class="search-container" id="search-container">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search">
+                </div>
+                <a href="#" class="utility-icon search-btn" id="search-btn" title="Search">
+                    <img src="assets/Search.svg" alt="Search">
+                </a>
+                <a href="cart.html" class="utility-icon" title="Shopping Cart">
+                    <img src="assets/Shopping cart.svg" alt="Cart">
+                </a>
+                <a href="#" class="utility-icon menu-toggle" title="Menu Toggle">
+                    <img src="assets/menu-bar-icon.svg" alt="Menu">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="account-main">
+        <!-- Account Header Hero Section -->
+        <section class="shop-hero">
+            <div class="shop-hero-overlay"></div>
+            <div class="shop-hero-content">
+                <span class="shop-hero-tag">[ Dashboard ]</span>
+                <h1 class="shop-hero-title">My Account</h1>
+                <p class="shop-hero-subtitle">Manage your personal settings, view order tracking, and edit billing addresses.</p>
+            </div>
+        </section>
+
+        <!-- Account Interface Dashboard -->
+        <section class="account-section">
+            <div class="container">
+                <div class="row account-grid">
+                    <!-- Left Sidebar Nav Links -->
+                    <aside class="col-md-3 account-sidebar">
+                        <ul class="account-nav-list">
+                            <li class="account-nav-item active" data-panel="dashboard">
+                                <span>Dashboard</span>
+                            </li>
+                            <li class="account-nav-item" data-panel="profile">
+                                <span>Profile Details</span>
+                            </li>
+                            <li class="account-nav-item" data-panel="orders">
+                                <span>Order History</span>
+                            </li>
+                            <li class="account-nav-item" data-panel="addresses">
+                                <span>Saved Addresses</span>
+                            </li>
+                            <li class="account-nav-item" data-panel="logout">
+                                <span>Logout</span>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <!-- Right Panel Content Area -->
+                    <div class="col-md-9 account-content-panels">
+                        
+                        <!-- Panel 1: Dashboard -->
+                        <div class="account-panel active" id="panel-dashboard">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Welcome back, Muhammed</h2>
+                                <p class="panel-subtitle">Here is a brief overview of your account status and recent actions.</p>
+                            </div>
+                            
+                            <!-- Stat Cards Row -->
+                            <div class="account-stats-row">
+                                <div class="stat-card">
+                                    <span class="stat-title">Total Orders</span>
+                                    <span class="stat-value">3</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-title">Active Shipments</span>
+                                    <span class="stat-value">1</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-title">Reward Points</span>
+                                    <span class="stat-value">450</span>
+                                </div>
+                            </div>
+
+                            <!-- Recent Activity / Active Order Track -->
+                            <div class="recent-order-highlight">
+                                <div class="highlight-header">
+                                    <h3 class="highlight-title">Active Order #SL-4829</h3>
+                                    <span class="status-badge in-transit">In Transit</span>
+                                </div>
+                                <div class="highlight-body">
+                                    <div class="order-details-summary">
+                                        <p><strong>Order Date:</strong> June 28, 2026</p>
+                                        <p><strong>Estimated Delivery:</strong> July 03, 2026</p>
+                                        <p><strong>Shipping Carrier:</strong> BlueDart Express (Track ID: BD9821733)</p>
+                                    </div>
+                                    <div class="order-tracking-steps">
+                                        <div class="tracking-step done">
+                                            <span class="step-dot"></span>
+                                            <span class="step-label">Placed</span>
+                                        </div>
+                                        <div class="tracking-step done">
+                                            <span class="step-dot"></span>
+                                            <span class="step-label">Processed</span>
+                                        </div>
+                                        <div class="tracking-step active">
+                                            <span class="step-dot"></span>
+                                            <span class="step-label">Shipped</span>
+                                        </div>
+                                        <div class="tracking-step">
+                                            <span class="step-dot"></span>
+                                            <span class="step-label">Out for Delivery</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel 2: Profile Details -->
+                        <div class="account-panel" id="panel-profile">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Profile Details</h2>
+                                <p class="panel-subtitle">Manage your personal settings, password configuration, and email address notifications.</p>
+                            </div>
+
+                            <form class="account-form" onsubmit="event.preventDefault(); alert('Profile details updated successfully!');">
+                                <h3 class="form-section-heading">Personal Information</h3>
+                                <div class="form-row split">
+                                    <div class="form-group">
+                                        <label for="first-name">First Name</label>
+                                        <input type="text" id="first-name" value="Muhammed" required class="account-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last-name">Last Name</label>
+                                        <input type="text" id="last-name" value="K" required class="account-input">
+                                    </div>
+                                </div>
+                                <div class="form-row split">
+                                    <div class="form-group">
+                                        <label for="email-address">Email Address</label>
+                                        <input type="email" id="email-address" value="kmuhammed@stylora.in" required class="account-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone-number">Phone Number</label>
+                                        <input type="tel" id="phone-number" value="+91 98765 43210" required class="account-input">
+                                    </div>
+                                </div>
+
+                                <h3 class="form-section-heading" style="margin-top: 40px;">Password Change</h3>
+                                <div class="form-group">
+                                    <label for="current-pwd">Current Password</label>
+                                    <input type="password" id="current-pwd" placeholder="••••••••" class="account-input">
+                                </div>
+                                <div class="form-row split">
+                                    <div class="form-group">
+                                        <label for="new-pwd">New Password</label>
+                                        <input type="password" id="new-pwd" placeholder="Enter new password" class="account-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm-pwd">Confirm New Password</label>
+                                        <input type="password" id="confirm-pwd" placeholder="Confirm new password" class="account-input">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="save-profile-btn">SAVE CHANGES</button>
+                            </form>
+                        </div>
+
+                        <!-- Panel 3: Order History -->
+                        <div class="account-panel" id="panel-orders">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Order History</h2>
+                                <p class="panel-subtitle">Review details, invoices, and status of all transactions made on your account.</p>
+                            </div>
+
+                            <div class="orders-table-wrapper">
+                                <table class="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>#SL-4829</strong></td>
+                                            <td>June 28, 2026</td>
+                                            <td><span class="status-badge in-transit">In Transit</span></td>
+                                            <td>₹3,499</td>
+                                            <td><a href="#" class="view-invoice-link" onclick="event.preventDefault(); alert('Opening tracking portal for Order #SL-4829');">Track Order</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>#SL-4712</strong></td>
+                                            <td>May 15, 2026</td>
+                                            <td><span class="status-badge delivered">Delivered</span></td>
+                                            <td>₹6,499</td>
+                                            <td><a href="#" class="view-invoice-link" onclick="event.preventDefault(); alert('Invoices are downloaded to local storage.');">Download PDF</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>#SL-4601</strong></td>
+                                            <td>April 02, 2026</td>
+                                            <td><span class="status-badge delivered">Delivered</span></td>
+                                            <td>₹2,499</td>
+                                            <td><a href="#" class="view-invoice-link" onclick="event.preventDefault(); alert('Invoices are downloaded to local storage.');">Download PDF</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Panel 4: Saved Addresses -->
+                        <div class="account-panel" id="panel-addresses">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Saved Addresses</h2>
+                                <p class="panel-subtitle">Manage default shipping locations and invoice billing configurations.</p>
+                            </div>
+
+                            <div class="addresses-grid">
+                                <!-- Address Card 1 -->
+                                <div class="address-card default">
+                                    <div class="address-card-header">
+                                        <h3 class="address-type">Default Shipping Address</h3>
+                                        <span class="address-badge">Default</span>
+                                    </div>
+                                    <div class="address-body">
+                                        <p class="address-name">Muhammed K</p>
+                                        <p class="address-line">12th Boulevard, Calicut Bypass Road</p>
+                                        <p class="address-city">Kozhikode, Kerala - 673001</p>
+                                        <p class="address-phone">Phone: +91 98765 43210</p>
+                                    </div>
+                                    <div class="address-actions">
+                                        <button class="address-btn edit" onclick="alert('Editing shipping address');">Edit</button>
+                                        <button class="address-btn delete" onclick="alert('Default shipping address cannot be deleted.');">Delete</button>
+                                    </div>
+                                </div>
+
+                                <!-- Address Card 2 -->
+                                <div class="address-card">
+                                    <div class="address-card-header">
+                                        <h3 class="address-type">Billing Address</h3>
+                                    </div>
+                                    <div class="address-body">
+                                        <p class="address-name">Muhammed K</p>
+                                        <p class="address-line">12th Boulevard, Calicut Bypass Road</p>
+                                        <p class="address-city">Kozhikode, Kerala - 673001</p>
+                                        <p class="address-phone">Phone: +91 98765 43210</p>
+                                    </div>
+                                    <div class="address-actions">
+                                        <button class="address-btn edit" onclick="alert('Editing billing address');">Edit</button>
+                                        <button class="address-btn delete" onclick="alert('Billing address deleted successfully.');">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Top Footer: 5 Columns -->
+            <div class="footer-top">
+                <!-- Column 1: Quick Links -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">QUICK LINKS</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                        <li><a href="#">Blogs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Policies -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">POLICIES</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Shipping & Delivery</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Styleora Description -->
+                <div class="footer-column brand-col">
+                    <h4 class="footer-heading">STYLEORA</h4>
+                    <p class="brand-desc">We deliver thoughtfully designed pieces that blend comfort and edge — made to move with you and crafted to help you stand out, every day.</p>
+                    <a href="#" class="find-stores">Find Store Locations</a>
+                </div>
+
+                <!-- Column 4: Newsletter -->
+                <div class="footer-column newsletter-col">
+                    <h4 class="footer-heading">NEWS LETTER</h4>
+                    <p class="newsletter-text">Sign up to our newsletter to receive exclusive offers.</p>
+                    <p class="newsletter-text highlight-text">Get 10% OFF on your first order</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="E-mail" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+                    </form>
+                </div>
+
+                <!-- Column 5: Popular Searches -->
+                <div class="footer-column searches-col">
+                    <h4 class="footer-heading">POPULAR SEARCHES</h4>
+                    <p class="searches-text">Shirts, T Shirts, Pyjamas, Cargos, Jeans, Joggers, Shorts, Trousers, Wacths</p>
+                    <a href="contact.html" class="footer-contact-btn">Contact Us</a>
+                </div>
+            </div>
+
+            <!-- Divider Line -->
+            <div class="footer-divider"></div>
+
+            <!-- Bottom Footer: Copyright, Socials, Credits -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Styleora India Pvt Ltd. All rights reserved.</p>
+                
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                    <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                    <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+                </div>
+                
+                <p class="credits">Designed By kmuhammed</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll behavior
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Search toggle interaction
+        const searchBtn = document.getElementById('search-btn');
+        const searchContainer = document.getElementById('search-container');
+        const searchInput = document.getElementById('search-input');
+
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+            }
+        });
+
+        // Close search when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchContainer.contains(e.target) && !searchBtn.contains(e.target)) {
+                searchContainer.classList.remove('active');
+            }
+        });
+
+        // Dynamic Panel Switching Vanilla JS
+        const navItems = document.querySelectorAll('.account-nav-item');
+        const panels = document.querySelectorAll('.account-panel');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetPanel = item.getAttribute('data-panel');
+                
+                if (targetPanel === 'logout') {
+                    if (confirm('Are you sure you want to log out from your account?')) {
+                        window.location.href = 'index.html';
+                    }
+                    return;
+                }
+
+                // Remove active classes
+                navItems.forEach(i => i.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+
+                // Add active classes
+                item.classList.add('active');
+                document.getElementById(`panel-${targetPanel}`).classList.add('active');
+            });
+        });
+
+        // Sidebar drawer toggles
+        window.addEventListener('DOMContentLoaded', () => {
+            const menuToggleBtn = document.querySelector('.menu-toggle');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+
+            if (menuToggleBtn && sidebarOverlay && sidebarDrawer && sidebarCloseBtn) {
+                menuToggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sidebarOverlay.classList.add('active');
+                    sidebarDrawer.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                const closeSidebar = () => {
+                    sidebarOverlay.classList.remove('active');
+                    sidebarDrawer.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                sidebarCloseBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Sidebar submenus accordion
+            const submenuToggles = document.querySelectorAll('.sidebar-submenu-toggle');
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const parentLi = toggle.closest('.sidebar-has-submenu');
+                    const submenu = parentLi.querySelector('.sidebar-submenu');
+                    
+                    if (parentLi.classList.contains('open')) {
+                        parentLi.classList.remove('open');
+                        submenu.style.maxHeight = null;
+                    } else {
+                        // close other open submenus
+                        document.querySelectorAll('.sidebar-has-submenu.open').forEach(openLi => {
+                            openLi.classList.remove('open');
+                            openLi.querySelector('.sidebar-submenu').style.maxHeight = null;
+                        });
+                        
+                        parentLi.classList.add('open');
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Slide-in Sidebar Navigation Menu -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar-drawer" id="sidebar-drawer">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">STYLEORA</span>
+            <button class="sidebar-close-btn" id="sidebar-close-btn">&times;</button>
+        </div>
+        
+        <div class="sidebar-search-wrapper">
+            <form action="shop.html" method="GET" class="sidebar-search-form">
+                <input type="text" name="search" placeholder="Search products..." class="sidebar-search-input">
+                <button type="submit" class="sidebar-search-submit">
+                    <img src="assets/Search.svg" alt="Search">
+                </button>
+            </form>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="sidebar-links">
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Men <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Accessories <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Shopping Bag</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-socials">
+                <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+            </div>
+            <p class="sidebar-signature">Designed By kmuhammed</p>
+        </div>
+    </div>
+</body>
+</html>

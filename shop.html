@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men's Collection - STYLORA</title>
+    <!-- Geist Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Product Dataset -->
+    <script src="products-data.js"></script>
+</head>
+<body>
+    <!-- Transparent Header -->
+    <header class="header">
+        <div class="container">
+            <!-- Left Side: Navigation Menu Links -->
+            <ul class="nav-links">
+                <li class="has-dropdown">
+                    <a href="#" class="active">Men <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#">Accessories <span class="arrow-icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo -->
+            <div class="logo">
+                <a href="index.html">STYLEORA</a>
+            </div>
+
+            <!-- Right Side: Utility Icons -->
+            <div class="nav-utilities">
+                <a href="account.html" class="utility-icon" title="Account">
+                    <img src="assets/account-icon 1.svg" alt="Account">
+                </a>
+                <div class="search-container" id="search-container">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search">
+                </div>
+                <a href="#" class="utility-icon search-btn" id="search-btn" title="Search">
+                    <img src="assets/Search.svg" alt="Search">
+                </a>
+                <a href="cart.html" class="utility-icon" title="Shopping Cart">
+                    <img src="assets/Shopping cart.svg" alt="Cart">
+                </a>
+                <a href="#" class="utility-icon menu-toggle" title="Menu Toggle">
+                    <img src="assets/menu-bar-icon.svg" alt="Menu">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Shop Hero Section -->
+        <section class="shop-hero">
+            <div class="shop-hero-overlay"></div>
+            <div class="shop-hero-content">
+                <span class="shop-hero-tag" id="shop-tag">[ Men's Collection ]</span>
+                <h1 class="shop-hero-title" id="shop-title">Men's Collection</h1>
+                <p class="shop-hero-subtitle">Discover essentials designed for motion, simplicity, and premium comfort.</p>
+            </div>
+        </section>
+
+        <!-- Shop Filters and Grid -->
+        <section class="shop-section">
+            <div class="container">
+                <!-- Filter Tabs -->
+                <div class="shop-filter-bar">
+                    <button class="shop-filter-tab active" data-category="all">All</button>
+                    <button class="shop-filter-tab" data-category="new-arrivals">New Arrivals</button>
+                    <button class="shop-filter-tab" data-category="clothing">Clothing</button>
+                    <button class="shop-filter-tab" data-category="shoes">Shoes</button>
+                    <button class="shop-filter-tab" data-category="activewear">Activewear</button>
+                    <button class="shop-filter-tab" data-category="outerwear">Outerwear</button>
+                    <button class="shop-filter-tab" data-category="shirts">Shirts</button>
+                    <button class="shop-filter-tab" data-category="pants">Pants</button>
+                    <button class="shop-filter-tab" data-category="shorts">Shorts</button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="shop-grid" id="shop-grid">
+                    <!-- Products dynamically inserted via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Top Footer: 5 Columns -->
+            <div class="footer-top">
+                <!-- Column 1: Quick Links -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">QUICK LINKS</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                        <li><a href="#">Blogs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Policies -->
+                <div class="footer-column">
+                    <h4 class="footer-heading">POLICIES</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Shipping & Delivery</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Styleora Description -->
+                <div class="footer-column brand-col">
+                    <h4 class="footer-heading">STYLEORA</h4>
+                    <p class="brand-desc">We deliver thoughtfully designed pieces that blend comfort and edge — made to move with you and crafted to help you stand out, every day.</p>
+                    <a href="#" class="find-stores">Find Store Locations</a>
+                </div>
+
+                <!-- Column 4: Newsletter -->
+                <div class="footer-column newsletter-col">
+                    <h4 class="footer-heading">NEWS LETTER</h4>
+                    <p class="newsletter-text">Sign up to our newsletter to receive exclusive offers.</p>
+                    <p class="newsletter-text highlight-text">Get 10% OFF on your first order</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="E-mail" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+                    </form>
+                </div>
+
+                <!-- Column 5: Popular Searches -->
+                <div class="footer-column searches-col">
+                    <h4 class="footer-heading">POPULAR SEARCHES</h4>
+                    <p class="searches-text">Shirts, T Shirts, Pyjamas, Cargos, Jeans, Joggers, Shorts, Trousers, Wacths</p>
+                    <a href="contact.html" class="footer-contact-btn">Contact Us</a>
+                </div>
+            </div>
+
+            <!-- Divider Line -->
+            <div class="footer-divider"></div>
+
+            <!-- Bottom Footer: Copyright, Socials, Credits -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Styleora India Pvt Ltd. All rights reserved.</p>
+                
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                    <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                    <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+                </div>
+                
+                <p class="credits">Designed By kmuhammed</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter productsData to include only Men's clothing (non-accessories)
+        const menList = productsData.filter(p => !p.tags.includes('Accessories'));
+
+        // Header scroll behavior
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Search toggle interaction
+        const searchBtn = document.getElementById('search-btn');
+        const searchContainer = document.getElementById('search-container');
+        const searchInput = document.getElementById('search-input');
+
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+            }
+        });
+
+        // Close search when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchContainer.contains(e.target) && !searchBtn.contains(e.target)) {
+                searchContainer.classList.remove('active');
+            }
+        });
+
+        // Dynamic Filtering Logic
+        const grid = document.getElementById('shop-grid');
+        const titleEl = document.getElementById('shop-title');
+        const tabs = document.querySelectorAll('.shop-filter-tab');
+
+        function renderProducts(category) {
+            // Update Active Tab UI
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-category') === category) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // Update Page Heading Title
+            const tagEl = document.getElementById('shop-tag');
+            const isAccessory = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'].includes(category);
+            tagEl.textContent = isAccessory ? "[ Accessories ]" : "[ Men's Collection ]";
+
+            let categoryLabel = category.replace('-', ' ');
+            categoryLabel = categoryLabel.charAt(0).toUpperCase() + categoryLabel.slice(1);
+            titleEl.textContent = category === 'all' ? "Men's Collection" : `${categoryLabel} Collection`;
+
+            // Filter Products Array
+            let filtered = [];
+            if (category === 'all') {
+                filtered = menList;
+            } else if (category === 'new-arrivals') {
+                filtered = menList.filter(p => p.tags.includes('New Arrival'));
+            } else if (category === 'clothing') {
+                // Clothing parent category covers outerwear, shirts, pants, shorts, and ribbed clothing
+                filtered = menList.filter(p => ['outerwear', 'shirts', 'pants', 'shorts', 'clothing'].includes(p.category));
+            } else {
+                filtered = menList.filter(p => p.category === category);
+            }
+
+            // Render Products HTML
+            grid.innerHTML = '';
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p class="no-products">No products found in this category.</p>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'shop-product-card';
+                card.innerHTML = `
+                    <div class="shop-card-image-wrapper" onclick="window.location.href='product.html?id=${p.id}';" style="cursor: pointer;">
+                        <img src="${p.image}" alt="${p.title}" class="shop-product-img">
+                        <div class="shop-quick-add">
+                            <button class="shop-add-btn" onclick="event.stopPropagation(); alert('${p.title} added to cart!');">Quick Add</button>
+                        </div>
+                    </div>
+                    <div class="shop-product-info">
+                        <span class="shop-product-category">${p.category.toUpperCase()}</span>
+                        <h3 class="shop-product-title" onclick="window.location.href='product.html?id=${p.id}';" style="cursor: pointer;">${p.title}</h3>
+                        <p class="shop-product-price">${p.price}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Parse category from URL query parameters
+        function initCategoryFilter() {
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get('category') || 'all';
+            renderProducts(category);
+        }
+
+        // Add click events to filter tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const cat = tab.getAttribute('data-category');
+                // Update URL query parameters without reloading
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?category=${cat}`;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+                renderProducts(cat);
+            });
+        });
+
+        // Initialize Shop Grid on load
+        window.addEventListener('load', initCategoryFilter);
+        // Handle back/forward navigation parameters
+        window.addEventListener('popstate', initCategoryFilter);
+
+        // Sidebar drawer toggles
+        window.addEventListener('DOMContentLoaded', () => {
+            const menuToggleBtn = document.querySelector('.menu-toggle');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+
+            if (menuToggleBtn && sidebarOverlay && sidebarDrawer && sidebarCloseBtn) {
+                menuToggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sidebarOverlay.classList.add('active');
+                    sidebarDrawer.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                const closeSidebar = () => {
+                    sidebarOverlay.classList.remove('active');
+                    sidebarDrawer.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                sidebarCloseBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Sidebar submenus accordion
+            const submenuToggles = document.querySelectorAll('.sidebar-submenu-toggle');
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const parentLi = toggle.closest('.sidebar-has-submenu');
+                    const submenu = parentLi.querySelector('.sidebar-submenu');
+                    
+                    if (parentLi.classList.contains('open')) {
+                        parentLi.classList.remove('open');
+                        submenu.style.maxHeight = null;
+                    } else {
+                        // close other open submenus
+                        document.querySelectorAll('.sidebar-has-submenu.open').forEach(openLi => {
+                            openLi.classList.remove('open');
+                            openLi.querySelector('.sidebar-submenu').style.maxHeight = null;
+                        });
+                        
+                        parentLi.classList.add('open');
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Slide-in Sidebar Navigation Menu -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar-drawer" id="sidebar-drawer">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">STYLEORA</span>
+            <button class="sidebar-close-btn" id="sidebar-close-btn">&times;</button>
+        </div>
+        
+        <div class="sidebar-search-wrapper">
+            <form action="shop.html" method="GET" class="sidebar-search-form">
+                <input type="text" name="search" placeholder="Search products..." class="sidebar-search-input">
+                <button type="submit" class="sidebar-search-submit">
+                    <img src="assets/Search.svg" alt="Search">
+                </button>
+            </form>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="sidebar-links">
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Men <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="shop.html?category=new-arrivals">New Arrivals</a></li>
+                        <li><a href="shop.html?category=clothing">Clothing</a></li>
+                        <li><a href="shop.html?category=shoes">Shoes</a></li>
+                        <li><a href="shop.html?category=activewear">Activewear</a></li>
+                        <li><a href="shop.html?category=outerwear">Outerwear</a></li>
+                        <li><a href="shop.html?category=shirts">Shirts</a></li>
+                        <li><a href="shop.html?category=pants">Pants</a></li>
+                        <li><a href="shop.html?category=shorts">Shorts</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-has-submenu">
+                    <a href="#" class="sidebar-submenu-toggle">Accessories <span class="plus-icon">+</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="accessories.html?category=watches">Watches</a></li>
+                        <li><a href="accessories.html?category=bags">Bags</a></li>
+                        <li><a href="accessories.html?category=sunglasses">Sunglasses</a></li>
+                        <li><a href="accessories.html?category=belts-wallets">Belts & Wallets</a></li>
+                        <li><a href="accessories.html?category=hats-caps">Hats & Caps</a></li>
+                        <li><a href="accessories.html?category=jewelry">Jewelry</a></li>
+                        <li><a href="accessories.html?category=socks">Socks</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Our Story</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Shopping Bag</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-socials">
+                <a href="#" aria-label="Instagram"><img src="assets/Instagram.svg" alt="Instagram"></a>
+                <a href="#" aria-label="Facebook"><img src="assets/Facebook.svg" alt="Facebook"></a>
+                <a href="#" aria-label="Youtube"><img src="assets/Youtube.svg" alt="Youtube"></a>
+            </div>
+            <p class="sidebar-signature">Designed By kmuhammed</p>
+        </div>
+    </div>
+</body>
+</html>
