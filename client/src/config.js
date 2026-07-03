@@ -6,13 +6,11 @@ const getApiUrl = () => {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
         return 'http://localhost:5000/api';
     }
-    // If on Render, e.g., stylora-1.onrender.com, map to stylora.onrender.com
+    // If on Render, point to the correct backend service URL
     if (hostname.includes('.onrender.com')) {
-        const subdomain = hostname.split('.')[0];
-        const baseSubdomain = subdomain.endsWith('-1') ? subdomain.slice(0, -2) : subdomain;
-        return `https://${baseSubdomain}.onrender.com/api`;
+        return 'https://stylora-xzws.onrender.com/api';
     }
-    return 'https://stylora.onrender.com/api';
+    return 'https://stylora-xzws.onrender.com/api';
 };
 
 export const API_URL = getApiUrl();
