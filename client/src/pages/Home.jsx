@@ -3,8 +3,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const Home = () => {
     const { settings } = useSettings();

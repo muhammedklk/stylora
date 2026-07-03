@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useSettings } from '../context/SettingsContext';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);

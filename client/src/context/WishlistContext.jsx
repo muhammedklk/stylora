@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { useToast } from './ToastContext';
+import { API_URL } from '../config';
 
 const WishlistContext = createContext();
-const API_URL = 'http://localhost:5000/api';
 
 export const WishlistProvider = ({ children }) => {
     const { isAuthenticated } = useAuth();

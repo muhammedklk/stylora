@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const SettingsContext = createContext();
 
@@ -40,7 +41,7 @@ export const SettingsProvider = ({ children }) => {
 
     const fetchSettings = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/settings');
+            const res = await axios.get(`${API_URL}/settings`);
             setSettings(sanitizeSettings(res.data));
         } catch (err) {
             console.error("Error fetching settings", err);
@@ -52,7 +53,7 @@ export const SettingsProvider = ({ children }) => {
     const updateSettings = async (newSettings) => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.put('http://localhost:5000/api/settings', newSettings, {
+            const res = await axios.put(`${API_URL}/settings`, newSettings, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSettings(sanitizeSettings(res.data));

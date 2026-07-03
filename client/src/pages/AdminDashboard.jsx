@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useSettings } from '../context/SettingsContext';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();

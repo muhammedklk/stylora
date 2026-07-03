@@ -4,8 +4,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const ProductDetails = () => {
     const { id } = useParams();
