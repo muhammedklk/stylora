@@ -28,7 +28,10 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
         } catch (err) {
             console.error('Error fetching profile', err);
-            logout();
+            // Only logout if token is explicitly invalid/expired (401/403)
+            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                logout();
+            }
         } finally {
             setLoading(false);
         }
