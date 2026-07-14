@@ -5,6 +5,7 @@ import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { API_URL } from '../config';
+import { productsData } from '../products-data';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -39,6 +40,9 @@ const ProductDetails = () => {
         try {
             const res = await axios.get(`${API_URL}/products/${id}`);
             const prod = res.data.product;
+            if (!prod) {
+                throw new Error('Product not found in API response');
+            }
             setProduct(prod);
             setReviews(res.data.reviews || []);
 
@@ -52,17 +56,39 @@ const ProductDetails = () => {
 
             // Fetch related and bestsellers
             const allRes = await axios.get(`${API_URL}/products`);
-            const allProducts = allRes.data;
+            const allProducts = Array.isArray(allRes.data) ? allRes.data : [];
 
             // Related: same category, excluding current
             const rel = allProducts.filter(p => p.category === prod.category && p._id !== prod._id).slice(0, 4);
             setRelated(rel);
 
             // Bestsellers
-            const bests = allProducts.filter(p => p.tags.includes('Bestseller')).slice(0, 4);
+            const bests = allProducts.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
             setBestsellers(bests);
         } catch (err) {
-            console.error('Error fetching product details', err);
+            console.warn('Error fetching product details, falling back to static local data:', err.message);
+            const fallbackProd = productsData.find(p => p._id === id || String(p._id) === String(id));
+            if (fallbackProd) {
+                setProduct(fallbackProd);
+                setReviews([]);
+
+                if (fallbackProd.sizes && fallbackProd.sizes.length > 0) {
+                    setSelectedSize(fallbackProd.sizes[0]);
+                }
+                if (fallbackProd.colors && fallbackProd.colors.length > 0) {
+                    setSelectedColor(fallbackProd.colors[0].name);
+                }
+                setMediaType('image');
+
+                // Filter related and bestsellers from fallback list
+                const rel = productsData.filter(p => p.category === fallbackProd.category && p._id !== fallbackProd._id).slice(0, 4);
+                setRelated(rel);
+
+                const bests = productsData.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
+                setBestsellers(bests);
+            } else {
+                setProduct(null);
+            }
         } finally {
             setLoading(false);
         }

@@ -4,6 +4,7 @@ import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import { API_URL } from '../config';
+import { productsData } from '../products-data';
 
 const Home = () => {
     const { settings } = useSettings();
@@ -23,18 +24,32 @@ const Home = () => {
     const fetchProducts = async () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
-            setProducts(res.data);
+            const data = Array.isArray(res.data) ? res.data : [];
+            if (data.length === 0) {
+                throw new Error('Empty products list from API server');
+            }
+            setProducts(data);
             
             // Extract bestsellers
-            const bests = res.data.filter(p => p.tags.includes('Bestseller'));
+            const bests = data.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
             
             // Extract Find Your Style products (usually the first 8)
-            const styleProds = res.data.slice(0, 8);
+            const styleProds = data.slice(0, 8);
             setFindStyleProducts(styleProds);
             setFilteredStyleProducts(styleProds);
         } catch (err) {
-            console.error('Error fetching products', err);
+            console.warn('Error fetching products, falling back to static local data:', err.message);
+            setProducts(productsData);
+            
+            // Extract bestsellers
+            const bests = productsData.filter(p => p.tags && p.tags.includes('Bestseller'));
+            setBestsellers(bests);
+            
+            // Extract Find Your Style products (usually the first 8)
+            const styleProds = productsData.slice(0, 8);
+            setFindStyleProducts(styleProds);
+            setFilteredStyleProducts(styleProds);
         }
     };
 

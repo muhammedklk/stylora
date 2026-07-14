@@ -4,6 +4,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useSettings } from '../context/SettingsContext';
 import { API_URL } from '../config';
+import { productsData } from '../products-data';
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -43,10 +44,16 @@ const Shop = () => {
     const fetchProducts = async () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
-            setProducts(res.data);
-            applyFilterAndSearch(res.data, initialCategory, searchQuery);
+            const data = Array.isArray(res.data) ? res.data : [];
+            if (data.length === 0) {
+                throw new Error('Empty products list from API server');
+            }
+            setProducts(data);
+            applyFilterAndSearch(data, initialCategory, searchQuery);
         } catch (err) {
-            console.error('Error fetching products', err);
+            console.warn('Error fetching products, falling back to static local data:', err.message);
+            setProducts(productsData);
+            applyFilterAndSearch(productsData, initialCategory, searchQuery);
         }
     };
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useSettings } from '../context/SettingsContext';
 import { API_URL } from '../config';
+import { productsData } from '../products-data';
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -41,18 +42,24 @@ const Accessories = () => {
     }, [location.search, products]);
 
     const fetchProducts = async () => {
+        const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
         try {
             // Get all products, we will filter for accessories tags/categories
             const res = await axios.get(`${API_URL}/products`);
+            const data = Array.isArray(res.data) ? res.data : [];
+            const accessoriesOnly = data.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
             
-            // Accessories categories list
-            const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
-            const accessoriesOnly = res.data.filter(p => p.tags.includes('Accessories') || accessoryCats.includes(p.category));
+            if (accessoriesOnly.length === 0) {
+                throw new Error('No accessories found in API response');
+            }
             
             setProducts(accessoriesOnly);
             applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
         } catch (err) {
-            console.error('Error fetching accessories', err);
+            console.warn('Error fetching accessories, falling back to static local data:', err.message);
+            const accessoriesOnly = productsData.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
+            setProducts(accessoriesOnly);
+            applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
         }
     };
 

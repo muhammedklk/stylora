@@ -277,7 +277,10 @@ const connectDB = async () => {
 
     try {
         console.log('Connecting to MongoDB database...');
-        await mongoose.connect(mongoUri);
+        // Set a connection timeout so it doesn't hang indefinitely if the cluster is paused/offline
+        await mongoose.connect(mongoUri, {
+            serverSelectionTimeoutMS: 5000
+        });
         console.log('MongoDB connection successful');
         
         await seedDatabase();
@@ -286,9 +289,27 @@ const connectDB = async () => {
             console.log(`Server is running on port ${PORT}`);
         });
     } catch (err) {
-        console.error('CRITICAL ERROR: MongoDB database connection failed:');
-        console.error(err);
-        process.exit(1);
+        console.warn('MongoDB Atlas database connection failed:', err.message);
+        console.warn('Attempting fallback to in-memory MongoDB (mongodb-memory-server)...');
+        try {
+            const { MongoMemoryServer } = require('mongodb-memory-server');
+            const mongoServer = await MongoMemoryServer.create();
+            const memoryUri = mongoServer.getUri();
+            console.log(`Starting in-memory MongoDB server at: ${memoryUri}`);
+            
+            await mongoose.connect(memoryUri);
+            console.log('In-memory MongoDB connection successful');
+            
+            await seedDatabase();
+            
+            app.listen(PORT, () => {
+                console.log(`Server is running on port ${PORT}`);
+            });
+        } catch (fallbackErr) {
+            console.error('CRITICAL ERROR: Both MongoDB Atlas and in-memory MongoDB failed to connect:');
+            console.error(fallbackErr);
+            process.exit(1);
+        }
     }
 };
 
