@@ -266,28 +266,35 @@ const seedDatabase = async () => {
 };
 
 // Database Connection
+let isConnecting = false;
+
 const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) {
+        return;
+    }
+    if (isConnecting) {
+        while (isConnecting && mongoose.connection.readyState !== 1) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        return;
+    }
+
+    isConnecting = true;
     const mongoUri = process.env.MONGO_URI;
 
     if (!mongoUri) {
         console.error('CRITICAL ERROR: MONGO_URI environment variable is missing.');
-        console.error('The application requires a valid MONGO_URI to connect to the database.');
-        process.exit(1);
+        isConnecting = false;
+        return;
     }
 
     try {
         console.log('Connecting to MongoDB database...');
-        // Set a connection timeout so it doesn't hang indefinitely if the cluster is paused/offline
         await mongoose.connect(mongoUri, {
             serverSelectionTimeoutMS: 5000
         });
         console.log('MongoDB connection successful');
-        
         await seedDatabase();
-        
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
     } catch (err) {
         console.warn('MongoDB Atlas database connection failed:', err.message);
         console.warn('Attempting fallback to in-memory MongoDB (mongodb-memory-server)...');
@@ -296,21 +303,34 @@ const connectDB = async () => {
             const mongoServer = await MongoMemoryServer.create();
             const memoryUri = mongoServer.getUri();
             console.log(`Starting in-memory MongoDB server at: ${memoryUri}`);
-            
             await mongoose.connect(memoryUri);
             console.log('In-memory MongoDB connection successful');
-            
             await seedDatabase();
-            
-            app.listen(PORT, () => {
-                console.log(`Server is running on port ${PORT}`);
-            });
         } catch (fallbackErr) {
-            console.error('CRITICAL ERROR: Both MongoDB Atlas and in-memory MongoDB failed to connect:');
-            console.error(fallbackErr);
-            process.exit(1);
+            console.error('CRITICAL ERROR: Both MongoDB Atlas and in-memory MongoDB failed to connect:', fallbackErr.message);
         }
+    } finally {
+        isConnecting = false;
     }
 };
 
-connectDB();
+// Middleware to ensure DB connection before handling serverless requests
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.error('Database connection middleware error:', err);
+    }
+    next();
+});
+
+if (require.main === module) {
+    connectDB().then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    });
+}
+
+module.exports = app;
+
