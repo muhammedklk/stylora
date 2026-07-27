@@ -297,22 +297,27 @@ const connectDB = async () => {
         await seedDatabase();
     } catch (err) {
         console.warn('MongoDB Atlas database connection failed:', err.message);
-        console.warn('Attempting fallback to in-memory MongoDB (mongodb-memory-server)...');
-        try {
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const mongoServer = await MongoMemoryServer.create();
-            const memoryUri = mongoServer.getUri();
-            console.log(`Starting in-memory MongoDB server at: ${memoryUri}`);
-            await mongoose.connect(memoryUri);
-            console.log('In-memory MongoDB connection successful');
-            await seedDatabase();
-        } catch (fallbackErr) {
-            console.error('CRITICAL ERROR: Both MongoDB Atlas and in-memory MongoDB failed to connect:', fallbackErr.message);
+        if (process.env.VERCEL) {
+            console.error('Running on Vercel: Please verify MONGO_URI is set correctly in Vercel Environment Variables and MongoDB Atlas IP whitelist allows 0.0.0.0/0.');
+        } else {
+            console.warn('Attempting fallback to in-memory MongoDB (mongodb-memory-server)...');
+            try {
+                const { MongoMemoryServer } = require('mongodb-memory-server');
+                const mongoServer = await MongoMemoryServer.create();
+                const memoryUri = mongoServer.getUri();
+                console.log(`Starting in-memory MongoDB server at: ${memoryUri}`);
+                await mongoose.connect(memoryUri);
+                console.log('In-memory MongoDB connection successful');
+                await seedDatabase();
+            } catch (fallbackErr) {
+                console.error('CRITICAL ERROR: Both MongoDB Atlas and in-memory MongoDB failed to connect:', fallbackErr.message);
+            }
         }
     } finally {
         isConnecting = false;
     }
 };
+
 
 // Middleware to ensure DB connection before handling serverless requests
 app.use(async (req, res, next) => {
