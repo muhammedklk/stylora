@@ -26,9 +26,12 @@ const Contact = () => {
     };
 
     return (
-        <div className="contact-page-wrapper light-theme">
+        <div style={{ backgroundColor: '#fafafa' }}>
             {/* Contact Hero Section */}
-            <section className="contact-hero" style={{ backgroundImage: getHeroBg(settings?.contactHeroImage) }}>
+            <section
+                className="contact-hero"
+                style={settings?.contactHeroImage ? { backgroundImage: getHeroBg(settings.contactHeroImage) } : undefined}
+            >
                 <div className="contact-hero-overlay"></div>
                 <div className="contact-hero-content">
                     <span className="contact-hero-tag">[ Contact Us ]</span>
