@@ -40,7 +40,7 @@ const getInitialProducts = () => {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             const { data } = JSON.parse(cached);
-            if (Array.isArray(data) && data.length > 0) {
+            if (Array.isArray(data)) {
                 return data;
             }
         }
@@ -122,10 +122,7 @@ const Shop = () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
             const data = Array.isArray(res.data) ? res.data : [];
-            if (data.length === 0) {
-                throw new Error('Empty products list from API server');
-            }
-            // Save to cache
+            // Save to cache (even if empty [])
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
             setProducts(data);
             applyFilterAndSearch(
@@ -141,22 +138,7 @@ const Shop = () => {
                 inStockOnly
             );
         } catch (err) {
-            console.warn('Error fetching products, falling back to static local data:', err.message);
-            if (products.length === 0) {
-                setProducts(productsData);
-                applyFilterAndSearch(
-                    productsData, 
-                    initialCategory, 
-                    searchQuery,
-                    sortBy,
-                    priceMin,
-                    priceMax,
-                    minDiscount,
-                    selectedSizes,
-                    selectedColors,
-                    inStockOnly
-                );
-            }
+            console.warn('Error fetching products from API server:', err.message);
         } finally {
             setLoading(false);
         }

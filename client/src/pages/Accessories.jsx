@@ -49,17 +49,10 @@ const Accessories = () => {
             const data = Array.isArray(res.data) ? res.data : [];
             const accessoriesOnly = data.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
             
-            if (accessoriesOnly.length === 0) {
-                throw new Error('No accessories found in API response');
-            }
-            
             setProducts(accessoriesOnly);
             applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
         } catch (err) {
-            console.warn('Error fetching accessories, falling back to static local data:', err.message);
-            const accessoriesOnly = productsData.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
-            setProducts(accessoriesOnly);
-            applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
+            console.warn('Error fetching accessories from API:', err.message);
         }
     };
 

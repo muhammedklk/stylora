@@ -71,7 +71,7 @@ const AdminDashboard = () => {
             ]);
 
             let fetchedProducts = [];
-            if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value.data) && prodRes.value.data.length > 0) {
+            if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value.data)) {
                 fetchedProducts = prodRes.value.data;
             } else {
                 fetchedProducts = productsData;
@@ -100,7 +100,6 @@ const AdminDashboard = () => {
             });
         } catch (err) {
             console.warn('Error fetching admin data:', err.message);
-            setAdminProducts(productsData);
         }
     };
 
@@ -108,12 +107,13 @@ const AdminDashboard = () => {
     const handleDeleteProduct = async (id, title) => {
         // Optimistic UI update: Remove product immediately from local state
         const previousProducts = [...adminProducts];
-        setAdminProducts(prev => prev.filter(p => p._id !== id));
+        const updatedProducts = adminProducts.filter(p => p._id !== id);
+        setAdminProducts(updatedProducts);
         showToast(`"${title}" deleted successfully!`, 'success');
 
-        // Invalidate local cache
+        // Update local cache so Shop, Home, and Admin stay in sync with deleted products list
         try {
-            localStorage.removeItem(CACHE_KEY);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedProducts, timestamp: Date.now() }));
         } catch (e) {}
 
         // Send API request in background
@@ -124,7 +124,6 @@ const AdminDashboard = () => {
             });
         } catch (err) {
             console.error('Delete product failed on backend:', err);
-            // Revert state if backend delete fails
             setAdminProducts(previousProducts);
             showToast(`Failed to delete "${title}". Reverted changes.`, 'error');
         }

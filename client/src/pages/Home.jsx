@@ -28,7 +28,7 @@ const getInitialProducts = () => {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             const { data } = JSON.parse(cached);
-            if (Array.isArray(data) && data.length > 0) {
+            if (Array.isArray(data)) {
                 return data;
             }
         }
@@ -54,10 +54,7 @@ const Home = () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
             const data = Array.isArray(res.data) ? res.data : [];
-            if (data.length === 0) {
-                throw new Error('Empty products list from API server');
-            }
-            // Update cache
+            // Update cache (even if empty [])
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
             setProducts(data);
             
@@ -65,7 +62,7 @@ const Home = () => {
             const bests = data.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
         } catch (err) {
-            console.warn('Error fetching products from API, staying with initial data:', err.message);
+            console.warn('Error fetching products from API:', err.message);
         }
     };
 
