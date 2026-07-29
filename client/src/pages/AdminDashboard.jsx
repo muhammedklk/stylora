@@ -582,7 +582,9 @@ const AdminDashboard = () => {
                                     <span style={{ fontSize: '12px', color: '#6b7280' }}>Displays a red N/A badge on empty category tabs in Shop page when products count is 0.</span>
                                 </div>
                             </label>
-                                                <div style={{ marginBottom: '24px' }}>
+                        </div>
+
+                        <div style={{ marginBottom: '24px' }}>
                             <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>Shop Hero Image URL</label>
                             <input
                                 type="text"
