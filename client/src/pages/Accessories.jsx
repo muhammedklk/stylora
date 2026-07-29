@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useSettings } from '../context/SettingsContext';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 import { productsData } from '../products-data';
 
 const useQuery = () => {
@@ -25,10 +25,7 @@ const Accessories = () => {
 
     const getHeroBg = (img) => {
         if (!img) return undefined;
-        const resolved = img.startsWith('http') 
-            ? img 
-            : (img.startsWith('uploads/') ? `http://localhost:5000/${img}` : (img.startsWith('/') ? img : `/${img}`));
-        return `url("${resolved}")`;
+        return `url("${resolveImageUrl(img)}")`;
     };
 
     useEffect(() => {

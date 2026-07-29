@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import { resolveImageUrl } from '../config';
 
 const About = () => {
     const navigate = useNavigate();
@@ -8,10 +9,7 @@ const About = () => {
 
     const getHeroBg = (img) => {
         if (!img) return undefined;
-        const resolved = img.startsWith('http') 
-            ? img 
-            : (img.startsWith('uploads/') ? `http://localhost:5000/${img}` : (img.startsWith('/') ? img : `/${img}`));
-        return `url("${resolved}")`;
+        return `url("${resolveImageUrl(img)}")`;
     };
 
     return (

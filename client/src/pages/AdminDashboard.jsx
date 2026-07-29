@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useSettings } from '../context/SettingsContext';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -573,7 +573,7 @@ const AdminDashboard = () => {
                                                                 filteredProducts.map(p => (
                                                                     <tr key={p._id} style={{ borderBottom: '1px solid #eee' }}>
                                                                         <td style={{ padding: '12px 16px' }}>
-                                                                            <img src={p.image.startsWith('http') ? p.image : (p.image.startsWith('uploads/') ? `http://localhost:5000/${p.image}` : (p.image.startsWith('/') ? p.image : `/${p.image}`))} alt={p.title} style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '2px', border: '1px solid #eee' }} />
+                                                                            <img src={resolveImageUrl(p.image)} alt={p.title} style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '2px', border: '1px solid #eee' }} />
                                                                         </td>
                                                                         <td style={{ padding: '12px 16px', fontWeight: 500 }}>
                                                                             <div>{p.title}</div>

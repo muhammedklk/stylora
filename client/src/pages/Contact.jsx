@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
+import { resolveImageUrl } from '../config';
 
 const Contact = () => {
     const { settings } = useSettings();
@@ -12,10 +13,7 @@ const Contact = () => {
 
     const getHeroBg = (img) => {
         if (!img) return undefined;
-        if (img.startsWith('http')) return `url("${img}")`;
-        if (img.startsWith('uploads/')) return `url("http://localhost:5000/${img}")`;
-        if (img.startsWith('/')) return `url("${img}")`;
-        return `url("/${img}")`;
+        return `url("${resolveImageUrl(img)}")`;
     };
 
     const handleSubmit = (e) => {

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 
+import { resolveImageUrl } from '../config';
+
 const ProductCard = ({ product, isFeatured = false }) => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
@@ -56,7 +58,7 @@ const ProductCard = ({ product, isFeatured = false }) => {
                             style={{ cursor: 'pointer' }}
                         >
                             <img 
-                                src={product.image.startsWith('http') ? product.image : (product.image.startsWith('uploads/') ? `http://localhost:5000/${product.image}` : (product.image.startsWith('/') ? product.image : `/${product.image}`))} 
+                                src={resolveImageUrl(product.image)} 
                                 alt={product.title} 
                                 className="product-image" 
                             />

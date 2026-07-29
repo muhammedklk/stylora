@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import LocationPickerModal from '../components/LocationPickerModal';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 
 const Cart = () => {
     const { 
@@ -248,7 +248,7 @@ const Cart = () => {
                                                     <td className="cart-product-cell">
                                                         <div className="cart-product-img-frame">
                                                             <img 
-                                                                src={prod.image.startsWith('http') ? prod.image : (prod.image.startsWith('uploads/') ? `http://localhost:5000/${prod.image}` : (prod.image.startsWith('/') ? prod.image : `/${prod.image}`))} 
+                                                                src={resolveImageUrl(prod.image)} 
                                                                 alt={prod.title} 
                                                             />
                                                         </div>

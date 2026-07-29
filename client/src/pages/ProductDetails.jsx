@@ -4,7 +4,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 import { productsData } from '../products-data';
 
 const ProductDetails = () => {
@@ -166,7 +166,7 @@ const ProductDetails = () => {
                             <div className="product-main-img-frame" style={{ position: 'relative', overflow: 'hidden' }}>
                                 {mediaType === 'image' ? (
                                     <img 
-                                        src={product.image.startsWith('http') ? product.image : (product.image.startsWith('uploads/') ? `http://localhost:5000/${product.image}` : (product.image.startsWith('/') ? product.image : `/${product.image}`))} 
+                                        src={resolveImageUrl(product.image)} 
                                         alt={product.title} 
                                         id="product-main-img" 
                                     />
@@ -185,7 +185,7 @@ const ProductDetails = () => {
                                     ) : (
                                         <video 
                                             controls 
-                                            src={product.videoUrl.startsWith('http') ? product.videoUrl : (product.videoUrl.startsWith('uploads/') ? `http://localhost:5000/${product.videoUrl}` : (product.videoUrl.startsWith('/') ? product.videoUrl : `/${product.videoUrl}`))} 
+                                            src={resolveImageUrl(product.videoUrl)} 
                                             style={{ width: '100%', height: 'auto', maxHeight: '450px', borderRadius: '2px', display: 'block' }}
                                             autoPlay
                                             muted

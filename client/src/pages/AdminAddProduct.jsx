@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 
 const getColorNameFromHex = (hex) => {
     const colorMap = {
@@ -639,7 +639,7 @@ const AdminAddProduct = () => {
                                                          src={
                                                              imageFile
                                                                  ? URL.createObjectURL(imageFile)
-                                                                 : (imageUrl.startsWith('http') ? imageUrl : (imageUrl.startsWith('uploads/') ? `http://localhost:5000/${imageUrl}` : (imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`)))
+                                                                 : resolveImageUrl(imageUrl)
                                                          } 
                                                          alt="Preview" 
                                                          style={{ maxHeight: '120px', maxWidth: '200px', objectFit: 'contain' }}

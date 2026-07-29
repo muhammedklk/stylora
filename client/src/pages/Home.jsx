@@ -3,7 +3,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
-import { API_URL } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 import { productsData } from '../products-data';
 
 const Home = () => {
@@ -130,10 +130,7 @@ const Home = () => {
 
     const getHeroBg = (img) => {
         if (!img) return {};
-        const resolved = img.startsWith('http') 
-            ? img 
-            : (img.startsWith('uploads/') ? `http://localhost:5000/${img}` : (img.startsWith('/') ? img : `/${img}`));
-        return { backgroundImage: `url("${resolved}")` };
+        return { backgroundImage: `url("${resolveImageUrl(img)}")` };
     };
 
     return (
@@ -246,7 +243,7 @@ const Home = () => {
                         {filteredStyleProducts.map(prod => (
                             <div className="style-item" key={prod._id}>
                                 <div className="style-card" onClick={() => navigate(`/product/${prod._id}`)} style={{ cursor: 'pointer' }}>
-                                    <img src={prod.image.startsWith('http') ? prod.image : (prod.image.startsWith('uploads/') ? `http://localhost:5000/${prod.image}` : (prod.image.startsWith('/') ? prod.image : `/${prod.image}`))} alt={prod.title} className="style-image" />
+                                    <img src={resolveImageUrl(prod.image)} alt={prod.title} className="style-image" />
                                     <button className="choose-options-btn">Choose Options</button>
                                 </div>
                             </div>
