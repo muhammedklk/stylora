@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSettings } from '../context/SettingsContext';
 import { API_URL, resolveImageUrl } from '../config';
 import { useToast } from '../context/ToastContext';
+import { productsData } from '../products-data';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -66,7 +67,16 @@ const AdminDashboard = () => {
     const [contactHeroImageType, setContactHeroImageType] = useState('url');
 
     const [adminStats, setAdminStats] = useState(null);
-    const [adminProducts, setAdminProducts] = useState([]);
+    const [adminProducts, setAdminProducts] = useState(() => {
+        try {
+            const cached = localStorage.getItem('stylora_products_cache');
+            if (cached) {
+                const { data } = JSON.parse(cached);
+                if (Array.isArray(data) && data.length > 0) return data;
+            }
+        } catch (e) {}
+        return productsData;
+    });
     const [adminOrders, setAdminOrders] = useState([]);
     const [expandedOrderId, setExpandedOrderId] = useState(null);
     const [adminCoupons, setAdminCoupons] = useState([]);
@@ -224,7 +234,7 @@ const AdminDashboard = () => {
 
     const handleDeleteProduct = async (prodId) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
-        // Optimistic update — remove from list immediately
+        // Optimistic update — remove from list immediately (0ms delay)
         setAdminProducts(prev => prev.filter(p => p._id !== prodId));
         showToast('Product deleted successfully!', 'success');
         // Invalidate cache so website reflects the change
@@ -235,9 +245,8 @@ const AdminDashboard = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
         } catch (err) {
-            // Revert on failure
-            showToast('Error deleting product. Please refresh and try again.', 'error');
-            fetchAdminData();
+            console.error("Error deleting product on server:", err);
+            showToast('Error deleting product on server.', 'error');
         }
     };
 
@@ -493,12 +502,7 @@ const AdminDashboard = () => {
                         <div className="col-lg-9 col-md-8">
                             <div className="p-5" style={{ backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '4px', minHeight: '600px' }}>
                                 
-                                {adminLoading && !adminStats && adminProducts.length === 0 ? (
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px', flexDirection: 'column' }}>
-                                        <p style={{ fontSize: '14px', color: '#666' }}>Loading administrative data workspace...</p>
-                                    </div>
-                                ) : (
-                                    <div>
+                                <div>
                                         
                                         {/* SCREEN 1: OVERVIEW / STATS */}
                                         {activeAdminTab === 'overview' && (
@@ -1372,7 +1376,6 @@ const AdminDashboard = () => {
                                             </form>
                                         )}
                                     </div>
-                                )}
                             </div>
                         </div>
 
