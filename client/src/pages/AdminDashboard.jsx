@@ -84,6 +84,7 @@ const AdminDashboard = () => {
 
     // Filter/search states
     const [productSearch, setProductSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('all');
     const [orderSearch, setOrderSearch] = useState('');
 
     // Form states
@@ -230,8 +231,7 @@ const AdminDashboard = () => {
     };
 
     const handleDeleteProduct = async (prodId) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
-        // Optimistic update — remove from list immediately (0ms delay)
+        // Direct instant removal — no browser confirm popup
         setAdminProducts(prev => prev.filter(p => p._id !== prodId));
         showToast('Product deleted successfully!', 'success');
         // Invalidate cache so website reflects the change
@@ -296,11 +296,16 @@ const AdminDashboard = () => {
     if (!user || user.role !== 'admin') return null;
 
     // Filter lists
-    const filteredProducts = adminProducts.filter(p => 
-        p.title.toLowerCase().includes(productSearch.toLowerCase()) || 
-        p.category.toLowerCase().includes(productSearch.toLowerCase()) || 
-        (p.brand && p.brand.toLowerCase().includes(productSearch.toLowerCase()))
-    );
+    const filteredProducts = adminProducts.filter(p => {
+        const matchesSearch = p.title.toLowerCase().includes(productSearch.toLowerCase()) || 
+            (p.category && p.category.toLowerCase().includes(productSearch.toLowerCase())) ||
+            (p.brand && p.brand.toLowerCase().includes(productSearch.toLowerCase()));
+        
+        const matchesCategory = selectedCategory === 'all' || 
+            (p.category && p.category.toLowerCase().replace(/[^a-z0-9]/g, '') === selectedCategory.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+        return matchesSearch && matchesCategory;
+    });
 
     const filteredOrders = adminOrders.filter(o => 
         o._id.toLowerCase().includes(orderSearch.toLowerCase()) ||
@@ -564,7 +569,7 @@ const AdminDashboard = () => {
                                                 </div>
 
                                                 {/* Search products filter */}
-                                                <div className="mb-4">
+                                                <div className="mb-3">
                                                     <input 
                                                         type="text" 
                                                         className="account-input" 
@@ -573,6 +578,40 @@ const AdminDashboard = () => {
                                                         onChange={e => setProductSearch(e.target.value)}
                                                         style={{ height: '46px' }}
                                                     />
+                                                </div>
+
+                                                {/* Admin Category Filter Tabs */}
+                                                <div className="mb-4 d-flex gap-2" style={{ overflowX: 'auto', paddingBottom: '6px' }}>
+                                                    {['all', 'clothing', 'shirts', 'pants', 'shorts', 'shoes', 'outerwear', 'activewear', 'watches', 'bags', 'jewelry', 'socks'].map(cat => {
+                                                        const label = cat === 'all' ? 'ALL' : cat.toUpperCase().replace('-', ' ');
+                                                        const isSelected = selectedCategory === cat;
+                                                        const count = cat === 'all' 
+                                                            ? adminProducts.length 
+                                                            : adminProducts.filter(p => p.category && p.category.toLowerCase().replace(/[^a-z0-9]/g, '') === cat.toLowerCase().replace(/[^a-z0-9]/g, '')).length;
+                                                        
+                                                        return (
+                                                            <button
+                                                                key={cat}
+                                                                type="button"
+                                                                onClick={() => setSelectedCategory(cat)}
+                                                                style={{
+                                                                    padding: '6px 14px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: 600,
+                                                                    borderRadius: '20px',
+                                                                    border: isSelected ? '1px solid #000' : '1px solid #eee',
+                                                                    backgroundColor: isSelected ? '#1a1a1a' : '#fff',
+                                                                    color: isSelected ? '#fff' : '#555',
+                                                                    cursor: 'pointer',
+                                                                    whiteSpace: 'nowrap',
+                                                                    transition: 'all 0.2s ease',
+                                                                    boxShadow: isSelected ? '0 2px 5px rgba(0,0,0,0.15)' : 'none'
+                                                                }}
+                                                            >
+                                                                {label} ({count})
+                                                            </button>
+                                                        );
+                                                    })}
                                                 </div>
 
                                                 {/* Products inventory table */}
