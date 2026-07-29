@@ -34,6 +34,7 @@ const Home = () => {
             const bests = data.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
             
+            // Use all products for Find Your Style section
             setFindStyleProducts(data);
             setFilteredStyleProducts(data);
         } catch (err) {
@@ -44,6 +45,7 @@ const Home = () => {
             const bests = productsData.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
             
+            // Use all products for Find Your Style section
             setFindStyleProducts(productsData);
             setFilteredStyleProducts(productsData);
         }
@@ -54,26 +56,17 @@ const Home = () => {
         setActiveFilter(category);
         setShowMoreDropdown(false);
         if (category === 'all') {
-            setFilteredStyleProducts(products);
+            setFilteredStyleProducts(findStyleProducts);
+        } else if (category === 'clothing') {
+            const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
+            const filtered = findStyleProducts.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing')));
+            setFilteredStyleProducts(filtered);
         } else {
-            const catLower = category.toLowerCase();
-            const filtered = products.filter(p => {
-                const pCat = p.category?.toLowerCase() || '';
-                const pTags = (p.tags || []).map(t => t.toLowerCase());
-
-                if (catLower === 'shirts' || catLower === 't-shirts') {
-                    return pCat === 'shirts' || pCat === 't-shirts' || pTags.includes('shirts');
-                } else if (catLower === 'pants' || catLower === 'trousers') {
-                    return pCat === 'pants' || pCat === 'trousers' || pTags.includes('pants');
-                } else if (catLower === 'track-pants' || catLower === 'activewear') {
-                    return pCat === 'activewear' || pCat === 'track-pants' || pTags.includes('activewear');
-                } else if (catLower === 'watches') {
-                    return pCat === 'watches' || pTags.includes('watches');
-                } else if (catLower === 'hats-caps') {
-                    return pCat === 'hats-caps' || pTags.includes('hats & caps');
-                } else {
-                    return pCat === catLower || pTags.includes(catLower);
-                }
+            const target = category.toLowerCase().replace(/-/g, '');
+            const filtered = findStyleProducts.filter(p => {
+                const catMatch = p.category && p.category.toLowerCase().replace(/-/g, '') === target;
+                const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '') === target);
+                return catMatch || tagMatch;
             });
             setFilteredStyleProducts(filtered);
         }

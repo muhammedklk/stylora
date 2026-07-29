@@ -62,18 +62,18 @@ const Shop = () => {
 
         // Apply category filter
         if (category && category !== 'all') {
-            const catLower = category.toLowerCase();
-            if (catLower === 'new-arrivals') {
-                result = result.filter(p => p.tags && (p.tags.includes('New Arrival') || p.tags.includes('New Arrivals')));
-            } else if (catLower === 'clothing') {
-                const clothingCats = ['clothing', 'outerwear', 'shirts', 'pants', 'shorts', 'activewear'];
-                result = result.filter(p => clothingCats.includes(p.category?.toLowerCase()) || (p.tags && p.tags.some(t => t.toLowerCase() === 'clothing')));
-            } else if (catLower === 'shirts' || catLower === 't-shirts') {
-                result = result.filter(p => p.category?.toLowerCase() === 'shirts' || p.category?.toLowerCase() === 't-shirts' || (p.tags && p.tags.some(t => t.toLowerCase() === 'shirts')));
-            } else if (catLower === 'pants' || catLower === 'trousers' || catLower === 'track-pants') {
-                result = result.filter(p => p.category?.toLowerCase() === 'pants' || p.category?.toLowerCase() === 'trousers' || p.category?.toLowerCase() === 'track-pants' || (p.tags && p.tags.some(t => t.toLowerCase() === 'pants')));
+            if (category === 'new-arrivals') {
+                result = result.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'new arrival'));
+            } else if (category === 'clothing') {
+                const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
+                result = result.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing')));
             } else {
-                result = result.filter(p => p.category?.toLowerCase() === catLower || (p.tags && p.tags.some(t => t.toLowerCase() === catLower)));
+                const target = category.toLowerCase().replace(/-/g, '');
+                result = result.filter(p => {
+                    const catMatch = p.category && p.category.toLowerCase().replace(/-/g, '') === target;
+                    const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '') === target);
+                    return catMatch || tagMatch;
+                });
             }
         }
 

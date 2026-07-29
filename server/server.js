@@ -60,7 +60,7 @@ const seedDatabase = async () => {
                     category: "outerwear",
                     price: 12499,
                     image: "assets/find-section-img-1.png",
-                    tags: ["New Arrival", "Outerwear"],
+                    tags: ["New Arrival", "Clothing", "Outerwear"],
                     description: "A premium wool coat crafted with tailored lines and absolute precision. Provides warmth, timeless structure, and ultimate cinematic style for any cold-weather wardrobe.",
                     inventoryCount: 50
                 },
@@ -78,7 +78,7 @@ const seedDatabase = async () => {
                     category: "shirts",
                     price: 2499,
                     image: "assets/find-section-img-3.png",
-                    tags: ["Clothing", "Shirts"],
+                    tags: ["Clothing", "Shirts", "New Arrival"],
                     description: "Lightweight and breathable linen shirt featuring a relaxed collar and button-down front. Perfect for summer days and warm evening events.",
                     inventoryCount: 50
                 },
@@ -140,7 +140,7 @@ const seedDatabase = async () => {
                     title: "Classic Leather Briefcase",
                     category: "bags",
                     price: 8999,
-                    image: "assets/find-section-img-1.png",
+                    image: "assets/acc-briefcase.png",
                     tags: ["Accessories", "Bags"],
                     description: "Timeless leather briefcase with spacious document sleeves, metallic lock systems, and robust carry straps.",
                     inventoryCount: 50
@@ -149,7 +149,7 @@ const seedDatabase = async () => {
                     title: "Aviator Black Sunglasses",
                     category: "sunglasses",
                     price: 3499,
-                    image: "assets/find-section-img-3.png",
+                    image: "assets/acc-sunglasses.png",
                     tags: ["Accessories", "Sunglasses", "New Arrival"],
                     description: "Dark polarized sunglasses constructed with a lightweight metallic frame. Delivers 100% UV protection and high-end elegance.",
                     inventoryCount: 50
@@ -158,7 +158,7 @@ const seedDatabase = async () => {
                     title: "Minimalist Suede Wallet",
                     category: "belts-wallets",
                     price: 1999,
-                    image: "assets/find-section-img-7.png",
+                    image: "assets/acc-wallet.png",
                     tags: ["Accessories", "Belts & Wallets"],
                     description: "Slim suede leather wallet with RFID blocking slots. Crafted for sleek, front-pocket convenience.",
                     inventoryCount: 50
@@ -167,7 +167,7 @@ const seedDatabase = async () => {
                     title: "Washed Cotton Baseball Cap",
                     category: "hats-caps",
                     price: 1299,
-                    image: "assets/find-section-img-2.png",
+                    image: "assets/acc-cap.png",
                     tags: ["Accessories", "Hats & Caps"],
                     description: "Relaxed fit washed cotton cap with an adjustable brass buckle. A subtle, high-quality athletic accent.",
                     inventoryCount: 50
@@ -176,7 +176,7 @@ const seedDatabase = async () => {
                     title: "Silver Anchor Chain Bracelet",
                     category: "jewelry",
                     price: 2799,
-                    image: "assets/find-section-img-4.png",
+                    image: "assets/acc-bracelet.png",
                     tags: ["Accessories", "Jewelry"],
                     description: "Solid 925 sterling silver anchor chain bracelet. Adds a touch of refined edge to any modern wrist.",
                     inventoryCount: 50
@@ -185,7 +185,7 @@ const seedDatabase = async () => {
                     title: "Organic Cotton Socks Pack",
                     category: "socks",
                     price: 899,
-                    image: "assets/find-section-img-6.png",
+                    image: "assets/acc-socks.png",
                     tags: ["Accessories", "Socks"],
                     description: "Three-pack of ribbed socks spun from certified organic cotton. Features reinforced heels and comfortable arch compression.",
                     inventoryCount: 50
@@ -193,7 +193,7 @@ const seedDatabase = async () => {
                 {
                     title: "Essential Hoodie",
                     category: "outerwear",
-                    price: 899,
+                    price: 3899,
                     image: "assets/essential-Hoodie-(pr-1).png",
                     tags: ["Bestseller", "Clothing", "Outerwear"],
                     description: "An absolute classic. The Essential Hoodie is made from ultra-soft brushed fleece with double-lined hood designs.",
@@ -202,34 +202,34 @@ const seedDatabase = async () => {
                 {
                     title: "Sand Oversize T-Shirt",
                     category: "shirts",
-                    price: 498,
+                    price: 1899,
                     image: "assets/sand-over(pr-1).png",
-                    tags: ["Bestseller", "Clothing", "Shirts"],
+                    tags: ["Bestseller", "Clothing", "Shirts", "New Arrival"],
                     description: "Heavy cotton t-shirt with drop-shoulder tailoring and a tight crew neckline. Built to hold its shape over time.",
                     inventoryCount: 50
                 },
                 {
-                    title: "Ocean Hoodie",
+                    title: "Ocean Blue Hoodie",
                     category: "outerwear",
-                    price: 489,
+                    price: 4299,
                     image: "assets/occian-h00die(pr-1).png",
-                    tags: ["Bestseller", "Clothing", "Outerwear"],
+                    tags: ["Bestseller", "Clothing", "Outerwear", "Activewear"],
                     description: "Spun in deep ocean blue, this heavyweight hoodie features dynamic fits, robust cuffs, and ultimate casual comfort.",
                     inventoryCount: 50
                 },
                 {
                     title: "Core Utility Pants",
                     category: "pants",
-                    price: 779,
+                    price: 3499,
                     image: "assets/core-utlity-pants(pr-1).png",
-                    tags: ["Bestseller", "Clothing", "Pants"],
+                    tags: ["Bestseller", "Clothing", "Pants", "Activewear"],
                     description: "Everyday utility trousers featuring elastic drawcords, reinforced knees, and multi-functional cargo pocket bays.",
                     inventoryCount: 50
                 },
                 {
                     title: "Longines Moonphase",
                     category: "watches",
-                    price: 2699,
+                    price: 26999,
                     image: "assets/longines-moonpnase(pr-1).png",
                     tags: ["Bestseller", "Accessories", "Watches"],
                     description: "Premium leather wrist watch featuring detailed star charts, gold bezel accents, and moonphase calendars.",
