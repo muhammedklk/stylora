@@ -233,83 +233,112 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Find Your Style Section */}
+            {/* Find Your Style (Category Cards Grid) Section */}
             <section className="find-style">
                 <div className="container">
                     <div className="find-style-header">
                         <h2 className="find-style-title">Find Your style</h2>
-                        <p className="find-style-subtitle">Browse our curated selection of premium menswear essentials.</p>
+                        <p className="find-style-subtitle">Explore our curated collections by category and discover your perfect look.</p>
                     </div>
 
-                    {/* Filter Bar */}
+                    {/* Filter Bar / Category Navigation Tabs */}
                     <div className="filter-bar">
                         <div className="filter-tabs">
                             {[
-                                { name: 'All', cat: 'all' },
+                                { name: 'All Categories', cat: 'all' },
                                 { name: 'Pants', cat: 'pants' },
                                 { name: 'Shirts', cat: 'shirts' },
-                                { name: 'T-Shirts', cat: 't-shirts' },
-                                { name: 'Track Pants', cat: 'track-pants' },
-                                { name: 'Watch', cat: 'watches' },
-                                { name: 'Trousers', cat: 'trousers' },
-                                { name: 'Cap', cat: 'hats-caps' }
+                                { name: 'Shoes', cat: 'shoes' },
+                                { name: 'Outerwear', cat: 'outerwear' },
+                                { name: 'Activewear', cat: 'activewear' },
+                                { name: 'Watches', cat: 'watches' }
                             ].map(tab => (
                                 <button 
                                     key={tab.name}
                                     className={`filter-tab ${activeFilter === tab.cat ? 'active' : ''}`}
-                                    onClick={() => handleFilterClick(tab.cat)}
+                                    onClick={() => navigate(`/shop?category=${tab.cat}`)}
                                 >
                                     {tab.name}
                                 </button>
                             ))}
-                            
-                            <button 
-                                className={`filter-tab filter-more-btn ${showMoreDropdown ? 'active' : ''}`} 
-                                id="filter-more-btn"
-                                onClick={(e) => { e.stopPropagation(); setShowMoreDropdown(!showMoreDropdown); }}
-                            >
-                                <img src="/assets/more-dots.svg" alt="More" className="more-icon" />
-                            </button>
-                            
-                            <div className={`filter-more-dropdown ${showMoreDropdown ? 'active' : ''}`} id="filter-more-dropdown">
-                                {[
-                                    { name: 'Activewear', cat: 'activewear' },
-                                    { name: 'Shoes', cat: 'shoes' },
-                                    { name: 'Outerwear', cat: 'outerwear' },
-                                    { name: 'Bags', cat: 'bags' },
-                                    { name: 'Socks', cat: 'socks' }
-                                ].map(dropItem => (
-                                    <button 
-                                        key={dropItem.name}
-                                        className={`filter-more-dropdown-item ${activeFilter === dropItem.cat ? 'active' : ''}`} 
-                                        onClick={() => handleFilterClick(dropItem.cat)}
-                                    >
-                                        {dropItem.name}
-                                    </button>
-                                ))}
-                            </div>
                         </div>
-                        <button className="view-all-btn" onClick={() => navigate('/shop')}>View All</button>
+                        <button className="view-all-btn" onClick={() => navigate('/shop')}>View All Products</button>
                     </div>
 
-                    {/* Product Grid */}
-                    <div className="find-style-grid">
-                        {filteredStyleProducts.map(prod => (
-                            <div className="style-item" key={prod._id}>
-                                <div className="style-card" onClick={() => navigate(`/product/${prod._id}`)} style={{ cursor: 'pointer' }}>
-                                    <img 
-                                        src={resolveImageUrl(prod.image)} 
-                                        alt={prod.title} 
-                                        className="style-image" 
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = '/assets/find-section-img-1.png';
-                                        }}
-                                    />
-                                    <button className="choose-options-btn">Choose Options</button>
+                    {/* Category Cards Grid */}
+                    <div className="find-style-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+                        {[
+                            { id: 'shirts', name: 'Shirts', tag: 'Essential Menswear', cat: 'shirts', fallback: '/assets/find-section-img-3.png' },
+                            { id: 'pants', name: 'Pants & Trousers', tag: 'Tailored Bottoms', cat: 'pants', fallback: '/assets/find-section-img-2.png' },
+                            { id: 'outerwear', name: 'Coats & Jackets', tag: 'Outerwear', cat: 'outerwear', fallback: '/assets/find-section-img-1.png' },
+                            { id: 'shoes', name: 'Shoes & Sneakers', tag: 'Footwear', cat: 'shoes', fallback: '/assets/find-section-img-4.png' },
+                            { id: 'activewear', name: 'Activewear', tag: 'Gym & Sports', cat: 'activewear', fallback: '/assets/find-section-img-1.png' },
+                            { id: 'watches', name: 'Watches & Accessories', tag: 'Timepieces', cat: 'watches', fallback: '/assets/find-section-img-3.png' }
+                        ].map(catItem => {
+                            const matchingProd = products.find(p => 
+                                (p.category && p.category.toLowerCase() === catItem.cat) ||
+                                (p.tags && p.tags.some(t => t.toLowerCase() === catItem.cat))
+                            );
+                            const imgUrl = matchingProd ? resolveImageUrl(matchingProd.image) : catItem.fallback;
+
+                            return (
+                                <div 
+                                    className="style-item" 
+                                    key={catItem.id}
+                                    onClick={() => navigate(`/shop?category=${catItem.cat}`)}
+                                    style={{ cursor: 'pointer', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}
+                                >
+                                    <div className="style-card" style={{ height: '420px', position: 'relative', width: '100%' }}>
+                                        <img 
+                                            src={imgUrl} 
+                                            alt={catItem.name} 
+                                            className="style-image" 
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = catItem.fallback;
+                                            }}
+                                        />
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            padding: '24px',
+                                            background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 65%, transparent 100%)',
+                                            color: '#fff',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'flex-start',
+                                            justifyContent: 'flex-end'
+                                        }}>
+                                            <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#d4af37', fontWeight: 700, marginBottom: '6px' }}>
+                                                {catItem.tag}
+                                            </span>
+                                            <h3 style={{ margin: '0 0 12px 0', fontSize: '20px', fontWeight: 800, color: '#fff', letterSpacing: '0.02em' }}>
+                                                {catItem.name}
+                                            </h3>
+                                            <div style={{
+                                                width: '100%',
+                                                padding: '12px 0',
+                                                backgroundColor: '#fff',
+                                                color: '#000',
+                                                border: 'none',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                letterSpacing: '0.08em',
+                                                textTransform: 'uppercase',
+                                                borderRadius: '2px',
+                                                textAlign: 'center',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                                            }}>
+                                                Explore {catItem.name} →
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
