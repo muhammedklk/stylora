@@ -131,7 +131,7 @@ const seedDatabase = async () => {
                     title: "Longines Premium Watch",
                     category: "watches",
                     price: 24999,
-                    image: "assets/find-section-img-5.png",
+                    image: "assets/longines-moonpnase(pr-1).png",
                     tags: ["Accessories", "Watches", "New Arrival"],
                     description: "An elegant timekeeper featuring a detailed moonphase complications layout, stainless steel frame, and genuine leather strap.",
                     inventoryCount: 50

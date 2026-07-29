@@ -5,7 +5,7 @@ export const productsData = [
         category: "outerwear",
         price: 12499,
         image: "assets/find-section-img-1.png",
-        tags: ["New Arrival", "Outerwear"],
+        tags: ["Clothing", "Outerwear", "New Arrival"],
         description: "A premium wool coat crafted with tailored lines and absolute precision. Provides warmth, timeless structure, and ultimate cinematic style for any cold-weather wardrobe.",
         inventoryCount: 50,
         brand: "STYLORA",
@@ -53,10 +53,10 @@ export const productsData = [
     {
         _id: "4",
         title: "Ribbed Knit Sweater",
-        category: "clothing",
+        category: "outerwear",
         price: 3799,
         image: "assets/find-section-img-4.png",
-        tags: ["Clothing", "New Arrival"],
+        tags: ["Clothing", "Outerwear", "New Arrival"],
         description: "A cozy ribbed sweater crafted from high-quality spun yarn. Features dynamic color tones and elasticated fit lines.",
         inventoryCount: 50,
         brand: "STYLORA",
@@ -140,111 +140,9 @@ export const productsData = [
         title: "Longines Premium Watch",
         category: "watches",
         price: 24999,
-        image: "assets/find-section-img-5.png",
+        image: "assets/longines-moonpnase(pr-1).png",
         tags: ["Accessories", "Watches", "New Arrival"],
         description: "An elegant timekeeper featuring a detailed moonphase complications layout, stainless steel frame, and genuine leather strap.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "10",
-        title: "Classic Leather Briefcase",
-        category: "bags",
-        price: 8999,
-        image: "assets/find-section-img-1.png",
-        tags: ["Accessories", "Bags"],
-        description: "Timeless leather briefcase with spacious document sleeves, metallic lock systems, and robust carry straps.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "11",
-        title: "Aviator Black Sunglasses",
-        category: "sunglasses",
-        price: 3499,
-        image: "assets/find-section-img-3.png",
-        tags: ["Accessories", "Sunglasses", "New Arrival"],
-        description: "Dark polarized sunglasses constructed with a lightweight metallic frame. Delivers 100% UV protection and high-end elegance.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "12",
-        title: "Minimalist Suede Wallet",
-        category: "belts-wallets",
-        price: 1999,
-        image: "assets/find-section-img-7.png",
-        tags: ["Accessories", "Belts & Wallets"],
-        description: "Slim suede leather wallet with RFID blocking slots. Crafted for sleek, front-pocket convenience.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "13",
-        title: "Washed Cotton Baseball Cap",
-        category: "hats-caps",
-        price: 1299,
-        image: "assets/find-section-img-2.png",
-        tags: ["Accessories", "Hats & Caps"],
-        description: "Relaxed fit washed cotton cap with an adjustable brass buckle. A subtle, high-quality athletic accent.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "14",
-        title: "Silver Anchor Chain Bracelet",
-        category: "jewelry",
-        price: 2799,
-        image: "assets/find-section-img-4.png",
-        tags: ["Accessories", "Jewelry"],
-        description: "Solid 925 sterling silver anchor chain bracelet. Adds a touch of refined edge to any modern wrist.",
-        inventoryCount: 50,
-        brand: "STYLORA",
-        sizes: ["S", "M", "L", "XL"],
-        colors: [
-            { name: "Black", hex: "#1a1a1a" },
-            { name: "Gray", hex: "#7a7a7a" },
-            { name: "White", hex: "#ffffff" }
-        ]
-    },
-    {
-        _id: "15",
-        title: "Organic Cotton Socks Pack",
-        category: "socks",
-        price: 899,
-        image: "assets/find-section-img-6.png",
-        tags: ["Accessories", "Socks"],
-        description: "Three-pack of ribbed socks spun from certified organic cotton. Features reinforced heels and comfortable arch compression.",
         inventoryCount: 50,
         brand: "STYLORA",
         sizes: ["S", "M", "L", "XL"],

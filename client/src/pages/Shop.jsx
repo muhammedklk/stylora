@@ -62,10 +62,18 @@ const Shop = () => {
 
         // Apply category filter
         if (category && category !== 'all') {
-            if (category === 'new-arrivals') {
-                result = result.filter(p => p.tags.includes('New Arrival'));
+            const catLower = category.toLowerCase();
+            if (catLower === 'new-arrivals') {
+                result = result.filter(p => p.tags && (p.tags.includes('New Arrival') || p.tags.includes('New Arrivals')));
+            } else if (catLower === 'clothing') {
+                const clothingCats = ['clothing', 'outerwear', 'shirts', 'pants', 'shorts', 'activewear'];
+                result = result.filter(p => clothingCats.includes(p.category?.toLowerCase()) || (p.tags && p.tags.some(t => t.toLowerCase() === 'clothing')));
+            } else if (catLower === 'shirts' || catLower === 't-shirts') {
+                result = result.filter(p => p.category?.toLowerCase() === 'shirts' || p.category?.toLowerCase() === 't-shirts' || (p.tags && p.tags.some(t => t.toLowerCase() === 'shirts')));
+            } else if (catLower === 'pants' || catLower === 'trousers' || catLower === 'track-pants') {
+                result = result.filter(p => p.category?.toLowerCase() === 'pants' || p.category?.toLowerCase() === 'trousers' || p.category?.toLowerCase() === 'track-pants' || (p.tags && p.tags.some(t => t.toLowerCase() === 'pants')));
             } else {
-                result = result.filter(p => p.category === category);
+                result = result.filter(p => p.category?.toLowerCase() === catLower || (p.tags && p.tags.some(t => t.toLowerCase() === catLower)));
             }
         }
 
