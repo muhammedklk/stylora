@@ -18,9 +18,12 @@ const Accessories = () => {
     const initialCategory = query.get('category') || 'all';
     const searchQuery = query.get('search') || '';
 
+    const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
+    const initialAccessories = productsData.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
+
     const { settings } = useSettings();
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [products, setProducts] = useState(initialAccessories);
+    const [filteredProducts, setFilteredProducts] = useState(initialAccessories);
     const [activeFilter, setActiveFilter] = useState(initialCategory);
 
     const getHeroBg = (img) => {

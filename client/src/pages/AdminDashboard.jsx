@@ -4,11 +4,13 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useSettings } from '../context/SettingsContext';
 import { API_URL, resolveImageUrl } from '../config';
+import { useToast } from '../context/ToastContext';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const { settings, updateSettings } = useSettings();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     // Changed to support sidebar pages: 'overview', 'products', 'orders', 'coupons', and content sections
     const [activeAdminTab, setActiveAdminTab] = useState('overview');
@@ -28,6 +30,7 @@ const AdminDashboard = () => {
     const [editShopHeroImage, setEditShopHeroImage] = useState('');
     const [editAccessoriesHeroImage, setEditAccessoriesHeroImage] = useState('');
     const [editContactHeroImage, setEditContactHeroImage] = useState('');
+    const [editShowNotAvailableBadge, setEditShowNotAvailableBadge] = useState(false);
 
     const [editContactEmail, setEditContactEmail] = useState('');
     const [editContactPhone, setEditContactPhone] = useState('');
@@ -96,6 +99,7 @@ const AdminDashboard = () => {
             setEditShopHeroImage(settings.shopHeroImage || '');
             setEditAccessoriesHeroImage(settings.accessoriesHeroImage || '');
             setEditContactHeroImage(settings.contactHeroImage || '');
+            setEditShowNotAvailableBadge(settings.showNotAvailableBadge === true);
 
             setEditContactEmail(settings.contactEmail || '');
             setEditContactPhone(settings.contactPhone || '');
@@ -130,6 +134,7 @@ const AdminDashboard = () => {
             formData.append('policyReturns', editPolicyReturns);
             formData.append('policyPrivacy', editPolicyPrivacy);
             formData.append('policyTerms', editPolicyTerms);
+            formData.append('showNotAvailableBadge', editShowNotAvailableBadge ? 'true' : 'false');
 
             // Handle Homepage Hero Image
             if (heroImageType === 'file' && heroImageFile) {
@@ -167,7 +172,7 @@ const AdminDashboard = () => {
             }
 
             await updateSettings(formData);
-            alert('Website content updated successfully!');
+            showToast('Website content updated successfully!', 'success');
             
             // Clear file states on success
             setHeroImageFile(null);
@@ -177,7 +182,7 @@ const AdminDashboard = () => {
             setContactHeroImageFile(null);
         } catch (err) {
             console.error("Error saving settings:", err);
-            alert('Error updating website content settings.');
+            showToast('Error updating website content settings.', 'error');
         }
     };
 
@@ -210,15 +215,20 @@ const AdminDashboard = () => {
 
     const handleDeleteProduct = async (prodId) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
+        // Optimistic update — remove from list immediately
+        setAdminProducts(prev => prev.filter(p => p._id !== prodId));
+        showToast('Product deleted successfully!', 'success');
+        // Invalidate cache so website reflects the change
+        localStorage.removeItem('stylora_products_cache');
         try {
             const token = localStorage.getItem('token');
             await axios.delete(`${API_URL}/products/${prodId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert('Product deleted successfully!');
-            fetchAdminData();
         } catch (err) {
-            alert('Error deleting product');
+            // Revert on failure
+            showToast('Error deleting product. Please refresh and try again.', 'error');
+            fetchAdminData();
         }
     };
 
@@ -236,10 +246,10 @@ const AdminDashboard = () => {
             });
             setNewCouponCode('');
             setNewCouponVal('');
-            alert('Coupon created successfully!');
+            showToast('Coupon created successfully!', 'success');
             fetchAdminData();
         } catch (err) {
-            alert('Error creating coupon');
+            showToast('Error creating coupon.', 'error');
         }
     };
 
@@ -247,7 +257,7 @@ const AdminDashboard = () => {
         const statuses = ['Placed', 'Processed', 'Shipped', 'Out for Delivery', 'Delivered'];
         const nextIdx = statuses.indexOf(currentStatus) + 1;
         if (nextIdx >= statuses.length) {
-            alert('Order is already Delivered.');
+            showToast('Order is already Delivered.', 'info');
             return;
         }
         const nextStatus = statuses[nextIdx];
@@ -256,10 +266,10 @@ const AdminDashboard = () => {
             await axios.put(`${API_URL}/orders/${orderId}/status`, { status: nextStatus }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert(`Order status updated to ${nextStatus}!`);
+            showToast(`Order status updated to ${nextStatus}!`, 'success');
             fetchAdminData();
         } catch (err) {
-            alert('Error updating status');
+            showToast('Error updating order status.', 'error');
         }
     };
 
@@ -573,7 +583,15 @@ const AdminDashboard = () => {
                                                                 filteredProducts.map(p => (
                                                                     <tr key={p._id} style={{ borderBottom: '1px solid #eee' }}>
                                                                         <td style={{ padding: '12px 16px' }}>
-                                                                            <img src={resolveImageUrl(p.image)} alt={p.title} style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '2px', border: '1px solid #eee' }} />
+                                                                            <img 
+                                                                                src={resolveImageUrl(p.image)} 
+                                                                                alt={p.title} 
+                                                                                style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '2px', border: '1px solid #eee' }} 
+                                                                                onError={(e) => {
+                                                                                    e.target.onerror = null;
+                                                                                    e.target.src = '/assets/find-section-img-1.png';
+                                                                                }}
+                                                                            />
                                                                         </td>
                                                                         <td style={{ padding: '12px 16px', fontWeight: 500 }}>
                                                                             <div>{p.title}</div>
@@ -1089,6 +1107,46 @@ const AdminDashboard = () => {
                                                                 style={{ height: '46px', paddingTop: '10px' }} 
                                                             />
                                                         )}
+                                                                    </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Not Available Badge toggle */}
+                                                <div className="p-4 mb-4" style={{ backgroundColor: '#fafafa', border: '1px solid #eee', borderRadius: '4px' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                        <div>
+                                                            <h4 style={{ fontSize: '13px', fontWeight: 700, margin: 0, color: '#111' }}>"Not Available" Badge on Empty Categories</h4>
+                                                            <p style={{ fontSize: '12px', color: '#666', margin: '4px 0 0 0' }}>Show a red "N/A" badge on shop filter tabs that have zero products.</p>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setEditShowNotAvailableBadge(!editShowNotAvailableBadge)}
+                                                            style={{
+                                                                width: '52px',
+                                                                height: '28px',
+                                                                borderRadius: '14px',
+                                                                border: 'none',
+                                                                backgroundColor: editShowNotAvailableBadge ? '#1a1a1a' : '#ddd',
+                                                                cursor: 'pointer',
+                                                                position: 'relative',
+                                                                transition: 'background-color 0.2s ease',
+                                                                flexShrink: 0
+                                                            }}
+                                                        >
+                                                            <span style={{
+                                                                position: 'absolute',
+                                                                top: '4px',
+                                                                left: editShowNotAvailableBadge ? '28px' : '4px',
+                                                                width: '20px',
+                                                                height: '20px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: '#fff',
+                                                                transition: 'left 0.2s ease',
+                                                                boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+                                                            }} />
+                                                        </button>
                                                     </div>
                                                 </div>
 

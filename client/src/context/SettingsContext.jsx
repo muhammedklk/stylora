@@ -21,7 +21,8 @@ export const SettingsProvider = ({ children }) => {
         contactPhone: "+91 98765 43210",
         contactAddress: "Stylora HQ, 5th Avenue, Bangalore, India",
         socialInstagram: "https://instagram.com/styleora",
-        socialTwitter: "https://twitter.com/styleora"
+        socialTwitter: "https://twitter.com/styleora",
+        showNotAvailableBadge: false
     });
     const [loading, setLoading] = useState(true);
 
@@ -36,6 +37,10 @@ export const SettingsProvider = ({ children }) => {
                 sanitized[field] = '/assets/herobg.png';
             }
         });
+        // Normalize showNotAvailableBadge from string to boolean
+        if (typeof sanitized.showNotAvailableBadge === 'string') {
+            sanitized.showNotAvailableBadge = sanitized.showNotAvailableBadge === 'true';
+        }
         return sanitized;
     };
 

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL, resolveImageUrl } from '../config';
+import { useToast } from '../context/ToastContext';
 
 const getColorNameFromHex = (hex) => {
     const colorMap = {
@@ -132,6 +133,7 @@ const getColorNameFromHex = (hex) => {
 const AdminEditProduct = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     // Form states
     const [title, setTitle] = useState('');
@@ -167,6 +169,30 @@ const AdminEditProduct = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+    const objectUrlRef = useRef(null);
+
+    // Update image preview whenever imageFile or imageUrl changes
+    useEffect(() => {
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
+        }
+        if (imageFile) {
+            const url = URL.createObjectURL(imageFile);
+            objectUrlRef.current = url;
+            setImagePreviewUrl(url);
+        } else if (imageUrl) {
+            setImagePreviewUrl(resolveImageUrl(imageUrl));
+        } else {
+            setImagePreviewUrl('');
+        }
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+            }
+        };
+    }, [imageFile, imageUrl]);
 
     useEffect(() => {
         fetchProductDetails();
@@ -690,15 +716,11 @@ const AdminEditProduct = () => {
                                                 </div>
                                             )}
 
-                                            {(imageUrl || imageFile) && (
+                                            {imagePreviewUrl && (
                                                 <div className="mt-3 p-3" style={{ border: '1px dashed #eee', display: 'inline-block', borderRadius: '4px' }}>
                                                     <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '8px' }}>Current Preview:</span>
                                                     <img 
-                                                         src={
-                                                             imageFile
-                                                                 ? URL.createObjectURL(imageFile)
-                                                                 : resolveImageUrl(imageUrl)
-                                                         } 
+                                                         src={imagePreviewUrl} 
                                                          alt="Preview" 
                                                          style={{ maxHeight: '120px', maxWidth: '200px', objectFit: 'contain' }}
                                                     />

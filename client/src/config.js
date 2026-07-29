@@ -21,12 +21,18 @@ export const SERVER_URL = API_URL.endsWith('/api') ? API_URL.slice(0, -4) : API_
 export const resolveImageUrl = (img) => {
     if (!img) return '/assets/find-section-img-1.png';
     if (typeof img !== 'string') return '/assets/find-section-img-1.png';
-    if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) {
-        return img;
+    const trimmed = img.trim();
+    if (!trimmed) return '/assets/find-section-img-1.png';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+        return trimmed;
     }
-    const cleanPath = img.startsWith('/') ? img.slice(1) : img;
+    const cleanPath = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
     if (cleanPath.startsWith('uploads/')) {
         return SERVER_URL ? `${SERVER_URL}/${cleanPath}` : `/${cleanPath}`;
     }
-    return `/${cleanPath}`;
+    if (cleanPath.startsWith('assets/')) {
+        return `/${cleanPath}`;
+    }
+    return `/assets/${cleanPath}`;
 };
+

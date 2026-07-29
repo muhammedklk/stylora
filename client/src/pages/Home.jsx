@@ -6,14 +6,48 @@ import { useSettings } from '../context/SettingsContext';
 import { API_URL, resolveImageUrl } from '../config';
 import { productsData } from '../products-data';
 
+const CACHE_KEY = 'stylora_products_cache';
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// Skeleton placeholder for bestseller cards
+const SkeletonCard = ({ isFeatured = false }) => (
+    <div style={{
+        background: '#fff',
+        border: '1px solid #f0f0f0',
+        borderRadius: '4px',
+        overflow: 'hidden',
+        height: isFeatured ? '480px' : '220px',
+        background: 'linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%)',
+        backgroundSize: '200% 100%',
+        animation: 'homeShimmer 1.5s infinite'
+    }} />
+);
+
+const getInitialProducts = () => {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { data } = JSON.parse(cached);
+            if (Array.isArray(data) && data.length > 0) {
+                return data;
+            }
+        }
+    } catch (e) {}
+    return productsData;
+};
+
 const Home = () => {
     const { settings } = useSettings();
-    const [products, setProducts] = useState([]);
-    const [bestsellers, setBestsellers] = useState([]);
-    const [findStyleProducts, setFindStyleProducts] = useState([]);
-    const [filteredStyleProducts, setFilteredStyleProducts] = useState([]);
+    const [products, setProducts] = useState(() => getInitialProducts());
+    const [bestsellers, setBestsellers] = useState(() => {
+        const initial = getInitialProducts();
+        return initial.filter(p => p.tags && p.tags.includes('Bestseller'));
+    });
+    const [findStyleProducts, setFindStyleProducts] = useState(() => getInitialProducts());
+    const [filteredStyleProducts, setFilteredStyleProducts] = useState(() => getInitialProducts());
     const [activeFilter, setActiveFilter] = useState('all');
     const [showMoreDropdown, setShowMoreDropdown] = useState(false);
+    const [productsLoading, setProductsLoading] = useState(false);
     const charRefs = useRef([]);
     const navigate = useNavigate();
 
@@ -28,6 +62,8 @@ const Home = () => {
             if (data.length === 0) {
                 throw new Error('Empty products list from API server');
             }
+            // Update cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
             setProducts(data);
             
             // Extract bestsellers
@@ -36,18 +72,29 @@ const Home = () => {
             
             // Use all products for Find Your Style section
             setFindStyleProducts(data);
-            setFilteredStyleProducts(data);
+            applyFilterToProducts(data, activeFilter);
         } catch (err) {
-            console.warn('Error fetching products, falling back to static local data:', err.message);
-            setProducts(productsData);
-            
-            // Extract bestsellers
-            const bests = productsData.filter(p => p.tags && p.tags.includes('Bestseller'));
-            setBestsellers(bests);
-            
-            // Use all products for Find Your Style section
-            setFindStyleProducts(productsData);
-            setFilteredStyleProducts(productsData);
+            console.warn('Error fetching products from API, staying with initial data:', err.message);
+        } finally {
+            setProductsLoading(false);
+        }
+    };
+
+    const applyFilterToProducts = (allProducts, category) => {
+        if (category === 'all') {
+            setFilteredStyleProducts(allProducts);
+        } else if (category === 'clothing') {
+            const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
+            const filtered = allProducts.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing')));
+            setFilteredStyleProducts(filtered);
+        } else {
+            const target = category.toLowerCase().replace(/-/g, '');
+            const filtered = allProducts.filter(p => {
+                const catMatch = p.category && p.category.toLowerCase().replace(/-/g, '') === target;
+                const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '') === target);
+                return catMatch || tagMatch;
+            });
+            setFilteredStyleProducts(filtered);
         }
     };
 
@@ -135,6 +182,13 @@ const Home = () => {
 
     return (
         <div>
+            {/* Shimmer keyframe */}
+            <style>{`
+                @keyframes homeShimmer {
+                    0% { background-position: -200% 0; }
+                    100% { background-position: 200% 0; }
+                }
+            `}</style>
             {/* Hero Section */}
             <section className="hero" style={getHeroBg(settings?.heroImage)}>
                 <div className="hero-overlay"></div>
@@ -243,7 +297,15 @@ const Home = () => {
                         {filteredStyleProducts.map(prod => (
                             <div className="style-item" key={prod._id}>
                                 <div className="style-card" onClick={() => navigate(`/product/${prod._id}`)} style={{ cursor: 'pointer' }}>
-                                    <img src={resolveImageUrl(prod.image)} alt={prod.title} className="style-image" />
+                                    <img 
+                                        src={resolveImageUrl(prod.image)} 
+                                        alt={prod.title} 
+                                        className="style-image" 
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/assets/find-section-img-1.png';
+                                        }}
+                                    />
                                     <button className="choose-options-btn">Choose Options</button>
                                 </div>
                             </div>

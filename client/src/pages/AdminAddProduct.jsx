@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL, resolveImageUrl } from '../config';
+import { fileToDataUrl } from '../utils/imageUtils';
+import { useToast } from '../context/ToastContext';
 
 const getColorNameFromHex = (hex) => {
     const colorMap = {
@@ -131,6 +133,7 @@ const getColorNameFromHex = (hex) => {
 
 const AdminAddProduct = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     // Form states
     const [title, setTitle] = useState('');
@@ -165,6 +168,31 @@ const AdminAddProduct = () => {
 
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+    const objectUrlRef = useRef(null);
+
+    // Update image preview whenever imageFile or imageUrl changes
+    useEffect(() => {
+        // Revoke previous object URL to prevent memory leaks
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
+        }
+        if (imageFile) {
+            const url = URL.createObjectURL(imageFile);
+            objectUrlRef.current = url;
+            setImagePreviewUrl(url);
+        } else if (imageUrl) {
+            setImagePreviewUrl(resolveImageUrl(imageUrl));
+        } else {
+            setImagePreviewUrl('');
+        }
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+            }
+        };
+    }, [imageFile, imageUrl]);
 
     const handleSizeToggle = (size) => {
         if (sizes.includes(size)) {
@@ -244,7 +272,10 @@ const AdminAddProduct = () => {
                 }
             });
 
-            alert('Product added successfully!');
+            // Invalidate the products cache so website shows the new product immediately
+            localStorage.removeItem('stylora_products_cache');
+
+            showToast('Product added successfully!', 'success');
             navigate('/admin/dashboard');
         } catch (err) {
             console.error('Error adding product:', err);
@@ -632,15 +663,11 @@ const AdminAddProduct = () => {
                                                 </div>
                                             )}
 
-                                            {(imageUrl || imageFile) && (
+                                            {imagePreviewUrl && (
                                                 <div className="mt-3 p-3" style={{ border: '1px dashed #eee', display: 'inline-block', borderRadius: '4px' }}>
                                                     <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '8px' }}>Current Preview:</span>
                                                     <img 
-                                                         src={
-                                                             imageFile
-                                                                 ? URL.createObjectURL(imageFile)
-                                                                 : resolveImageUrl(imageUrl)
-                                                         } 
+                                                         src={imagePreviewUrl} 
                                                          alt="Preview" 
                                                          style={{ maxHeight: '120px', maxWidth: '200px', objectFit: 'contain' }}
                                                     />
