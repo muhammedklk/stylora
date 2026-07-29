@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
@@ -43,12 +43,7 @@ const Home = () => {
         const initial = getInitialProducts();
         return initial.filter(p => p.tags && p.tags.includes('Bestseller'));
     });
-    const [findStyleProducts, setFindStyleProducts] = useState(() => getInitialProducts());
-    const [filteredStyleProducts, setFilteredStyleProducts] = useState(() => getInitialProducts());
     const [activeFilter, setActiveFilter] = useState('all');
-    const [showMoreDropdown, setShowMoreDropdown] = useState(false);
-    const [productsLoading, setProductsLoading] = useState(false);
-    const charRefs = useRef([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,32 +64,8 @@ const Home = () => {
             // Extract bestsellers
             const bests = data.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
-            
-            // Use all products for Find Your Style section
-            setFindStyleProducts(data);
-            applyFilterToProducts(data, activeFilter);
         } catch (err) {
             console.warn('Error fetching products from API, staying with initial data:', err.message);
-        } finally {
-            setProductsLoading(false);
-        }
-    };
-
-    const applyFilterToProducts = (allProducts, category) => {
-        if (category === 'all') {
-            setFilteredStyleProducts(allProducts);
-        } else if (category === 'clothing') {
-            const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
-            const filtered = allProducts.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing')));
-            setFilteredStyleProducts(filtered);
-        } else {
-            const target = category.toLowerCase().replace(/-/g, '');
-            const filtered = allProducts.filter(p => {
-                const catMatch = p.category && p.category.toLowerCase().replace(/-/g, '') === target;
-                const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '') === target);
-                return catMatch || tagMatch;
-            });
-            setFilteredStyleProducts(filtered);
         }
     };
 

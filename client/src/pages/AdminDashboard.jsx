@@ -24,7 +24,6 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState({ totalRevenue: 0, totalOrders: 0, totalProducts: 0, totalUsers: 0 });
     const [adminCategoryFilter, setAdminCategoryFilter] = useState('ALL');
     const [searchQuery, setSearchQuery] = useState('');
-    const [loading, setLoading] = useState(false);
 
     // Local state for Content Settings tab
     const [showNotAvailableBadge, setShowNotAvailableBadge] = useState(settings?.showNotAvailableBadge ?? false);
