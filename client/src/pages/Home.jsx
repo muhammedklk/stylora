@@ -275,11 +275,12 @@ const Home = () => {
                             { id: 'activewear', name: 'Activewear', tag: 'Gym & Sports', cat: 'activewear', fallback: '/assets/find-section-img-1.png' },
                             { id: 'watches', name: 'Watches & Accessories', tag: 'Timepieces', cat: 'watches', fallback: '/assets/find-section-img-3.png' }
                         ].map(catItem => {
+                            const customImg = settings?.categoryImages?.[catItem.id];
                             const matchingProd = products.find(p => 
                                 (p.category && p.category.toLowerCase() === catItem.cat) ||
                                 (p.tags && p.tags.some(t => t.toLowerCase() === catItem.cat))
                             );
-                            const imgUrl = matchingProd ? resolveImageUrl(matchingProd.image) : catItem.fallback;
+                            const imgUrl = customImg ? resolveImageUrl(customImg) : (matchingProd ? resolveImageUrl(matchingProd.image) : catItem.fallback);
 
                             return (
                                 <div 

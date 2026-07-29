@@ -22,7 +22,15 @@ export const SettingsProvider = ({ children }) => {
         contactAddress: "Stylora HQ, 5th Avenue, Bangalore, India",
         socialInstagram: "https://instagram.com/styleora",
         socialTwitter: "https://twitter.com/styleora",
-        showNotAvailableBadge: false
+        showNotAvailableBadge: false,
+        categoryImages: {
+            shirts: '',
+            pants: '',
+            outerwear: '',
+            shoes: '',
+            activewear: '',
+            watches: ''
+        }
     });
     const [loading, setLoading] = useState(true);
 

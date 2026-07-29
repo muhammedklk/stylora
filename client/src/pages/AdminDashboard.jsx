@@ -29,6 +29,14 @@ const AdminDashboard = () => {
     // Local state for Content Settings tab
     const [showNotAvailableBadge, setShowNotAvailableBadge] = useState(settings?.showNotAvailableBadge ?? false);
     const [shopHeroImg, setShopHeroImg] = useState(settings?.shopHeroImage || '');
+    const [categoryImages, setCategoryImages] = useState({
+        shirts: settings?.categoryImages?.shirts || '',
+        pants: settings?.categoryImages?.pants || '',
+        outerwear: settings?.categoryImages?.outerwear || '',
+        shoes: settings?.categoryImages?.shoes || '',
+        activewear: settings?.categoryImages?.activewear || '',
+        watches: settings?.categoryImages?.watches || ''
+    });
 
     useEffect(() => {
         const tab = new URLSearchParams(location.search).get('tab');
@@ -39,6 +47,12 @@ const AdminDashboard = () => {
         if (settings) {
             setShowNotAvailableBadge(settings.showNotAvailableBadge ?? false);
             setShopHeroImg(settings.shopHeroImage || '');
+            if (settings.categoryImages) {
+                setCategoryImages(prev => ({
+                    ...prev,
+                    ...settings.categoryImages
+                }));
+            }
         }
     }, [settings]);
 
@@ -134,9 +148,17 @@ const AdminDashboard = () => {
     const handleSaveSettings = () => {
         updateSettings({
             showNotAvailableBadge,
-            shopHeroImage: shopHeroImg
+            shopHeroImage: shopHeroImg,
+            categoryImages
         });
-        showToast('Settings saved successfully!', 'success');
+        showToast('Settings & Category Images saved successfully!', 'success');
+    };
+
+    const handleCategoryImgChange = (catKey, value) => {
+        setCategoryImages(prev => ({
+            ...prev,
+            [catKey]: value
+        }));
     };
 
     const handleLogout = () => {
@@ -538,9 +560,7 @@ const AdminDashboard = () => {
                                     <span style={{ fontSize: '12px', color: '#6b7280' }}>Displays a red N/A badge on empty category tabs in Shop page when products count is 0.</span>
                                 </div>
                             </label>
-                        </div>
-
-                        <div style={{ marginBottom: '24px' }}>
+                                                <div style={{ marginBottom: '24px' }}>
                             <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>Shop Hero Image URL</label>
                             <input
                                 type="text"
@@ -551,11 +571,61 @@ const AdminDashboard = () => {
                             />
                         </div>
 
+                        <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '24px 0' }} />
+
+                        <h4 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 700, color: '#111' }}>
+                            Find Your Style - Category Card Images
+                        </h4>
+                        <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
+                            Set custom image URLs or paths for the Category Cards displayed on the Home Page "Find Your Style" section.
+                        </p>
+
+                        {[
+                            { key: 'shirts', label: 'Shirts Category Image', placeholder: '/assets/find-section-img-3.png' },
+                            { key: 'pants', label: 'Pants & Trousers Category Image', placeholder: '/assets/find-section-img-2.png' },
+                            { key: 'outerwear', label: 'Coats & Jackets (Outerwear) Image', placeholder: '/assets/find-section-img-1.png' },
+                            { key: 'shoes', label: 'Shoes & Sneakers Category Image', placeholder: '/assets/find-section-img-4.png' },
+                            { key: 'activewear', label: 'Activewear Category Image', placeholder: '/assets/find-section-img-1.png' },
+                            { key: 'watches', label: 'Watches Category Image', placeholder: '/assets/find-section-img-3.png' }
+                        ].map(cat => (
+                            <div key={cat.key} style={{ marginBottom: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '4px', color: '#374151' }}>
+                                        {cat.label}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={categoryImages[cat.key] || ''}
+                                        onChange={e => handleCategoryImgChange(cat.key, e.target.value)}
+                                        placeholder={cat.placeholder}
+                                        style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
+                                    />
+                                </div>
+                                <div style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                    border: '1px solid #e5e7eb',
+                                    backgroundColor: '#f3f4f6',
+                                    flexShrink: 0,
+                                    marginTop: '16px'
+                                }}>
+                                    <img
+                                        src={resolveImageUrl(categoryImages[cat.key] || cat.placeholder)}
+                                        alt={cat.label}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+
                         <button
                             onClick={handleSaveSettings}
-                            style={{ padding: '12px 24px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
+                            style={{ marginTop: '16px', padding: '12px 24px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', width: '100%' }}
                         >
-                            Save Settings
+                            Save All Settings & Category Images
                         </button>
                     </div>
                 )}
