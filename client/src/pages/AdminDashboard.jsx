@@ -80,7 +80,7 @@ const AdminDashboard = () => {
     const [adminOrders, setAdminOrders] = useState([]);
     const [expandedOrderId, setExpandedOrderId] = useState(null);
     const [adminCoupons, setAdminCoupons] = useState([]);
-    const [adminLoading, setAdminLoading] = useState(true);
+    const [adminLoading, setAdminLoading] = useState(false);
 
     // Filter/search states
     const [productSearch, setProductSearch] = useState('');
@@ -204,9 +204,6 @@ const AdminDashboard = () => {
     };
 
     const fetchAdminData = async () => {
-        if (!adminStats && adminProducts.length === 0) {
-            setAdminLoading(true);
-        }
         try {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
