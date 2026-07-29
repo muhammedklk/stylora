@@ -318,8 +318,11 @@ const AdminEditProduct = () => {
                 }
             });
 
-            alert('Product updated successfully!');
-            navigate('/admin/dashboard');
+            // Invalidate the products cache so website shows updated product immediately
+            localStorage.removeItem('stylora_products_cache');
+
+            showToast('Product updated successfully!', 'success');
+            navigate('/admin/dashboard?tab=products');
         } catch (err) {
             console.error('Error updating product:', err);
             setError(err.response?.data?.message || 'Failed to update product details. Please try again.');

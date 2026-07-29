@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useSettings } from '../context/SettingsContext';
@@ -10,11 +10,18 @@ const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const { settings, updateSettings } = useSettings();
     const navigate = useNavigate();
+    const location = useLocation();
     const { showToast } = useToast();
 
-    // Changed to support sidebar pages: 'overview', 'products', 'orders', 'coupons', and content sections
-    const [activeAdminTab, setActiveAdminTab] = useState('overview');
+    const queryTab = new URLSearchParams(location.search).get('tab');
+    const [activeAdminTab, setActiveAdminTab] = useState(queryTab || 'overview');
     const [contentMenuOpen, setContentMenuOpen] = useState(false);
+
+    useEffect(() => {
+        if (queryTab) {
+            setActiveAdminTab(queryTab);
+        }
+    }, [queryTab]);
 
     // Dynamic Site Content States
     const [editHeroTitle, setEditHeroTitle] = useState('');
@@ -187,21 +194,23 @@ const AdminDashboard = () => {
     };
 
     const fetchAdminData = async () => {
-        setAdminLoading(true);
+        if (!adminStats && adminProducts.length === 0) {
+            setAdminLoading(true);
+        }
         try {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
             
-            const statsRes = await axios.get(`${API_URL}/admin/dashboard`, { headers });
-            setAdminStats(statsRes.data);
+            const [statsRes, prodRes, ordersRes] = await Promise.all([
+                axios.get(`${API_URL}/admin/dashboard`, { headers }).catch(err => ({ data: null })),
+                axios.get(`${API_URL}/products`).catch(err => ({ data: [] })),
+                axios.get(`${API_URL}/orders/all`, { headers }).catch(err => ({ data: [] }))
+            ]);
 
-            const prodRes = await axios.get(`${API_URL}/products`);
-            setAdminProducts(prodRes.data);
+            if (statsRes.data) setAdminStats(statsRes.data);
+            if (Array.isArray(prodRes.data)) setAdminProducts(prodRes.data);
+            if (Array.isArray(ordersRes.data)) setAdminOrders(ordersRes.data);
 
-            const ordersRes = await axios.get(`${API_URL}/orders/all`, { headers });
-            setAdminOrders(ordersRes.data);
-
-            // Coupons validate call or mocked data
             setAdminCoupons([
                 { _id: '1', code: 'WELCOME10', discountValue: 10, discountType: 'percentage', expiryDate: '2027-12-31' },
                 { _id: '2', code: 'STYLORA20', discountValue: 20, discountType: 'percentage', expiryDate: '2027-12-31' }
@@ -484,7 +493,7 @@ const AdminDashboard = () => {
                         <div className="col-lg-9 col-md-8">
                             <div className="p-5" style={{ backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '4px', minHeight: '600px' }}>
                                 
-                                {adminLoading ? (
+                                {adminLoading && !adminStats && adminProducts.length === 0 ? (
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px', flexDirection: 'column' }}>
                                         <p style={{ fontSize: '14px', color: '#666' }}>Loading administrative data workspace...</p>
                                     </div>

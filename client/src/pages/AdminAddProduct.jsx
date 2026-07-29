@@ -276,7 +276,7 @@ const AdminAddProduct = () => {
             localStorage.removeItem('stylora_products_cache');
 
             showToast('Product added successfully!', 'success');
-            navigate('/admin/dashboard');
+            navigate('/admin/dashboard?tab=products');
         } catch (err) {
             console.error('Error adding product:', err);
             setError(err.response?.data?.message || 'Failed to create product. Make sure all required fields are filled.');
