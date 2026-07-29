@@ -690,14 +690,23 @@ const AdminEditProduct = () => {
                                                 </div>
                                             )}
 
-                                            {imageUrl && (
+                                            {(imageUrl || imageFile) && (
                                                 <div className="mt-3 p-3" style={{ border: '1px dashed #eee', display: 'inline-block', borderRadius: '4px' }}>
                                                     <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '8px' }}>Current Preview:</span>
                                                     <img 
-                                                         src={imageUrl.startsWith('http') ? imageUrl : (imageUrl.startsWith('uploads/') ? `http://localhost:5000/${imageUrl}` : (imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`))} 
+                                                         src={
+                                                             imageFile
+                                                                 ? URL.createObjectURL(imageFile)
+                                                                 : (imageUrl.startsWith('http') ? imageUrl : (imageUrl.startsWith('uploads/') ? `http://localhost:5000/${imageUrl}` : (imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`)))
+                                                         } 
                                                          alt="Preview" 
-                                                         style={{ maxHeight: '100px', objectFit: 'contain' }}
+                                                         style={{ maxHeight: '120px', maxWidth: '200px', objectFit: 'contain' }}
                                                     />
+                                                    {imageFile && (
+                                                        <span style={{ fontSize: '11px', color: '#22c55e', display: 'block', marginTop: '6px' }}>
+                                                            ✓ {imageFile.name}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>
