@@ -82,9 +82,6 @@ const ProductCard = ({ product, isFeatured = false }) => {
                     {/* Back Face */}
                     <div className="card-back" onClick={() => navigate(`/product/${product._id}`)} style={{ cursor: 'pointer' }}>
                         <div className="card-back-content">
-                            <span style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#d4af37', fontWeight: 600, display: 'block', marginBottom: '4px', textTransform: 'uppercase' }}>
-                                {product.brand || 'STYLORA'}
-                            </span>
                             <h4 className="back-title">{product.title}</h4>
                             <div className="d-flex align-items-center justify-content-center gap-2">
                                 <span className="back-price">₹{product.price}</span>
@@ -128,9 +125,6 @@ const ProductCard = ({ product, isFeatured = false }) => {
             </div>
 
             <div className="product-info">
-                <span className="product-card-brand" style={{ fontSize: '9px', letterSpacing: '0.05em', color: '#888', textTransform: 'uppercase', display: 'block', marginBottom: '2px', fontWeight: 600 }}>
-                    {product.brand || 'STYLORA'}
-                </span>
                 <h3 
                     className="product-title" 
                     onClick={() => navigate(`/product/${product._id}`)}
