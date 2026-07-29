@@ -401,45 +401,68 @@ const AdminDashboard = () => {
                                 </thead>
                                 <tbody>
                                     {filteredProducts.length > 0 ? (
-                                        filteredProducts.map(product => (
-                                            <tr key={product._id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                                                <td style={{ padding: '12px 16px' }}>
-                                                    <img
-                                                        src={resolveImageUrl(product.image)}
-                                                        alt={product.title}
-                                                        style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px', backgroundColor: '#f0f0f0' }}
-                                                        onError={(e) => { e.target.onerror = null; e.target.src = '/assets/find-section-img-1.png'; }}
-                                                    />
+                                        filteredProducts.map((product, idx) => (
+                                            <tr key={product._id || idx} className="admin-product-row" style={{ borderBottom: '1px solid #f3f4f6', transition: 'background-color 0.2s ease' }}>
+                                                <td style={{ padding: '14px 16px' }}>
+                                                    <div style={{ width: '54px', height: '54px', borderRadius: '6px', overflow: 'hidden', backgroundColor: '#f0f0f0', border: '1px solid #e5e7eb', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                                                        <img
+                                                            src={resolveImageUrl(product.image)}
+                                                            alt={product.title}
+                                                            className="admin-product-img"
+                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                            onError={(e) => { e.target.onerror = null; e.target.src = '/assets/find-section-img-1.png'; }}
+                                                        />
+                                                    </div>
                                                 </td>
-                                                <td style={{ padding: '12px 16px', fontWeight: 600 }}>{product.title}</td>
-                                                <td style={{ padding: '12px 16px', textTransform: 'capitalize', color: '#6b7280' }}>{product.category}</td>
-                                                <td style={{ padding: '12px 16px', fontWeight: 700 }}>₹{product.price}</td>
-                                                <td style={{ padding: '12px 16px', color: '#9ca3af', textDecoration: product.originalPrice ? 'line-through' : 'none' }}>
+                                                <td style={{ padding: '14px 16px' }}>
+                                                    <span style={{ fontSize: '10px', color: '#9ca3af', fontFamily: 'monospace', display: 'block', marginBottom: '2px', fontWeight: 600 }}>
+                                                        ID: #{product._id ? String(product._id).slice(-6) : idx + 1}
+                                                    </span>
+                                                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#111', display: 'block' }}>
+                                                        {product.title}
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '14px 16px' }}>
+                                                    <span style={{
+                                                        padding: '3px 8px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '10px',
+                                                        fontWeight: 700,
+                                                        backgroundColor: '#f3f4f6',
+                                                        color: '#374151',
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '0.05em'
+                                                    }}>
+                                                        {product.category || 'General'}
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '14px 16px', fontWeight: 800, color: '#111', fontSize: '14px' }}>₹{product.price}</td>
+                                                <td style={{ padding: '14px 16px', color: '#9ca3af', textDecoration: product.originalPrice ? 'line-through' : 'none' }}>
                                                     {product.originalPrice ? `₹${product.originalPrice}` : '-'}
                                                 </td>
-                                                <td style={{ padding: '12px 16px' }}>
+                                                <td style={{ padding: '14px 16px' }}>
                                                     <span style={{
-                                                        padding: '4px 8px',
+                                                        padding: '4px 10px',
                                                         borderRadius: '12px',
                                                         fontSize: '11px',
-                                                        fontWeight: 600,
+                                                        fontWeight: 700,
                                                         backgroundColor: (product.inventoryCount ?? 10) > 0 ? '#dcfce7' : '#fee2e2',
                                                         color: (product.inventoryCount ?? 10) > 0 ? '#15803d' : '#b91c1c'
                                                     }}>
                                                         {(product.inventoryCount ?? 10) > 0 ? `In Stock (${product.inventoryCount ?? 10})` : 'Out of Stock'}
                                                     </span>
                                                 </td>
-                                                <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
                                                         <button
                                                             onClick={() => navigate(`/admin/edit-product/${product._id}`)}
-                                                            style={{ padding: '6px 12px', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
+                                                            style={{ padding: '7px 14px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s ease' }}
                                                         >
                                                             Edit
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteProduct(product._id, product.title)}
-                                                            style={{ padding: '6px 12px', backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
+                                                            style={{ padding: '7px 14px', backgroundColor: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s ease' }}
                                                         >
                                                             Delete
                                                         </button>

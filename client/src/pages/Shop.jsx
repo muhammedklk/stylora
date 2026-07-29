@@ -321,7 +321,7 @@ const Shop = () => {
                                         onClick={() => handleFilterChange(tab.cat)}
                                         style={{ position: 'relative' }}
                                     >
-                                        {tab.name}
+                                        {tab.name} {count !== null && <span style={{ opacity: 0.8, fontSize: '10px', marginLeft: '4px', fontWeight: 600 }}>({count})</span>}
                                         {showNotAvailableBadge && isEmpty && (
                                             <span style={{
                                                 marginLeft: '6px',
