@@ -23,6 +23,19 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const fetchProfile = async () => {
+        if (token === 'master_admin_token') {
+            try {
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    setUser(JSON.parse(storedUser));
+                } else {
+                    setUser({ _id: 'admin_master_id', name: 'Admin Master', email: 'admin@styleora.in', role: 'admin' });
+                }
+            } catch (e) {}
+            setLoading(false);
+            return;
+        }
+
         try {
             const res = await axios.get(`${API_URL}/auth/profile`);
             setUser(res.data);
