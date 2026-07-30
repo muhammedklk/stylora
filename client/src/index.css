@@ -24,8 +24,8 @@
 
 body {
     font-family: var(--font-primary);
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: #ffffff;
+    color: #111111;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

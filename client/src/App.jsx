@@ -31,17 +31,51 @@ import PolicyPage from './pages/PolicyPage';
 
 import './index.css'; // global style.css style sheets
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("STYLORA ErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '80px 20px', textAlign: 'center', backgroundColor: '#ffffff', color: '#111', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', color: '#000' }}>STYLORA Store</h2>
+          <p style={{ fontSize: '14px', color: '#666666', marginBottom: '24px', maxWidth: '400px', lineHeight: '1.6' }}>Updating application state and clearing cached assets. Please click below to refresh the site.</p>
+          <button 
+            onClick={() => { localStorage.clear(); window.location.href = '/'; }}
+            style={{ padding: '12px 28px', backgroundColor: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
+          >
+            Reset Cache & Load Store
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <Router>
-      <ToastProvider>
-        <AuthProvider>
-          <SettingsProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <div className="app-container">
+    <ErrorBoundary>
+      <Router>
+        <ToastProvider>
+          <AuthProvider>
+            <SettingsProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  <div className="app-container">
                   <Header toggleSidebar={() => setSidebarOpen(true)} />
                 
                 <SidebarDrawer 
@@ -99,7 +133,8 @@ function App() {
         </SettingsProvider>
       </AuthProvider>
       </ToastProvider>
-    </Router>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
