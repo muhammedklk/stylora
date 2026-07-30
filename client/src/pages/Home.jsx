@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
@@ -44,6 +44,7 @@ const Home = () => {
         return initial.filter(p => p.tags && p.tags.includes('Bestseller'));
     });
     const [activeFilter, setActiveFilter] = useState('all');
+    const charRefs = useRef([]);
     const navigate = useNavigate();
 
     useEffect(() => {

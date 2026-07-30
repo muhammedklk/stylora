@@ -6,6 +6,7 @@ import { useToast } from '../context/ToastContext';
 import { resolveImageUrl } from '../config';
 
 const ProductCard = ({ product, isFeatured = false }) => {
+    if (!product) return null;
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { showToast } = useToast();
