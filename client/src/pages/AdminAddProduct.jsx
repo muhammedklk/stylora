@@ -274,6 +274,8 @@ const AdminAddProduct = () => {
 
             // Invalidate the products cache so website shows the new product immediately
             localStorage.removeItem('stylora_products_cache');
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('stylora_products_updated'));
 
             showToast('Product added successfully!', 'success');
             navigate('/admin/dashboard?tab=products');

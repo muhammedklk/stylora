@@ -103,7 +103,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // Optimistic Product Deletion without blocking native confirm/alert popups
+    // Real-time Optimistic Product Deletion
     const handleDeleteProduct = async (id, title) => {
         // Optimistic UI update: Remove product immediately from local state
         const previousProducts = [...adminProducts];
@@ -111,14 +111,16 @@ const AdminDashboard = () => {
         setAdminProducts(updatedProducts);
         showToast(`"${title}" deleted successfully!`, 'success');
 
-        // Update local cache so Shop, Home, and Admin stay in sync with deleted products list
+        // Update local cache and dispatch real-time events across all tabs/windows
         try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedProducts, timestamp: Date.now() }));
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('stylora_products_updated', { detail: updatedProducts }));
         } catch (e) {}
 
         // Send API request in background
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             await axios.delete(`${API_URL}/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });

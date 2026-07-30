@@ -33,6 +33,13 @@ const Accessories = () => {
 
     useEffect(() => {
         fetchProducts();
+        const handleUpdate = () => fetchProducts();
+        window.addEventListener('storage', handleUpdate);
+        window.addEventListener('stylora_products_updated', handleUpdate);
+        return () => {
+            window.removeEventListener('storage', handleUpdate);
+            window.removeEventListener('stylora_products_updated', handleUpdate);
+        };
     }, []);
 
     useEffect(() => {

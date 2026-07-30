@@ -49,6 +49,20 @@ const Home = () => {
 
     useEffect(() => {
         fetchProducts();
+        const handleUpdate = (e) => {
+            if (e.detail && Array.isArray(e.detail)) {
+                setProducts(e.detail);
+                setBestsellers(e.detail.filter(p => p.tags && p.tags.includes('Bestseller')));
+            } else {
+                fetchProducts();
+            }
+        };
+        window.addEventListener('storage', handleUpdate);
+        window.addEventListener('stylora_products_updated', handleUpdate);
+        return () => {
+            window.removeEventListener('storage', handleUpdate);
+            window.removeEventListener('stylora_products_updated', handleUpdate);
+        };
     }, []);
 
     const fetchProducts = async () => {

@@ -99,6 +99,31 @@ const Shop = () => {
 
     useEffect(() => {
         fetchProducts();
+        const handleUpdate = (e) => {
+            if (e.detail && Array.isArray(e.detail)) {
+                setProducts(e.detail);
+                applyFilterAndSearch(
+                    e.detail, 
+                    initialCategory, 
+                    searchQuery,
+                    sortBy,
+                    priceMin,
+                    priceMax,
+                    minDiscount,
+                    selectedSizes,
+                    selectedColors,
+                    inStockOnly
+                );
+            } else {
+                fetchProducts();
+            }
+        };
+        window.addEventListener('storage', handleUpdate);
+        window.addEventListener('stylora_products_updated', handleUpdate);
+        return () => {
+            window.removeEventListener('storage', handleUpdate);
+            window.removeEventListener('stylora_products_updated', handleUpdate);
+        };
     }, []);
 
     useEffect(() => {
