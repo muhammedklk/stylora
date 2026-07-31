@@ -66,8 +66,9 @@ const ProductDetails = () => {
             const bests = allProducts.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
             setBestsellers(bests);
         } catch (err) {
-            console.warn('Error fetching product details, falling back to static local data:', err.message);
-            const fallbackProd = productsData.find(p => p._id === id || String(p._id) === String(id));
+            console.warn('Error fetching product details from API, searching local custom products:', err.message);
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const fallbackProd = customProds.find(p => p._id === id || String(p._id) === String(id));
             if (fallbackProd) {
                 setProduct(fallbackProd);
                 setReviews([]);
@@ -80,11 +81,10 @@ const ProductDetails = () => {
                 }
                 setMediaType('image');
 
-                // Filter related and bestsellers from fallback list
-                const rel = productsData.filter(p => p.category === fallbackProd.category && p._id !== fallbackProd._id).slice(0, 4);
+                const rel = customProds.filter(p => p.category === fallbackProd.category && p._id !== fallbackProd._id).slice(0, 4);
                 setRelated(rel);
 
-                const bests = productsData.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
+                const bests = customProds.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
                 setBestsellers(bests);
             } else {
                 setProduct(null);

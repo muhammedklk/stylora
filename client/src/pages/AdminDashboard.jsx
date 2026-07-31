@@ -31,8 +31,12 @@ const addDeletedId = (id) => {
 
 const filterOutDeleted = (prods) => {
     const deletedIds = getDeletedIds();
-    if (!deletedIds || deletedIds.length === 0) return prods;
-    return prods.filter(p => !deletedIds.includes(String(p._id)));
+    return prods.filter(p => {
+        const strId = String(p._id);
+        const num = Number(strId);
+        const isMock = !isNaN(num) && num >= 1 && num <= 20;
+        return !deletedIds.includes(strId) && !isMock;
+    });
 };
 
 const AdminDashboard = () => {
@@ -99,8 +103,6 @@ const AdminDashboard = () => {
             let fetchedProducts = [];
             if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value.data)) {
                 fetchedProducts = prodRes.value.data;
-            } else {
-                fetchedProducts = productsData;
             }
 
             const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');

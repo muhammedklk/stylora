@@ -33,7 +33,9 @@ const getInitialProducts = () => {
             }
         }
     } catch (e) {}
-    return productsData;
+    const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+    const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+    return customProds.filter(p => !deletedIds.includes(String(p._id)));
 };
 
 const Home = () => {
@@ -74,7 +76,11 @@ const Home = () => {
             const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
             const merged = [...customProds, ...rawData];
             const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-            const data = merged.filter(p => !deletedIds.includes(String(p._id)));
+            const data = merged.filter(p => {
+                const num = Number(p._id);
+                const isMock = !isNaN(num) && num >= 1 && num <= 20;
+                return !deletedIds.includes(String(p._id)) && !isMock;
+            });
 
             // Update cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));

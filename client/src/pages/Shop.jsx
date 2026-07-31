@@ -30,6 +30,11 @@ const SkeletonCard = () => (
     </div>
 );
 
+const isMockProduct = (p) => {
+    const num = Number(p._id);
+    return !isNaN(num) && num >= 1 && num <= 20;
+};
+
 const getInitialProducts = () => {
     try {
         const cached = localStorage.getItem(CACHE_KEY);
@@ -37,11 +42,13 @@ const getInitialProducts = () => {
             const { data } = JSON.parse(cached);
             if (Array.isArray(data)) {
                 const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-                return data.filter(p => !deletedIds.includes(String(p._id)));
+                return data.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
             }
         }
     } catch (e) {}
-    return productsData;
+    const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+    const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+    return customProds.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
 };
 
 const Shop = () => {
@@ -136,7 +143,7 @@ const Shop = () => {
             const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
             const merged = [...customProds, ...rawData];
             const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-            const data = merged.filter(p => !deletedIds.includes(String(p._id)));
+            const data = merged.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
 
             // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));

@@ -10,6 +10,14 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
 
+const getInitialAccessories = () => {
+    const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
+    const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+    const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+    const clean = customProds.filter(p => !deletedIds.includes(String(p._id)));
+    return clean.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category?.toLowerCase()));
+};
+
 const Accessories = () => {
     const query = useQuery();
     const navigate = useNavigate();
@@ -18,12 +26,9 @@ const Accessories = () => {
     const initialCategory = query.get('category') || 'all';
     const searchQuery = query.get('search') || '';
 
-    const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
-    const initialAccessories = productsData.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
-
     const { settings } = useSettings();
-    const [products, setProducts] = useState(initialAccessories);
-    const [filteredProducts, setFilteredProducts] = useState(initialAccessories);
+    const [products, setProducts] = useState(() => getInitialAccessories());
+    const [filteredProducts, setFilteredProducts] = useState(() => getInitialAccessories());
     const [activeFilter, setActiveFilter] = useState(initialCategory);
 
     const getHeroBg = (img) => {
@@ -44,10 +49,14 @@ const Accessories = () => {
     const fetchProducts = async () => {
         const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
         try {
-            // Get all products, we will filter for accessories tags/categories
             const res = await axios.get(`${API_URL}/products`);
-            const data = Array.isArray(res.data) ? res.data : [];
-            const accessoriesOnly = data.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category));
+            const rawData = Array.isArray(res.data) ? res.data : [];
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const merged = [...customProds, ...rawData];
+            const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+            const clean = merged.filter(p => !deletedIds.includes(String(p._id)));
+
+            const accessoriesOnly = clean.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category?.toLowerCase()));
             
             setProducts(accessoriesOnly);
             applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
