@@ -57,14 +57,14 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         position: 'absolute',
                         top: '12px',
                         right: '12px',
-                        backgroundColor: '#000000',
-                        color: '#d4af37',
-                        border: '1px solid #d4af37',
+                        backgroundColor: '#d4af37',
+                        color: '#ffffff',
                         fontSize: '9px',
                         fontWeight: 800,
-                        padding: '3px 7px',
+                        padding: '3px 8px',
                         borderRadius: '2px',
                         letterSpacing: '0.05em',
+                        boxShadow: '0 2px 8px rgba(212, 175, 55, 0.35)',
                         zIndex: 3
                     }}>
                         ⭐ BESTSELLER

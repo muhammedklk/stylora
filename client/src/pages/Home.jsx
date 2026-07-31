@@ -168,8 +168,16 @@ const Home = () => {
         });
     };
 
-    const featuredProduct = bestsellers[0];
-    const rightGridProducts = bestsellers.slice(1, 5);
+    const featuredProduct = bestsellers[0] || products[0];
+    
+    // Right grid shows up to 4 bestsellers (items #2, #3, #4, #5)
+    // If admin has fewer than 5 bestsellers selected, fallback fill with regular products to keep the 2x2 grid full
+    const remainingBestsellers = bestsellers.slice(1, 5);
+    const fillCount = 4 - remainingBestsellers.length;
+    const fallbackFill = fillCount > 0 
+        ? products.filter(p => p._id !== featuredProduct?._id && !remainingBestsellers.some(b => b._id === p._id)).slice(0, fillCount) 
+        : [];
+    const rightGridProducts = [...remainingBestsellers, ...fallbackFill];
 
     const getHeroBg = (img) => {
         if (!img) return {};

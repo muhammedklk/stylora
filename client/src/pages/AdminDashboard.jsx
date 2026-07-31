@@ -912,108 +912,137 @@ const AdminDashboard = () => {
                     </div>
                 )}
 
-                {activeTab === 'bestsellers' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        {/* Header info banner */}
-                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                                <span style={{ fontSize: '11px', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.08em' }}>[ Home Page Bestsellers Manager ]</span>
-                                <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '4px 0 0 0', color: '#111827' }}>
-                                    Manage Featured Bestseller Highlights
-                                </h2>
-                                <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
-                                    Products marked with the ⭐ Bestseller badge will feature prominently in the Bestsellers grid on your Home Page.
-                                </p>
-                            </div>
-                            <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '10px 16px', borderRadius: '6px', textAlign: 'right' }}>
-                                <span style={{ fontSize: '11px', fontWeight: 700, color: '#b45309', display: 'block' }}>ACTIVE BESTSELLERS</span>
-                                <span style={{ fontSize: '22px', fontWeight: 900, color: '#92400e' }}>
-                                    {adminProducts.filter(p => p.tags && p.tags.includes('Bestseller')).length} Items
-                                </span>
-                            </div>
-                        </div>
+                {activeTab === 'bestsellers' && (() => {
+                    const allBestsellers = adminProducts.filter(p => p.tags && p.tags.includes('Bestseller'));
+                    const homeFeaturedCount = Math.min(allBestsellers.length, 5);
 
-                        {/* Product Selection List with Search & Bestseller Toggle */}
-                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
-                            
-                            {/* Search bar inside Bestsellers tab */}
-                            <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <input 
-                                    type="text" 
-                                    placeholder="Search products to highlight as Bestsellers on Home Page..." 
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px', outline: 'none' }}
-                                />
-                                <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600 }}>
-                                    Showing {filteredProducts.length} Products
-                                </span>
+                    return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            {/* Header info banner */}
+                            <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.08em' }}>[ Bestsellers & Highlights Manager ]</span>
+                                    <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '4px 0 0 0', color: '#111827' }}>
+                                        Manage Store Bestsellers & Home Showcase
+                                    </h2>
+                                    <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                        Products marked as ⭐ Bestseller appear in Shop lists. The top 5 selected items will be showcased on your Home Page (1 Featured Card + 4 Right Grid items).
+                                    </p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px' }}>
+                                    <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '10px 16px', borderRadius: '6px', textAlign: 'right' }}>
+                                        <span style={{ fontSize: '10px', fontWeight: 700, color: '#b45309', display: 'block' }}>HOME PAGE FEATURED</span>
+                                        <span style={{ fontSize: '20px', fontWeight: 900, color: '#92400e' }}>
+                                            {homeFeaturedCount} / 5 Slots
+                                        </span>
+                                    </div>
+                                    <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 16px', borderRadius: '6px', textAlign: 'right' }}>
+                                        <span style={{ fontSize: '10px', fontWeight: 700, color: '#15803d', display: 'block' }}>TOTAL BESTSELLERS</span>
+                                        <span style={{ fontSize: '20px', fontWeight: 900, color: '#166534' }}>
+                                            {allBestsellers.length} Items
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Bestseller Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-                                {filteredProducts.map(product => {
-                                    const isBestseller = product.tags && product.tags.includes('Bestseller');
-                                    return (
-                                        <div 
-                                            key={product._id} 
-                                            style={{ 
-                                                borderRadius: '8px', 
-                                                border: isBestseller ? '2px solid #d4af37' : '1px solid #e5e7eb', 
-                                                backgroundColor: isBestseller ? '#fffdf5' : '#ffffff',
-                                                padding: '14px', 
-                                                display: 'flex', 
-                                                gap: '14px', 
-                                                alignItems: 'center',
-                                                transition: 'all 0.2s ease',
-                                                boxShadow: isBestseller ? '0 4px 12px rgba(212,175,55,0.15)' : 'none'
-                                            }}
-                                        >
-                                            <img 
-                                                src={resolveImageUrl(product.image)} 
-                                                alt={product.title} 
-                                                style={{ width: '64px', height: '64px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #f3f4f6' }}
-                                                onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80'; }}
-                                            />
+                            {/* Product Selection List with Search & Bestseller Toggle */}
+                            <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
+                                
+                                {/* Search bar inside Bestsellers tab */}
+                                <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Search products to highlight as Bestsellers..." 
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                        style={{ flex: 1, padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px', outline: 'none' }}
+                                    />
+                                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600 }}>
+                                        Showing {filteredProducts.length} Products
+                                    </span>
+                                </div>
 
-                                            <div style={{ flex: 1, overflow: 'hidden' }}>
-                                                <span style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', color: isBestseller ? '#b45309' : '#6b7280' }}>
-                                                    {product.category}
-                                                </span>
-                                                <h4 style={{ fontSize: '13px', fontWeight: 700, margin: '2px 0 4px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#111827' }}>
-                                                    {product.title}
-                                                </h4>
-                                                <span style={{ fontSize: '13px', fontWeight: 800, color: '#000000' }}>
-                                                    ₹{product.price}
-                                                </span>
-                                            </div>
+                                {/* Bestseller Grid */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: '16px' }}>
+                                    {filteredProducts.map(product => {
+                                        const isBestseller = product.tags && product.tags.includes('Bestseller');
+                                        const bIndex = isBestseller ? allBestsellers.findIndex(p => p._id === product._id) : -1;
 
-                                            <button 
-                                                type="button"
-                                                onClick={() => handleToggleBestsellerTag(product)}
+                                        let positionBadge = null;
+                                        if (isBestseller) {
+                                            if (bIndex === 0) {
+                                                positionBadge = <span style={{ fontSize: '9px', fontWeight: 800, color: '#b45309', backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '2px 6px', borderRadius: '4px' }}>👑 #1 Home Main</span>;
+                                            } else if (bIndex >= 1 && bIndex <= 4) {
+                                                positionBadge = <span style={{ fontSize: '9px', fontWeight: 800, color: '#1d4ed8', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', padding: '2px 6px', borderRadius: '4px' }}>⭐ Home Grid #{bIndex}</span>;
+                                            } else {
+                                                positionBadge = <span style={{ fontSize: '9px', fontWeight: 800, color: '#047857', backgroundColor: '#ecfdf5', border: '1px solid #a7f3d0', padding: '2px 6px', borderRadius: '4px' }}>🛒 Shop Only</span>;
+                                            }
+                                        }
+
+                                        return (
+                                            <div 
+                                                key={product._id} 
                                                 style={{ 
-                                                    backgroundColor: isBestseller ? '#000000' : '#f3f4f6', 
-                                                    color: isBestseller ? '#ffffff' : '#374151', 
-                                                    border: isBestseller ? 'none' : '1px solid #d1d5db', 
-                                                    padding: '8px 12px', 
-                                                    borderRadius: '6px', 
-                                                    fontSize: '11px', 
-                                                    fontWeight: 800, 
-                                                    cursor: 'pointer',
-                                                    whiteSpace: 'nowrap',
-                                                    transition: 'all 0.2s ease'
+                                                    borderRadius: '8px', 
+                                                    border: isBestseller ? '2px solid #d4af37' : '1px solid #e5e7eb', 
+                                                    backgroundColor: isBestseller ? '#fffdf5' : '#ffffff',
+                                                    padding: '14px', 
+                                                    display: 'flex', 
+                                                    gap: '14px', 
+                                                    alignItems: 'center',
+                                                    transition: 'all 0.2s ease',
+                                                    boxShadow: isBestseller ? '0 4px 12px rgba(212,175,55,0.15)' : 'none'
                                                 }}
                                             >
-                                                {isBestseller ? '⭐ Bestseller' : '+ Highlight'}
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                                <img 
+                                                    src={resolveImageUrl(product.image)} 
+                                                    alt={product.title} 
+                                                    style={{ width: '64px', height: '64px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #f3f4f6' }}
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80'; }}
+                                                />
 
+                                                <div style={{ flex: 1, overflow: 'hidden' }}>
+                                                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '2px' }}>
+                                                        <span style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', color: isBestseller ? '#b45309' : '#6b7280' }}>
+                                                            {product.category}
+                                                        </span>
+                                                        {positionBadge}
+                                                    </div>
+                                                    <h4 style={{ fontSize: '13px', fontWeight: 700, margin: '2px 0 4px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#111827' }}>
+                                                        {product.title}
+                                                    </h4>
+                                                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#000000' }}>
+                                                        ₹{product.price}
+                                                    </span>
+                                                </div>
+
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => handleToggleBestsellerTag(product)}
+                                                    style={{ 
+                                                        backgroundColor: isBestseller ? '#000000' : '#f3f4f6', 
+                                                        color: isBestseller ? '#ffffff' : '#374151', 
+                                                        border: isBestseller ? 'none' : '1px solid #d1d5db', 
+                                                        padding: '8px 12px', 
+                                                        borderRadius: '6px', 
+                                                        fontSize: '11px', 
+                                                        fontWeight: 800, 
+                                                        cursor: 'pointer',
+                                                        whiteSpace: 'nowrap',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                >
+                                                    {isBestseller ? '⭐ Bestseller' : '+ Highlight'}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                )}
+                    );
+                })()}
 
                 {activeTab === 'category-cards' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
