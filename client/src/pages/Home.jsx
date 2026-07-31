@@ -263,10 +263,12 @@ const Home = () => {
                                 { name: 'All Categories', cat: 'all' },
                                 { name: 'Pants', cat: 'pants' },
                                 { name: 'Shirts', cat: 'shirts' },
+                                { name: 'T-Shirts', cat: 't-shirts' },
                                 { name: 'Shoes', cat: 'shoes' },
                                 { name: 'Outerwear', cat: 'outerwear' },
                                 { name: 'Activewear', cat: 'activewear' },
-                                { name: 'Watches', cat: 'watches' }
+                                { name: 'Watches', cat: 'watches' },
+                                { name: 'Accessories', cat: 'accessories' }
                             ].map(tab => (
                                 <button 
                                     key={tab.name}
@@ -281,14 +283,16 @@ const Home = () => {
                     </div>
 
                     {/* Category Cards Grid */}
-                    <div className="find-style-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+                    <div className="find-style-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
                         {[
                             { id: 'shirts', name: 'Shirts', tag: 'Essential Menswear', cat: 'shirts', fallback: '/assets/find-section-img-3.png' },
                             { id: 'pants', name: 'Pants & Trousers', tag: 'Tailored Bottoms', cat: 'pants', fallback: '/assets/find-section-img-2.png' },
                             { id: 'outerwear', name: 'Coats & Jackets', tag: 'Outerwear', cat: 'outerwear', fallback: '/assets/find-section-img-1.png' },
                             { id: 'shoes', name: 'Shoes & Sneakers', tag: 'Footwear', cat: 'shoes', fallback: '/assets/find-section-img-4.png' },
                             { id: 'activewear', name: 'Activewear', tag: 'Gym & Sports', cat: 'activewear', fallback: '/assets/find-section-img-1.png' },
-                            { id: 'watches', name: 'Watches & Accessories', tag: 'Timepieces', cat: 'watches', fallback: '/assets/find-section-img-3.png' }
+                            { id: 'watches', name: 'Watches & Accessories', tag: 'Timepieces', cat: 'watches', fallback: '/assets/find-section-img-3.png' },
+                            { id: 't-shirts', name: 'T-Shirts & Tops', tag: 'Casual Essentials', cat: 't-shirts', fallback: '/assets/find-section-img-4.png' },
+                            { id: 'accessories', name: 'Bags & Accessories', tag: 'Everyday Luxury', cat: 'accessories', fallback: '/assets/find-section-img-2.png' }
                         ].map(catItem => {
                             const customImg = settings?.categoryImages?.[catItem.id];
                             const matchingProd = products.find(p => 

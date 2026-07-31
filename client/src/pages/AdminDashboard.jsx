@@ -1156,7 +1156,7 @@ const AdminDashboard = () => {
                                     Find Your Style - Category Cards Manager
                                 </h2>
                                 <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
-                                    Upload custom cover photos or paste image URLs for the 6 Category Cards in the "Find Your Style" section on your Home Page.
+                                    Upload custom cover photos or paste image URLs for the 8 Category Cards in the "Find Your Style" section on your Home Page.
                                 </p>
                             </div>
                             <button
@@ -1167,7 +1167,7 @@ const AdminDashboard = () => {
                             </button>
                         </div>
 
-                        {/* 6 Category Cards Grid */}
+                        {/* 8 Category Cards Grid */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
                             {[
                                 { key: 'shirts', name: 'Shirts', tag: 'ESSENTIAL MENSWEAR', placeholder: '/assets/find-section-img-3.png' },
@@ -1175,7 +1175,9 @@ const AdminDashboard = () => {
                                 { key: 'outerwear', name: 'Coats & Jackets', tag: 'OUTERWEAR', placeholder: '/assets/find-section-img-1.png' },
                                 { key: 'shoes', name: 'Shoes & Sneakers', tag: 'FOOTWEAR', placeholder: '/assets/find-section-img-4.png' },
                                 { key: 'activewear', name: 'Activewear', tag: 'GYM & SPORTS', placeholder: '/assets/find-section-img-1.png' },
-                                { key: 'watches', name: 'Watches & Accessories', tag: 'TIMEPIECES', placeholder: '/assets/find-section-img-3.png' }
+                                { key: 'watches', name: 'Watches & Accessories', tag: 'TIMEPIECES', placeholder: '/assets/find-section-img-3.png' },
+                                { key: 't-shirts', name: 'T-Shirts & Tops', tag: 'CASUAL ESSENTIALS', placeholder: '/assets/find-section-img-4.png' },
+                                { key: 'accessories', name: 'Bags & Accessories', tag: 'EVERYDAY LUXURY', placeholder: '/assets/find-section-img-2.png' }
                             ].map(cat => {
                                 const currentImg = categoryImages[cat.key] || cat.placeholder;
                                 const isCustom = categoryImages[cat.key] && categoryImages[cat.key] !== cat.placeholder;
