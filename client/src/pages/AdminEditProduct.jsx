@@ -130,6 +130,8 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
+import { SUB_CATEGORIES, CATEGORIES_LIST } from '../config/categories';
+
 const AdminEditProduct = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -138,7 +140,8 @@ const AdminEditProduct = () => {
     // Form states
     const [title, setTitle] = useState('');
     const [brand, setBrand] = useState('STYLORA');
-    const [category, setCategory] = useState('clothing');
+    const [category, setCategory] = useState('shirts');
+    const [subCategory, setSubCategory] = useState('Checked');
     const [price, setPrice] = useState('');
     const [originalPrice, setOriginalPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -397,22 +400,37 @@ const AdminEditProduct = () => {
                                             />
                                         </div>
 
-                                        {/* Category & Pricing */}
+                                        {/* Category & Sub-Category */}
                                         <div className="col-md-3">
                                             <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Category</label>
                                             <select 
                                                 className="account-input" 
                                                 value={category} 
-                                                onChange={e => setCategory(e.target.value)}
+                                                onChange={e => {
+                                                    const newCat = e.target.value;
+                                                    setCategory(newCat);
+                                                    const availSub = SUB_CATEGORIES[newCat] || [];
+                                                    setSubCategory(availSub.length > 0 ? availSub[0] : '');
+                                                }}
                                                 style={{ height: '52px' }}
                                             >
-                                                <option value="clothing">Clothing</option>
-                                                <option value="shirts">Shirts</option>
-                                                <option value="pants">Pants</option>
-                                                <option value="outerwear">Outerwear</option>
-                                                <option value="watches">Watches</option>
-                                                <option value="shoes">Shoes</option>
-                                                <option value="socks">Socks</option>
+                                                {CATEGORIES_LIST.map(cat => (
+                                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="col-md-3">
+                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981', marginBottom: '8px', display: 'block' }}>Sub-Category / Style</label>
+                                            <select 
+                                                className="account-input" 
+                                                value={subCategory} 
+                                                onChange={e => setSubCategory(e.target.value)}
+                                                style={{ height: '52px', border: '1.5px solid #10b981', backgroundColor: '#f0fdf4' }}
+                                            >
+                                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                                    <option key={sub} value={sub}>{sub}</option>
+                                                ))}
                                             </select>
                                         </div>
 

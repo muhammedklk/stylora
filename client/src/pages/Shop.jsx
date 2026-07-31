@@ -6,6 +6,8 @@ import { useSettings } from '../context/SettingsContext';
 import { API_URL, resolveImageUrl } from '../config';
 import { productsData } from '../products-data';
 
+import { SUB_CATEGORIES } from '../config/categories';
+
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
@@ -18,19 +20,12 @@ const SkeletonCard = () => (
         borderRadius: '4px', 
         overflow: 'hidden',
         background: '#fff',
-        border: '1px solid #f0f0f0'
+        border: '1px solid #eee'
     }}>
-        <div style={{ 
-            width: '100%', 
-            paddingBottom: '125%', 
-            background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-            backgroundSize: '200% 100%',
-            animation: 'shimmer 1.5s infinite'
-        }} />
+        <div style={{ width: '100%', paddingTop: '125%', background: '#f0f0f0', animation: 'shimmer 1.5s infinite linear' }}></div>
         <div style={{ padding: '12px' }}>
-            <div style={{ height: '10px', background: '#f0f0f0', borderRadius: '4px', marginBottom: '8px', width: '60%', animation: 'shimmer 1.5s infinite' }} />
-            <div style={{ height: '14px', background: '#f0f0f0', borderRadius: '4px', marginBottom: '8px', animation: 'shimmer 1.5s infinite' }} />
-            <div style={{ height: '14px', background: '#f0f0f0', borderRadius: '4px', width: '40%', animation: 'shimmer 1.5s infinite' }} />
+            <div style={{ height: '14px', width: '80%', background: '#f0f0f0', borderRadius: '4px', marginBottom: '8px', animation: 'shimmer 1.5s infinite linear' }}></div>
+            <div style={{ height: '14px', width: '40%', background: '#f0f0f0', borderRadius: '4px', animation: 'shimmer 1.5s infinite linear' }}></div>
         </div>
     </div>
 );
@@ -41,7 +36,8 @@ const getInitialProducts = () => {
         if (cached) {
             const { data } = JSON.parse(cached);
             if (Array.isArray(data)) {
-                return data;
+                const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+                return data.filter(p => !deletedIds.includes(String(p._id)));
             }
         }
     } catch (e) {}
@@ -60,6 +56,7 @@ const Shop = () => {
     const [products, setProducts] = useState(() => getInitialProducts());
     const [filteredProducts, setFilteredProducts] = useState(() => getInitialProducts());
     const [activeFilter, setActiveFilter] = useState(initialCategory);
+    const [activeSubCategory, setActiveSubCategory] = useState('all');
     const [loading, setLoading] = useState(false);
 
     // Amazon/Flipkart Style Sidebar Filter States
@@ -192,6 +189,17 @@ const Shop = () => {
                     return catMatch || tagMatch;
                 });
             }
+        }
+
+        // 1.5. Sub-Category Filter
+        if (activeSubCategory && activeSubCategory !== 'all') {
+            const targetSub = activeSubCategory.toLowerCase().replace(/[^a-z0-9]/g, '');
+            result = result.filter(p => {
+                const subMatch = p.subCategory && p.subCategory.toLowerCase().replace(/[^a-z0-9]/g, '') === targetSub;
+                const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '') === targetSub);
+                const titleMatch = p.title && p.title.toLowerCase().replace(/[^a-z0-9]/g, '').includes(targetSub);
+                return subMatch || tagMatch || titleMatch;
+            });
         }
 
         // 2. Search Query Filter
@@ -340,9 +348,48 @@ const Shop = () => {
                                             </span>
                                         )}
                                     </button>
-                                );
-                            })}
                         </div>
+
+                        {/* Dynamic Sub-Category Filter Pills */}
+                        {SUB_CATEGORIES[activeFilter] && (
+                            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '10px 0 4px 0', width: '100%', borderTop: '1px solid #f3f4f6', marginTop: '12px' }}>
+                                <button
+                                    onClick={() => setActiveSubCategory('all')}
+                                    style={{
+                                        padding: '5px 14px',
+                                        borderRadius: '16px',
+                                        fontSize: '11px',
+                                        fontWeight: activeSubCategory === 'all' ? 700 : 500,
+                                        border: activeSubCategory === 'all' ? '1px solid #000' : '1px solid #e5e7eb',
+                                        backgroundColor: activeSubCategory === 'all' ? '#000' : '#ffffff',
+                                        color: activeSubCategory === 'all' ? '#fff' : '#4b5563',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    All {activeFilter.toUpperCase()}
+                                </button>
+                                {SUB_CATEGORIES[activeFilter].map(sub => (
+                                    <button
+                                        key={sub}
+                                        onClick={() => setActiveSubCategory(sub)}
+                                        style={{
+                                            padding: '5px 14px',
+                                            borderRadius: '16px',
+                                            fontSize: '11px',
+                                            fontWeight: activeSubCategory === sub ? 700 : 500,
+                                            border: activeSubCategory === sub ? '1px solid #000' : '1px solid #e5e7eb',
+                                            backgroundColor: activeSubCategory === sub ? '#000' : '#ffffff',
+                                            color: activeSubCategory === sub ? '#fff' : '#4b5563',
+                                            cursor: 'pointer',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {sub}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Right Side: Amazon/Flipkart Style Filters Button */}
                         <button 

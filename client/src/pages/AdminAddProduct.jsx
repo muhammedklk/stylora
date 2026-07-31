@@ -131,6 +131,8 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
+import { SUB_CATEGORIES, CATEGORIES_LIST } from '../config/categories';
+
 const AdminAddProduct = () => {
     const navigate = useNavigate();
     const { showToast } = useToast();
@@ -138,7 +140,8 @@ const AdminAddProduct = () => {
     // Form states
     const [title, setTitle] = useState('');
     const [brand, setBrand] = useState('STYLORA');
-    const [category, setCategory] = useState('clothing');
+    const [category, setCategory] = useState('shirts');
+    const [subCategory, setSubCategory] = useState('Checked');
     const [price, setPrice] = useState('');
     const [originalPrice, setOriginalPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -246,17 +249,20 @@ const AdminAddProduct = () => {
             resolvedImageDataUrl = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80';
         }
 
+        const tagList = [subCategory, 'New Arrival'].filter(Boolean);
+
         const newProductObj = {
             _id: 'prod-' + Date.now(),
             title: title.trim() || 'New Product',
             brand: brand.trim() || 'STYLORA',
             category: category ? category.toLowerCase() : 'clothing',
+            subCategory: subCategory || '',
             price: Number(price) || 0,
             originalPrice: originalPrice ? Number(originalPrice) : undefined,
             description: description.trim() || '',
             inventoryCount: Number(inventoryCount) || 50,
             image: resolvedImageDataUrl,
-            tags: ['New Arrival'],
+            tags: tagList,
             sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
             colors: colors.length > 0 ? colors : [{ name: 'Black', hex: '#1a1a1a' }]
         };
@@ -269,13 +275,14 @@ const AdminAddProduct = () => {
             formData.append('title', title);
             formData.append('brand', brand);
             formData.append('category', category);
+            formData.append('subCategory', subCategory);
             formData.append('price', Number(price));
             if (originalPrice) {
                 formData.append('originalPrice', Number(originalPrice));
             }
             formData.append('description', description);
             formData.append('inventoryCount', Number(inventoryCount));
-            formData.append('tags', 'New Arrival'); 
+            formData.append('tags', JSON.stringify(tagList)); 
             formData.append('sizes', JSON.stringify(sizes));
             formData.append('colors', JSON.stringify(colors));
 
@@ -377,22 +384,37 @@ const AdminAddProduct = () => {
                                             />
                                         </div>
 
-                                        {/* Category & Pricing */}
+                                        {/* Category & Sub-Category */}
                                         <div className="col-md-3">
                                             <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Category</label>
                                             <select 
                                                 className="account-input" 
                                                 value={category} 
-                                                onChange={e => setCategory(e.target.value)}
+                                                onChange={e => {
+                                                    const newCat = e.target.value;
+                                                    setCategory(newCat);
+                                                    const availSub = SUB_CATEGORIES[newCat] || [];
+                                                    setSubCategory(availSub.length > 0 ? availSub[0] : '');
+                                                }}
                                                 style={{ height: '52px' }}
                                             >
-                                                <option value="clothing">Clothing</option>
-                                                <option value="shirts">Shirts</option>
-                                                <option value="pants">Pants</option>
-                                                <option value="outerwear">Outerwear</option>
-                                                <option value="watches">Watches</option>
-                                                <option value="shoes">Shoes</option>
-                                                <option value="socks">Socks</option>
+                                                {CATEGORIES_LIST.map(cat => (
+                                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="col-md-3">
+                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981', marginBottom: '8px', display: 'block' }}>Sub-Category / Style</label>
+                                            <select 
+                                                className="account-input" 
+                                                value={subCategory} 
+                                                onChange={e => setSubCategory(e.target.value)}
+                                                style={{ height: '52px', border: '1.5px solid #10b981', backgroundColor: '#f0fdf4' }}
+                                            >
+                                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                                    <option key={sub} value={sub}>{sub}</option>
+                                                ))}
                                             </select>
                                         </div>
 
