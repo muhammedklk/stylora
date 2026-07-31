@@ -197,11 +197,22 @@ const Home = () => {
 
     return (
         <div>
-            {/* Shimmer keyframe */}
+            {/* Shimmer keyframe & Card Hover styles */}
             <style>{`
                 @keyframes homeShimmer {
                     0% { background-position: -200% 0; }
                     100% { background-position: 200% 0; }
+                }
+                .style-item-card {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+                }
+                .style-item-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+                    border-color: #d1d5db !important;
+                }
+                .style-item-card:hover .style-card-image {
+                    transform: scale(1.05);
                 }
             `}</style>
             {/* Hero Section */}
@@ -303,28 +314,25 @@ const Home = () => {
 
                             return (
                                 <div 
-                                    className="style-item" 
+                                    className="style-item-card" 
                                     key={catItem.id}
                                     onClick={() => navigate(`/shop?category=${catItem.cat}`)}
                                     style={{ 
                                         cursor: 'pointer', 
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '12px'
-                                    }}
-                                >
-                                    <div className="style-card-img-wrapper" style={{ 
-                                        height: '320px', 
-                                        width: '100%', 
-                                        backgroundColor: '#f5f5f7', 
                                         borderRadius: '8px', 
                                         overflow: 'hidden', 
-                                        position: 'relative'
-                                    }}>
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #eaeaea',
+                                        transition: 'all 0.3s ease',
+                                        display: 'flex',
+                                        flexDirection: 'column'
+                                    }}
+                                >
+                                    <div style={{ height: '320px', width: '100%', overflow: 'hidden', backgroundColor: '#f8fafc', position: 'relative' }}>
                                         <img 
                                             src={imgUrl} 
                                             alt={catItem.name} 
-                                            className="style-image" 
+                                            className="style-card-image"
                                             style={{ 
                                                 width: '100%', 
                                                 height: '100%', 
@@ -337,21 +345,15 @@ const Home = () => {
                                             }}
                                         />
                                     </div>
-                                    <div style={{ padding: '0 4px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                        <span style={{ 
-                                            fontSize: '11px', 
-                                            textTransform: 'uppercase', 
-                                            letterSpacing: '0.08em', 
-                                            color: '#71717a', 
-                                            fontWeight: 600 
-                                        }}>
+                                    <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#ffffff' }}>
+                                        <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#888888', fontWeight: 600 }}>
                                             {catItem.tag}
                                         </span>
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#111827', letterSpacing: '-0.01em' }}>
+                                            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#111111', letterSpacing: '-0.01em' }}>
                                                 {catItem.name}
                                             </h3>
-                                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#111111', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                 Explore →
                                             </span>
                                         </div>
