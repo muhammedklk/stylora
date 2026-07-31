@@ -438,14 +438,14 @@ const AdminAddProduct = () => {
                 </div>
             </header>
 
-            {/* Compact Form Grid Container with Left & Right Side Spacing */}
-            <div style={{ padding: '24px 48px', flex: 1, display: 'flex', justifyContent: 'center' }}>
+            {/* Compact Form Grid Container with Balanced Side Spacing */}
+            <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center' }}>
                 <form onSubmit={handleSubmit} style={{ 
                     display: 'grid', 
-                    gridTemplateColumns: '1fr 320px', 
-                    gap: '20px', 
+                    gridTemplateColumns: '1fr 340px', 
+                    gap: '16px', 
                     alignItems: 'start',
-                    maxWidth: '1140px',
+                    maxWidth: '1380px',
                     width: '100%'
                 }}>
                     
