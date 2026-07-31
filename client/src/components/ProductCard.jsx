@@ -40,16 +40,16 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         position: 'absolute',
                         top: '12px',
                         left: '12px',
-                        backgroundColor: '#d4af37',
-                        color: '#fff',
-                        fontSize: '9px',
-                        fontWeight: 700,
+                        backgroundColor: '#111111',
+                        color: '#ffffff',
+                        fontSize: '10px',
+                        fontWeight: 600,
                         padding: '4px 8px',
                         borderRadius: '2px',
-                        letterSpacing: '0.05em',
+                        letterSpacing: '0.03em',
                         zIndex: 3
                     }}>
-                        {discountPercentage}% OFF
+                        -{discountPercentage}%
                     </div>
                 )}
                 {isBestsellerProduct && (
@@ -57,23 +57,17 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         position: 'absolute',
                         top: '12px',
                         right: '12px',
-                        backgroundColor: 'transparent',
-                        color: '#b45309',
-                        border: '1.5px solid #d4af37',
-                        fontSize: '9px',
-                        fontWeight: 900,
-                        padding: '3px 8px',
-                        borderRadius: '3px',
-                        letterSpacing: '0.06em',
-                        backdropFilter: 'blur(4px)',
-                        WebkitBackdropFilter: 'blur(4px)',
+                        backgroundColor: '#e5e5e5',
+                        color: '#111111',
+                        fontSize: '11px',
+                        fontWeight: 500,
+                        padding: '5px 12px',
+                        borderRadius: '2px',
+                        letterSpacing: '0.01em',
                         zIndex: 3,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
+                        lineHeight: 1.2
                     }}>
-                        <span>⭐</span>
-                        <span>BESTSELLER</span>
+                        Best Seller
                     </div>
                 )}
                 <div className="card-inner">
