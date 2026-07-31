@@ -72,6 +72,8 @@ const AdminDashboard = () => {
         if (tab) setActiveTab(tab);
     }, [location.search]);
 
+    const [homeSlots, setHomeSlots] = useState(['', '', '', '', '']);
+
     useEffect(() => {
         if (settings) {
             setShowNotAvailableBadge(settings.showNotAvailableBadge ?? false);
@@ -81,6 +83,9 @@ const AdminDashboard = () => {
                     ...prev,
                     ...settings.categoryImages
                 }));
+            }
+            if (settings.homeBestsellerSlots && Array.isArray(settings.homeBestsellerSlots)) {
+                setHomeSlots(settings.homeBestsellerSlots);
             }
         }
     }, [settings]);
@@ -226,6 +231,27 @@ const AdminDashboard = () => {
         } catch (err) {
             console.error('Error saving settings:', err);
             showToast('Failed to save settings.', 'error');
+        }
+    };
+
+    const handleSlotChange = (index, prodId) => {
+        const updated = [...homeSlots];
+        updated[index] = prodId;
+        setHomeSlots(updated);
+    };
+
+    const handleSaveHomeSlots = async (newSlots = homeSlots) => {
+        try {
+            const updated = {
+                ...settings,
+                homeBestsellerSlots: newSlots
+            };
+            await updateSettings(updated);
+            window.dispatchEvent(new Event('stylora_products_updated'));
+            showToast('Home Page Bestseller Showcase Layout updated!', 'success');
+        } catch (err) {
+            console.error('Error saving home slots:', err);
+            showToast('Failed to save home showcase slots.', 'error');
         }
     };
 
@@ -942,6 +968,83 @@ const AdminDashboard = () => {
                                             {allBestsellers.length} Items
                                         </span>
                                     </div>
+                                </div>
+                            {/* Visual Home Showcase Layout Grid Control */}
+                            <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1.5px solid #d4af37', padding: '24px', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.08)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+                                    <div>
+                                        <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span>🖼️</span> Home Page Bestsellers Showcase Positions (5 Slots)
+                                        </h3>
+                                        <p style={{ fontSize: '12px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                            Choose exact products for the 5 positions in the Home Page Bestsellers section (1 Main Featured Card + 4 Right Grid items).
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSaveHomeSlots(homeSlots)}
+                                        style={{ backgroundColor: '#000000', color: '#ffffff', border: 'none', padding: '10px 20px', borderRadius: '6px', fontSize: '12px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+                                    >
+                                        💾 Save Showcase Layout
+                                    </button>
+                                </div>
+
+                                {/* 5 Slots Mock Grid */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+                                    {[
+                                        { index: 0, label: '👑 Main Featured Card (Left)', badge: 'MAIN FEATURED' },
+                                        { index: 1, label: '⭐ Right Grid #1 (Top-Left)', badge: 'RIGHT GRID #1' },
+                                        { index: 2, label: '⭐ Right Grid #2 (Top-Right)', badge: 'RIGHT GRID #2' },
+                                        { index: 3, label: '⭐ Right Grid #3 (Bottom-Left)', badge: 'RIGHT GRID #3' },
+                                        { index: 4, label: '⭐ Right Grid #4 (Bottom-Right)', badge: 'RIGHT GRID #4' }
+                                    ].map(slot => {
+                                        const selectedProd = adminProducts.find(p => String(p._id) === String(homeSlots[slot.index])) || allBestsellers[slot.index];
+                                        const currentVal = homeSlots[slot.index] || (selectedProd ? selectedProd._id : '');
+
+                                        return (
+                                            <div key={slot.index} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '12px', backgroundColor: '#fafafa', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <span style={{ fontSize: '10px', fontWeight: 800, color: slot.index === 0 ? '#b45309' : '#1d4ed8', textTransform: 'uppercase' }}>{slot.badge}</span>
+                                                    <span style={{ fontSize: '10px', color: '#9ca3af', fontWeight: 600 }}>Pos #{slot.index + 1}</span>
+                                                </div>
+
+                                                {/* Product Preview Box */}
+                                                <div style={{ height: '110px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                                                    {selectedProd ? (
+                                                        <>
+                                                            <img 
+                                                                src={resolveImageUrl(selectedProd.image)} 
+                                                                alt={selectedProd.title} 
+                                                                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '4px' }}
+                                                            />
+                                                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.85)', color: '#fff', padding: '4px 6px', fontSize: '10px', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                {selectedProd.title} (₹{selectedProd.price})
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <span style={{ fontSize: '11px', color: '#9ca3af' }}>No Product</span>
+                                                    )}
+                                                </div>
+
+                                                {/* Selector Dropdown */}
+                                                <select
+                                                    value={currentVal}
+                                                    onChange={e => {
+                                                        const newProdId = e.target.value;
+                                                        handleSlotChange(slot.index, newProdId);
+                                                    }}
+                                                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '11px', outline: 'none', backgroundColor: '#fff' }}
+                                                >
+                                                    <option value="">-- Choose Product --</option>
+                                                    {adminProducts.map(p => (
+                                                        <option key={p._id} value={p._id}>
+                                                            {p.title} - ₹{p.price} {p.tags && p.tags.includes('Bestseller') ? '⭐' : ''}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
 

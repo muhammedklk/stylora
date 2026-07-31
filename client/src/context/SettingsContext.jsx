@@ -30,7 +30,8 @@ export const SettingsProvider = ({ children }) => {
             shoes: '',
             activewear: '',
             watches: ''
-        }
+        },
+        homeBestsellerSlots: ['', '', '', '', '']
     });
     const [loading, setLoading] = useState(true);
 

@@ -57,17 +57,22 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         position: 'absolute',
                         top: '12px',
                         right: '12px',
-                        backgroundColor: '#d4af37',
-                        color: '#ffffff',
+                        backgroundColor: '#0f172a',
+                        color: '#fbbf24',
+                        border: '1px solid #f59e0b',
                         fontSize: '9px',
                         fontWeight: 800,
                         padding: '3px 8px',
-                        borderRadius: '2px',
-                        letterSpacing: '0.05em',
-                        boxShadow: '0 2px 8px rgba(212, 175, 55, 0.35)',
-                        zIndex: 3
+                        borderRadius: '3px',
+                        letterSpacing: '0.06em',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+                        zIndex: 3,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
                     }}>
-                        ⭐ BESTSELLER
+                        <span>⭐</span>
+                        <span>BESTSELLER</span>
                     </div>
                 )}
                 <div className="card-inner">
