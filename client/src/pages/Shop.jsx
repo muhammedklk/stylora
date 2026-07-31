@@ -198,7 +198,7 @@ const Shop = () => {
             if (category === 'new-arrivals') {
                 result = result.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'new arrival'));
             } else if (category === 'clothing') {
-                const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
+                const apparelCats = ['clothing', 'shirts', 't-shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
                 result = result.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing')));
             } else {
                 const target = category.toLowerCase().replace(/-/g, '');
@@ -274,7 +274,7 @@ const Shop = () => {
         if (cat === 'all') return products.length;
         if (cat === 'new-arrivals') return products.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'new arrival')).length;
         if (cat === 'clothing') {
-            const apparelCats = ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
+            const apparelCats = ['clothing', 'shirts', 't-shirts', 'pants', 'shorts', 'outerwear', 'activewear'];
             return products.filter(p => apparelCats.includes(p.category) || (p.tags && p.tags.includes('Clothing'))).length;
         }
         const target = cat.toLowerCase().replace(/-/g, '');
@@ -290,12 +290,12 @@ const Shop = () => {
     const filterTabs = [
         { name: 'All', cat: 'all' },
         { name: 'New Arrivals', cat: 'new-arrivals' },
-        { name: 'Clothing', cat: 'clothing' },
+        { name: 'T-Shirts', cat: 't-shirts' },
+        { name: 'Shirts', cat: 'shirts' },
+        { name: 'Pants', cat: 'pants' },
         { name: 'Shoes', cat: 'shoes' },
         { name: 'Activewear', cat: 'activewear' },
         { name: 'Outerwear', cat: 'outerwear' },
-        { name: 'Shirts', cat: 'shirts' },
-        { name: 'Pants', cat: 'pants' },
         { name: 'Shorts', cat: 'shorts' }
     ];
 
