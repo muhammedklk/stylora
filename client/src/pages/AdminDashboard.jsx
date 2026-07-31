@@ -1145,7 +1145,7 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                     );
-                })()}
+                })()
 
                 {activeTab === 'category-cards' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
