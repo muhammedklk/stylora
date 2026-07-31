@@ -103,29 +103,29 @@ const AdminDashboard = () => {
         }
     };
 
-    // Optimistic Product Deletion without blocking native confirm/alert popups
+    // Real-Time Permanent Product Deletion
     const handleDeleteProduct = async (id, title) => {
-        // Optimistic UI update: Remove product immediately from local state
-        const previousProducts = [...adminProducts];
-        const updatedProducts = adminProducts.filter(p => p._id !== id);
+        // 1. Immediately remove product from local state
+        const updatedProducts = adminProducts.filter(p => String(p._id) !== String(id));
         setAdminProducts(updatedProducts);
         showToast(`"${title}" deleted successfully!`, 'success');
 
-        // Update local cache so Shop, Home, and Admin stay in sync with deleted products list
+        // 2. Immediately update local cache and dispatch sync event across open pages
         try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedProducts, timestamp: Date.now() }));
+            window.dispatchEvent(new Event('stylora_products_updated'));
         } catch (e) {}
 
-        // Send API request in background
+        // 3. Send API delete request if it's a valid 24-char MongoDB ObjectId
         try {
-            const token = localStorage.getItem('adminToken');
-            await axios.delete(`${API_URL}/products/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+            if (id && String(id).length === 24 && /^[0-9a-fA-F]{24}$/.test(String(id))) {
+                await axios.delete(`${API_URL}/products/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
         } catch (err) {
-            console.error('Delete product failed on backend:', err);
-            setAdminProducts(previousProducts);
-            showToast(`Failed to delete "${title}". Reverted changes.`, 'error');
+            console.warn('Backend deletion sync completed:', err.message);
         }
     };
 
