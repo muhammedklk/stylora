@@ -17,28 +17,10 @@ export const CATEGORIES_LIST = [
     { value: 'shoes', label: 'Shoes & Footwear' },
     { value: 'accessories', label: 'Accessories' },
     { value: 'watches', label: 'Watches' },
-    { value: 'outerwear', label: 'Coats & Jackets' },
+    { value: 'outerwear', label: 'Outerwear (Coats, Jackets, Hoodies)' },
     { value: 'activewear', label: 'Activewear' },
     { value: 'clothing', label: 'General Clothing' }
 ];
-
-export const getSubCategories = (catName) => {
-    if (!catName) return ['General'];
-    const cleanCat = String(catName).toLowerCase().trim();
-    if (SUB_CATEGORIES[cleanCat]) return SUB_CATEGORIES[cleanCat];
-    
-    if (cleanCat.includes('outerwear') || cleanCat.includes('coat') || cleanCat.includes('jacket')) return SUB_CATEGORIES['outerwear'];
-    if (cleanCat.includes('t-shirt') || cleanCat.includes('tshirt')) return SUB_CATEGORIES['t-shirts'];
-    if (cleanCat.includes('shirt')) return SUB_CATEGORIES['shirts'];
-    if (cleanCat.includes('pant') || cleanCat.includes('trouser') || cleanCat.includes('jean')) return SUB_CATEGORIES['pants'];
-    if (cleanCat.includes('shoe') || cleanCat.includes('footwear') || cleanCat.includes('sneaker')) return SUB_CATEGORIES['shoes'];
-    if (cleanCat.includes('watch')) return SUB_CATEGORIES['watches'];
-    if (cleanCat.includes('accessory') || cleanCat.includes('accessories')) return SUB_CATEGORIES['accessories'];
-    if (cleanCat.includes('active')) return SUB_CATEGORIES['activewear'];
-    if (cleanCat.includes('clothing')) return SUB_CATEGORIES['clothing'];
-
-    return ['General'];
-};
 
 export const CATEGORY_SIZE_PRESETS = {
     't-shirts': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
