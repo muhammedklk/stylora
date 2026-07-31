@@ -177,6 +177,42 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleToggleBestsellerTag = async (product) => {
+        const hasBestsellerTag = product.tags && product.tags.includes('Bestseller');
+        let newTags;
+        if (hasBestsellerTag) {
+            newTags = (product.tags || []).filter(t => t !== 'Bestseller');
+        } else {
+            newTags = [...(product.tags || []).filter(t => t !== 'Bestseller'), 'Bestseller'];
+        }
+
+        const updatedProduct = { ...product, tags: newTags };
+        const updatedList = adminProducts.map(p => String(p._id) === String(product._id) ? updatedProduct : p);
+        setAdminProducts(updatedList);
+
+        if (hasBestsellerTag) {
+            showToast(`Removed "${product.title}" from Home Page Bestsellers`, 'info');
+        } else {
+            showToast(`Added "${product.title}" to Home Page Bestsellers! ⭐`, 'success');
+        }
+
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedList, timestamp: Date.now() }));
+            window.dispatchEvent(new Event('stylora_products_updated'));
+        } catch (e) {}
+
+        try {
+            const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+            if (product._id && String(product._id).length === 24) {
+                await axios.put(`${API_URL}/products/${product._id}`, updatedProduct, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
+        } catch (err) {
+            console.warn('Background update note:', err.message);
+        }
+    };
+
     const handleSaveSettings = async () => {
         try {
             const updated = {
@@ -198,6 +234,19 @@ const AdminDashboard = () => {
             ...prev,
             [key]: val
         }));
+    };
+
+    const handleCategoryFileUpload = (catKey, file) => {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setCategoryImages(prev => ({
+                ...prev,
+                [catKey]: reader.result
+            }));
+            showToast(`Image selected for ${catKey.toUpperCase()}! Click Save to apply.`, 'info');
+        };
+        reader.readAsDataURL(file);
     };
 
     const categoryCounts = {
@@ -321,6 +370,8 @@ const AdminDashboard = () => {
                     {[
                         { id: 'overview', label: 'Overview' },
                         { id: 'products', label: `Products (${adminProducts.length})` },
+                        { id: 'bestsellers', label: `⭐ Bestsellers (${adminProducts.filter(p => p.tags && p.tags.includes('Bestseller')).length})` },
+                        { id: 'category-cards', label: '🖼️ Category Banners' },
                         { id: 'orders', label: `Orders (${orders.length})` },
                         { id: 'users', label: `Users (${users.length})` },
                         { id: 'settings', label: 'Content Settings' }
@@ -858,6 +909,219 @@ const AdminDashboard = () => {
                         ) : (
                             <p style={{ color: '#6b7280', margin: 0 }}>No registered users found.</p>
                         )}
+                    </div>
+                )}
+
+                {activeTab === 'bestsellers' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        {/* Header info banner */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <span style={{ fontSize: '11px', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.08em' }}>[ Home Page Bestsellers Manager ]</span>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '4px 0 0 0', color: '#111827' }}>
+                                    Manage Featured Bestseller Highlights
+                                </h2>
+                                <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                    Products marked with the ⭐ Bestseller badge will feature prominently in the Bestsellers grid on your Home Page.
+                                </p>
+                            </div>
+                            <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '10px 16px', borderRadius: '6px', textAlign: 'right' }}>
+                                <span style={{ fontSize: '11px', fontWeight: 700, color: '#b45309', display: 'block' }}>ACTIVE BESTSELLERS</span>
+                                <span style={{ fontSize: '22px', fontWeight: 900, color: '#92400e' }}>
+                                    {adminProducts.filter(p => p.tags && p.tags.includes('Bestseller')).length} Items
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Product Selection List with Search & Bestseller Toggle */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
+                            
+                            {/* Search bar inside Bestsellers tab */}
+                            <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search products to highlight as Bestsellers on Home Page..." 
+                                    value={searchQuery}
+                                    onChange={e => setSearchQuery(e.target.value)}
+                                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px', outline: 'none' }}
+                                />
+                                <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600 }}>
+                                    Showing {filteredProducts.length} Products
+                                </span>
+                            </div>
+
+                            {/* Bestseller Grid */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                                {filteredProducts.map(product => {
+                                    const isBestseller = product.tags && product.tags.includes('Bestseller');
+                                    return (
+                                        <div 
+                                            key={product._id} 
+                                            style={{ 
+                                                borderRadius: '8px', 
+                                                border: isBestseller ? '2px solid #d4af37' : '1px solid #e5e7eb', 
+                                                backgroundColor: isBestseller ? '#fffdf5' : '#ffffff',
+                                                padding: '14px', 
+                                                display: 'flex', 
+                                                gap: '14px', 
+                                                alignItems: 'center',
+                                                transition: 'all 0.2s ease',
+                                                boxShadow: isBestseller ? '0 4px 12px rgba(212,175,55,0.15)' : 'none'
+                                            }}
+                                        >
+                                            <img 
+                                                src={resolveImageUrl(product.image)} 
+                                                alt={product.title} 
+                                                style={{ width: '64px', height: '64px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #f3f4f6' }}
+                                                onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80'; }}
+                                            />
+
+                                            <div style={{ flex: 1, overflow: 'hidden' }}>
+                                                <span style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', color: isBestseller ? '#b45309' : '#6b7280' }}>
+                                                    {product.category}
+                                                </span>
+                                                <h4 style={{ fontSize: '13px', fontWeight: 700, margin: '2px 0 4px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#111827' }}>
+                                                    {product.title}
+                                                </h4>
+                                                <span style={{ fontSize: '13px', fontWeight: 800, color: '#000000' }}>
+                                                    ₹{product.price}
+                                                </span>
+                                            </div>
+
+                                            <button 
+                                                type="button"
+                                                onClick={() => handleToggleBestsellerTag(product)}
+                                                style={{ 
+                                                    backgroundColor: isBestseller ? '#000000' : '#f3f4f6', 
+                                                    color: isBestseller ? '#ffffff' : '#374151', 
+                                                    border: isBestseller ? 'none' : '1px solid #d1d5db', 
+                                                    padding: '8px 12px', 
+                                                    borderRadius: '6px', 
+                                                    fontSize: '11px', 
+                                                    fontWeight: 800, 
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                            >
+                                                {isBestseller ? '⭐ Bestseller' : '+ Highlight'}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'category-cards' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        {/* Header Banner */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <span style={{ fontSize: '11px', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.08em' }}>[ Home Page Banners Manager ]</span>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '4px 0 0 0', color: '#111827' }}>
+                                    Find Your Style - Category Cards Manager
+                                </h2>
+                                <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                    Upload custom cover photos or paste image URLs for the 6 Category Cards in the "Find Your Style" section on your Home Page.
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleSaveSettings}
+                                style={{ backgroundColor: '#000000', color: '#ffffff', border: 'none', padding: '12px 24px', borderRadius: '6px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+                            >
+                                💾 Save All Category Images
+                            </button>
+                        </div>
+
+                        {/* 6 Category Cards Grid */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
+                            {[
+                                { key: 'shirts', name: 'Shirts', tag: 'ESSENTIAL MENSWEAR', placeholder: '/assets/find-section-img-3.png' },
+                                { key: 'pants', name: 'Pants & Trousers', tag: 'TAILORED BOTTOMS', placeholder: '/assets/find-section-img-2.png' },
+                                { key: 'outerwear', name: 'Coats & Jackets', tag: 'OUTERWEAR', placeholder: '/assets/find-section-img-1.png' },
+                                { key: 'shoes', name: 'Shoes & Sneakers', tag: 'FOOTWEAR', placeholder: '/assets/find-section-img-4.png' },
+                                { key: 'activewear', name: 'Activewear', tag: 'GYM & SPORTS', placeholder: '/assets/find-section-img-1.png' },
+                                { key: 'watches', name: 'Watches & Accessories', tag: 'TIMEPIECES', placeholder: '/assets/find-section-img-3.png' }
+                            ].map(cat => {
+                                const currentImg = categoryImages[cat.key] || cat.placeholder;
+                                const isCustom = categoryImages[cat.key] && categoryImages[cat.key] !== cat.placeholder;
+
+                                return (
+                                    <div key={cat.key} style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                                        
+                                        {/* Live Image Card Preview Box */}
+                                        <div style={{ height: '220px', width: '100%', position: 'relative', backgroundColor: '#111' }}>
+                                            <img 
+                                                src={resolveImageUrl(currentImg)} 
+                                                alt={cat.name} 
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
+                                            />
+                                            {/* Card Overlay Preview */}
+                                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)', color: '#fff' }}>
+                                                <span style={{ fontSize: '9px', fontWeight: 800, color: '#d4af37', letterSpacing: '0.1em' }}>{cat.tag}</span>
+                                                <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '2px 0 0 0', color: '#fff' }}>{cat.name}</h3>
+                                            </div>
+                                            {isCustom && (
+                                                <span style={{ position: 'absolute', top: '12px', right: '12px', backgroundColor: '#10b981', color: '#fff', fontSize: '9px', fontWeight: 800, padding: '3px 8px', borderRadius: '10px' }}>
+                                                    CUSTOM IMAGE
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Control Box */}
+                                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1, justifyContent: 'space-between' }}>
+                                            <div>
+                                                <label style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: '#374151', marginBottom: '6px', display: 'block' }}>
+                                                    Upload File or Paste Image URL
+                                                </label>
+                                                
+                                                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                                                    <input 
+                                                        type="file" 
+                                                        accept="image/*"
+                                                        onChange={e => handleCategoryFileUpload(cat.key, e.target.files[0])}
+                                                        style={{ fontSize: '11px', border: '1px solid #d1d5db', borderRadius: '4px', padding: '4px 6px', flex: 1 }}
+                                                    />
+                                                    {isCustom && (
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => handleCategoryImgChange(cat.key, '')}
+                                                            style={{ backgroundColor: '#fee2e2', color: '#dc2626', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, borderRadius: '4px', cursor: 'pointer' }}
+                                                        >
+                                                            Reset
+                                                        </button>
+                                                    )}
+                                                </div>
+
+                                                <input 
+                                                    type="text"
+                                                    value={categoryImages[cat.key] || ''}
+                                                    onChange={e => handleCategoryImgChange(cat.key, e.target.value)}
+                                                    placeholder={`Or URL e.g. ${cat.placeholder}`}
+                                                    style={{ width: '100%', padding: '8px 10px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '11px', outline: 'none', boxSizing: 'border-box' }}
+                                                />
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Bottom Save Action */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '16px 24px', display: 'flex', justifyContent: 'flex-end' }}>
+                            <button
+                                onClick={handleSaveSettings}
+                                style={{ backgroundColor: '#000000', color: '#ffffff', border: 'none', padding: '12px 32px', borderRadius: '6px', fontSize: '13px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+                            >
+                                💾 Save All Category Banner Images
+                            </button>
+                        </div>
                     </div>
                 )}
 

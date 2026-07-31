@@ -146,6 +146,8 @@ const AdminEditProduct = () => {
     const [originalPrice, setOriginalPrice] = useState('');
     const [description, setDescription] = useState('');
     const [inventoryCount, setInventoryCount] = useState(100);
+    const [isBestseller, setIsBestseller] = useState(false);
+    const [isNotAvailable, setIsNotAvailable] = useState(false);
     
     // Video states
     const [videoType, setVideoType] = useState('url'); // 'url' or 'file'
@@ -238,6 +240,8 @@ const AdminEditProduct = () => {
             setOriginalPrice(prod.originalPrice || '');
             setDescription(prod.description || '');
             setInventoryCount(prod.inventoryCount !== undefined ? prod.inventoryCount : 100);
+            setIsBestseller(prod.tags ? prod.tags.includes('Bestseller') : false);
+            setIsNotAvailable((prod.inventoryCount !== undefined && prod.inventoryCount === 0) || (prod.tags ? prod.tags.includes('Not Available') : false));
             
             // Read video url and set standard source selection tab
             const vUrl = prod.videoUrl || '';
@@ -317,6 +321,12 @@ const AdminEditProduct = () => {
                 });
             }
 
+            const calculatedStock = isNotAvailable ? 0 : Number(inventoryCount);
+            let updatedTags = [subCategory, category];
+            if (isBestseller) updatedTags.push('Bestseller');
+            if (isNotAvailable) updatedTags.push('Not Available');
+            const cleanTags = Array.from(new Set(updatedTags.filter(Boolean)));
+
             if (customIndex !== -1) {
                 customProds[customIndex] = {
                     ...customProds[customIndex],
@@ -327,12 +337,13 @@ const AdminEditProduct = () => {
                     price: Number(price),
                     originalPrice: originalPrice ? Number(originalPrice) : null,
                     description,
-                    inventoryCount: Number(inventoryCount),
+                    inventoryCount: calculatedStock,
+                    inStock: !isNotAvailable && calculatedStock > 0,
                     sizes,
                     colors,
                     image: finalImgUrl,
                     videoUrl,
-                    tags: Array.from(new Set([...(customProds[customIndex].tags || []), subCategory, category].filter(Boolean)))
+                    tags: cleanTags
                 };
                 localStorage.setItem('stylora_custom_products', JSON.stringify(customProds));
             }
@@ -432,8 +443,8 @@ const AdminEditProduct = () => {
 
                                 <form onSubmit={handleSubmit}>
                                     <div className="row g-4">
-                                        {/* Brand & Title */}
-                                        <div className="col-md-4">
+                                        {/* Brand, Title & Bestseller */}
+                                        <div className="col-md-3">
                                             <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Brand Name</label>
                                             <input 
                                                 type="text" 
@@ -445,7 +456,7 @@ const AdminEditProduct = () => {
                                             />
                                         </div>
 
-                                        <div className="col-md-8">
+                                        <div className="col-md-6">
                                             <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Product Title</label>
                                             <input 
                                                 type="text" 
@@ -455,6 +466,33 @@ const AdminEditProduct = () => {
                                                 required 
                                                 style={{ height: '52px' }}
                                             />
+                                        </div>
+
+                                        <div className="col-md-3" style={{ display: 'flex', alignItems: 'flex-end' }}>
+                                            <label style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '8px', 
+                                                cursor: 'pointer', 
+                                                height: '52px',
+                                                width: '100%',
+                                                backgroundColor: isBestseller ? '#fffdf5' : '#f8fafc', 
+                                                border: isBestseller ? '1.5px solid #d4af37' : '1px solid #e2e8f0', 
+                                                padding: '0 14px', 
+                                                borderRadius: '4px',
+                                                boxSizing: 'border-box',
+                                                userSelect: 'none'
+                                            }}>
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={isBestseller} 
+                                                    onChange={e => setIsBestseller(e.target.checked)} 
+                                                    style={{ accentColor: '#d4af37', width: '16px', height: '16px', cursor: 'pointer', margin: 0 }}
+                                                />
+                                                <span style={{ fontSize: '11px', fontWeight: 800, color: isBestseller ? '#b45309' : '#4b5563' }}>
+                                                    ⭐ Home Bestseller
+                                                </span>
+                                            </label>
                                         </div>
 
                                         {/* Category & Sub-Category */}
@@ -523,11 +561,51 @@ const AdminEditProduct = () => {
                                                 type="number" 
                                                 className="account-input" 
                                                 value={inventoryCount} 
-                                                onChange={e => setInventoryCount(e.target.value)} 
+                                                onChange={e => {
+                                                    const count = Number(e.target.value);
+                                                    setInventoryCount(count);
+                                                    if (count === 0) setIsNotAvailable(true);
+                                                    else if (isNotAvailable && count > 0) setIsNotAvailable(false);
+                                                }} 
                                                 required
                                                 min="0"
                                                 style={{ height: '52px' }}
                                             />
+                                        </div>
+
+                                        <div className="col-md-3" style={{ display: 'flex', alignItems: 'flex-end' }}>
+                                            <label style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '8px', 
+                                                cursor: 'pointer', 
+                                                height: '52px',
+                                                width: '100%',
+                                                backgroundColor: isNotAvailable ? '#fee2e2' : '#f8fafc', 
+                                                border: isNotAvailable ? '1.5px solid #ef4444' : '1px solid #e2e8f0', 
+                                                padding: '0 14px', 
+                                                borderRadius: '4px',
+                                                boxSizing: 'border-box',
+                                                userSelect: 'none'
+                                            }}>
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={isNotAvailable} 
+                                                    onChange={e => {
+                                                        const checked = e.target.checked;
+                                                        setIsNotAvailable(checked);
+                                                        if (checked) {
+                                                            setInventoryCount(0);
+                                                        } else {
+                                                            setInventoryCount(100);
+                                                        }
+                                                    }} 
+                                                    style={{ accentColor: '#dc2626', width: '16px', height: '16px', cursor: 'pointer', margin: 0 }}
+                                                />
+                                                <span style={{ fontSize: '11px', fontWeight: 800, color: isNotAvailable ? '#dc2626' : '#4b5563' }}>
+                                                    {isNotAvailable ? '🔴 Not Available' : '🟢 In Stock'}
+                                                </span>
+                                            </label>
                                         </div>
 
                                         {/* Description */}

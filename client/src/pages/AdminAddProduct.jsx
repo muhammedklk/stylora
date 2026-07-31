@@ -146,6 +146,8 @@ const AdminAddProduct = () => {
     const [originalPrice, setOriginalPrice] = useState('');
     const [description, setDescription] = useState('');
     const [inventoryCount, setInventoryCount] = useState(100);
+    const [isBestseller, setIsBestseller] = useState(false);
+    const [isNotAvailable, setIsNotAvailable] = useState(false);
     
     // Video states (URL vs File)
     const [videoType, setVideoType] = useState('url'); // 'url' or 'file'
@@ -304,7 +306,14 @@ const AdminAddProduct = () => {
             resolvedImageDataUrl = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80';
         }
 
-        const tagList = [subCategory, 'New Arrival'].filter(Boolean);
+        const tagList = [
+            subCategory, 
+            'New Arrival', 
+            isBestseller ? 'Bestseller' : null,
+            isNotAvailable ? 'Not Available' : null
+        ].filter(Boolean);
+
+        const calculatedStock = isNotAvailable ? 0 : Number(inventoryCount);
 
         const newProductObj = {
             _id: 'prod-' + Date.now(),
@@ -315,7 +324,8 @@ const AdminAddProduct = () => {
             price: Number(price) || 0,
             originalPrice: originalPrice ? Number(originalPrice) : undefined,
             description: description.trim() || '',
-            inventoryCount: Number(inventoryCount) || productNumber,
+            inventoryCount: calculatedStock,
+            inStock: !isNotAvailable && calculatedStock > 0,
             image: resolvedImageDataUrl,
             tags: tagList,
             sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
@@ -499,8 +509,8 @@ const AdminAddProduct = () => {
                             </div>
                         )}
 
-                        {/* Row 1: Brand & Title */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '12px' }}>
+                        {/* Row 1: Brand, Title & Bestseller Highlight Toggle */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr 170px', gap: '12px', alignItems: 'end' }}>
                             <div>
                                 <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Brand Name</label>
                                 <input 
@@ -523,10 +533,35 @@ const AdminAddProduct = () => {
                                     style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
                                 />
                             </div>
+                            <div>
+                                <label style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '8px', 
+                                    cursor: 'pointer', 
+                                    height: '36px',
+                                    backgroundColor: isBestseller ? '#fffdf5' : '#f8fafc', 
+                                    border: isBestseller ? '1.5px solid #d4af37' : '1px solid #cbd5e1', 
+                                    padding: '0 12px', 
+                                    borderRadius: '4px',
+                                    boxSizing: 'border-box',
+                                    userSelect: 'none'
+                                }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={isBestseller} 
+                                        onChange={e => setIsBestseller(e.target.checked)} 
+                                        style={{ accentColor: '#d4af37', width: '16px', height: '16px', cursor: 'pointer', margin: 0 }}
+                                    />
+                                    <span style={{ fontSize: '11px', fontWeight: 800, color: isBestseller ? '#b45309' : '#4b5563' }}>
+                                        ⭐ Home Bestseller
+                                    </span>
+                                </label>
+                            </div>
                         </div>
 
-                        {/* Row 2: Category, Sub-Category, Price, Original Price, Stock */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+                        {/* Row 2: Category, Sub-Category, Price, Original Price, Stock, Availability Status */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '10px' }}>
                             <div>
                                 <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Category</label>
                                 <select 
@@ -590,11 +625,51 @@ const AdminAddProduct = () => {
                                 <input 
                                     type="number" 
                                     value={inventoryCount} 
-                                    onChange={e => setInventoryCount(e.target.value)} 
+                                    onChange={e => {
+                                        const count = Number(e.target.value);
+                                        setInventoryCount(count);
+                                        if (count === 0) setIsNotAvailable(true);
+                                        else if (isNotAvailable && count > 0) setIsNotAvailable(false);
+                                    }} 
                                     required
                                     min="0"
                                     style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
                                 />
+                            </div>
+
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: isNotAvailable ? '#dc2626' : '#4b5563', marginBottom: '4px', display: 'block' }}>Availability</label>
+                                <label style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '6px', 
+                                    cursor: 'pointer', 
+                                    height: '36px',
+                                    backgroundColor: isNotAvailable ? '#fee2e2' : '#f8fafc', 
+                                    border: isNotAvailable ? '1.5px solid #ef4444' : '1px solid #cbd5e1', 
+                                    padding: '0 8px', 
+                                    borderRadius: '4px',
+                                    boxSizing: 'border-box',
+                                    userSelect: 'none'
+                                }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={isNotAvailable} 
+                                        onChange={e => {
+                                            const checked = e.target.checked;
+                                            setIsNotAvailable(checked);
+                                            if (checked) {
+                                                setInventoryCount(0);
+                                            } else {
+                                                setInventoryCount(100);
+                                            }
+                                        }} 
+                                        style={{ accentColor: '#dc2626', width: '15px', height: '15px', cursor: 'pointer', margin: 0 }}
+                                    />
+                                    <span style={{ fontSize: '10px', fontWeight: 800, color: isNotAvailable ? '#dc2626' : '#4b5563', whiteSpace: 'nowrap' }}>
+                                        {isNotAvailable ? '🔴 Not Available' : '🟢 In Stock'}
+                                    </span>
+                                </label>
                             </div>
                         </div>
 
