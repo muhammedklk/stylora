@@ -304,6 +304,9 @@ const AdminDashboard = () => {
         if (adminCategoryFilter === 'ACCESSORIES') {
             return (p.tags && p.tags.includes('Accessories')) || ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'].includes(p.category?.toLowerCase());
         }
+        return p.category?.toLowerCase() === adminCategoryFilter.toLowerCase();
+    });
+
     const allBestsellers = adminProducts.filter(p => p.tags && p.tags.includes('Bestseller'));
     const homeFeaturedCount = Math.min(allBestsellers.length, 5);
 
