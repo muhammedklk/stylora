@@ -99,31 +99,20 @@ const Shop = () => {
 
     useEffect(() => {
         fetchProducts();
-        const handleUpdate = (e) => {
-            if (e.detail && Array.isArray(e.detail)) {
-                setProducts(e.detail);
-                applyFilterAndSearch(
-                    e.detail, 
-                    initialCategory, 
-                    searchQuery,
-                    sortBy,
-                    priceMin,
-                    priceMax,
-                    minDiscount,
-                    selectedSizes,
-                    selectedColors,
-                    inStockOnly
-                );
-            } else {
-                fetchProducts();
+
+        const handleSync = () => {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                try {
+                    const { data } = JSON.parse(cached);
+                    if (Array.isArray(data)) {
+                        setProducts(data);
+                    }
+                } catch(e) {}
             }
         };
-        window.addEventListener('storage', handleUpdate);
-        window.addEventListener('stylora_products_updated', handleUpdate);
-        return () => {
-            window.removeEventListener('storage', handleUpdate);
-            window.removeEventListener('stylora_products_updated', handleUpdate);
-        };
+        window.addEventListener('stylora_products_updated', handleSync);
+        return () => window.removeEventListener('stylora_products_updated', handleSync);
     }, []);
 
     useEffect(() => {

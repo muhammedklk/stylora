@@ -103,7 +103,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // Real-time Optimistic Product Deletion
+    // Optimistic Product Deletion without blocking native confirm/alert popups
     const handleDeleteProduct = async (id, title) => {
         // Optimistic UI update: Remove product immediately from local state
         const previousProducts = [...adminProducts];
@@ -111,16 +111,14 @@ const AdminDashboard = () => {
         setAdminProducts(updatedProducts);
         showToast(`"${title}" deleted successfully!`, 'success');
 
-        // Update local cache and dispatch real-time events across all tabs/windows
+        // Update local cache so Shop, Home, and Admin stay in sync with deleted products list
         try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedProducts, timestamp: Date.now() }));
-            window.dispatchEvent(new Event('storage'));
-            window.dispatchEvent(new CustomEvent('stylora_products_updated', { detail: updatedProducts }));
         } catch (e) {}
 
         // Send API request in background
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('adminToken');
             await axios.delete(`${API_URL}/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -306,356 +304,510 @@ const AdminDashboard = () => {
                         </div>
 
                         {/* Recent Activity Card */}
-                        <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
-                            <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 700 }}>Quick Actions</h3>
-                            <div style={{ display: 'flex', gap: '12px' }}>
-                                <button
-                                    onClick={() => navigate('/admin/add-product')}
-                                    style={{ padding: '12px 20px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer' }}
-                                >
-                                    + Add New Product
-                                </button>
-                                <button
-                                    onClick={() => { setActiveTab('products'); navigate('/admin/dashboard?tab=products'); }}
-                                    style={{ padding: '12px 20px', backgroundColor: '#f3f4f6', color: '#111', border: '1px solid #d1d5db', borderRadius: '4px', fontWeight: 600, cursor: 'pointer' }}
-                                >
-                                    Manage Catalog
-                                </button>
-                            </div>
-                        </div>
+            {/* Main Workspace Body */}
+            <div style={{ display: 'flex', flex: 1 }}>
+
+                {/* Left Sidebar Navigation */}
+                <aside style={{ 
+                    width: '260px', 
+                    backgroundColor: '#14161d', 
+                    borderRight: '1px solid #232733', 
+                    padding: '24px 16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                }}>
+                    <div style={{ padding: '0 12px 16px 12px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#6b7280' }}>
+                        Admin Management
                     </div>
-                )}
 
-                {/* TAB 2: PRODUCTS CATALOG */}
-                {activeTab === 'products' && (
-                    <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
-                        
-                        {/* Search & Category Filter Pills Bar */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <input
-                                    type="text"
-                                    placeholder="Search products by title..."
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    style={{
-                                        padding: '10px 16px',
-                                        width: '320px',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '4px',
-                                        fontSize: '13px'
-                                    }}
-                                />
-                                <button
-                                    onClick={() => navigate('/admin/add-product')}
-                                    style={{ padding: '10px 18px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
-                                >
-                                    + Add Product
-                                </button>
+                    {[
+                        { id: 'overview', label: 'Overview Dashboard', icon: '📊' },
+                        { id: 'products', label: 'Products Catalog', icon: '🛍️', badge: adminProducts.length },
+                        { id: 'orders', label: 'Orders List', icon: '📦', badge: orders.length },
+                        { id: 'users', label: 'Users & Customers', icon: '👥', badge: users.length },
+                        { id: 'settings', label: 'Content Settings', icon: '⚙️' }
+                    ].map(item => {
+                        const active = activeTab === item.id;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => { setActiveTab(item.id); navigate(`/admin/dashboard?tab=${item.id}`); }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    width: '100%',
+                                    padding: '12px 16px',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    backgroundColor: active ? '#d4af37' : 'transparent',
+                                    color: active ? '#000000' : '#9ca3af',
+                                    fontSize: '13px',
+                                    fontWeight: active ? 700 : 500,
+                                    cursor: 'pointer',
+                                    textAlign: 'left',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <span>{item.icon}</span>
+                                    <span>{item.label}</span>
+                                </span>
+                                {item.badge !== undefined && (
+                                    <span style={{ 
+                                        backgroundColor: active ? '#000' : '#232733', 
+                                        color: active ? '#fff' : '#9ca3af', 
+                                        fontSize: '11px', 
+                                        fontWeight: 700, 
+                                        padding: '2px 8px', 
+                                        borderRadius: '12px' 
+                                    }}>
+                                        {item.badge}
+                                    </span>
+                                )}
+                            </button>
+                        );
+                    })}
+                </aside>
+
+                {/* Right Content View */}
+                <main style={{ flex: 1, padding: '32px 40px', backgroundColor: '#0d0e12', overflowY: 'auto' }}>
+
+                    {/* TAB 1: OVERVIEW DASHBOARD */}
+                    {activeTab === 'overview' && (
+                        <div>
+                            <div style={{ marginBottom: '28px' }}>
+                                <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', margin: '0 0 6px 0' }}>Dashboard Overview</h1>
+                                <p style={{ fontSize: '13px', color: '#9ca3af', margin: 0 }}>Real-time metrics and store inventory health.</p>
                             </div>
 
-                            {/* Category Filter Pills */}
-                            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
-                                {categories.map(cat => {
-                                    const count = cat === 'ALL' ? adminProducts.length : adminProducts.filter(p => 
-                                        (p.category && p.category.toUpperCase() === cat) ||
-                                        (p.tags && p.tags.some(t => t.toUpperCase() === cat))
-                                    ).length;
-
-                                    return (
-                                        <button
-                                            key={cat}
-                                            onClick={() => setAdminCategoryFilter(cat)}
-                                            style={{
-                                                padding: '6px 14px',
-                                                borderRadius: '20px',
-                                                fontSize: '11px',
-                                                fontWeight: adminCategoryFilter === cat ? 700 : 500,
-                                                border: adminCategoryFilter === cat ? '1px solid #000' : '1px solid #e5e7eb',
-                                                backgroundColor: adminCategoryFilter === cat ? '#000' : '#f9fafb',
-                                                color: adminCategoryFilter === cat ? '#fff' : '#4b5563',
-                                                cursor: 'pointer',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {cat} ({count})
-                                        </button>
-                                    );
-                                })}
+                            {/* KPI Stat Cards Grid */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+                                {[
+                                    { title: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString()}`, color: '#10b981', icon: '💰' },
+                                    { title: 'Total Orders', value: stats.totalOrders, color: '#3b82f6', icon: '📦' },
+                                    { title: 'Active Products', value: stats.totalProducts, color: '#d4af37', icon: '🏷️' },
+                                    { title: 'Registered Users', value: stats.totalUsers, color: '#8b5cf6', icon: '👥' }
+                                ].map((kpi, idx) => (
+                                    <div key={idx} style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '24px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{kpi.title}</span>
+                                            <span style={{ fontSize: '20px' }}>{kpi.icon}</span>
+                                        </div>
+                                        <div style={{ fontSize: '28px', fontWeight: 900, color: '#ffffff' }}>{kpi.value}</div>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
 
-                        {/* Product Table */}
-                        <div style={{ overflowX: 'auto' }}>
-                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-                                <thead>
-                                    <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Image</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Title</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Category</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Price</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Original Price</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>Stock</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredProducts.length > 0 ? (
-                                        filteredProducts.map((product, idx) => (
-                                            <tr key={product._id || idx} className="admin-product-row" style={{ borderBottom: '1px solid #f3f4f6', transition: 'background-color 0.2s ease' }}>
-                                                <td style={{ padding: '14px 16px' }}>
-                                                    <div style={{ width: '54px', height: '54px', borderRadius: '6px', overflow: 'hidden', backgroundColor: '#f0f0f0', border: '1px solid #e5e7eb', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
-                                                        <img
-                                                            src={resolveImageUrl(product.image)}
-                                                            alt={product.title}
-                                                            className="admin-product-img"
-                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                            onError={(e) => { e.target.onerror = null; e.target.src = '/assets/find-section-img-1.png'; }}
-                                                        />
-                                                    </div>
-                                                </td>
-                                                <td style={{ padding: '14px 16px' }}>
-                                                    <span style={{ fontSize: '10px', color: '#9ca3af', fontFamily: 'monospace', display: 'block', marginBottom: '2px', fontWeight: 600 }}>
-                                                        ID: #{product._id ? String(product._id).slice(-6) : idx + 1}
-                                                    </span>
-                                                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#111', display: 'block' }}>
-                                                        {product.title}
-                                                    </span>
-                                                </td>
-                                                <td style={{ padding: '14px 16px' }}>
-                                                    <span style={{
-                                                        padding: '3px 8px',
-                                                        borderRadius: '4px',
-                                                        fontSize: '10px',
-                                                        fontWeight: 700,
-                                                        backgroundColor: '#f3f4f6',
-                                                        color: '#374151',
-                                                        textTransform: 'uppercase',
-                                                        letterSpacing: '0.05em'
-                                                    }}>
-                                                        {product.category || 'General'}
-                                                    </span>
-                                                </td>
-                                                <td style={{ padding: '14px 16px', fontWeight: 800, color: '#111', fontSize: '14px' }}>₹{product.price}</td>
-                                                <td style={{ padding: '14px 16px', color: '#9ca3af', textDecoration: product.originalPrice ? 'line-through' : 'none' }}>
-                                                    {product.originalPrice ? `₹${product.originalPrice}` : '-'}
-                                                </td>
-                                                <td style={{ padding: '14px 16px' }}>
-                                                    <span style={{
-                                                        padding: '4px 10px',
-                                                        borderRadius: '12px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 700,
-                                                        backgroundColor: (product.inventoryCount ?? 10) > 0 ? '#dcfce7' : '#fee2e2',
-                                                        color: (product.inventoryCount ?? 10) > 0 ? '#15803d' : '#b91c1c'
-                                                    }}>
-                                                        {(product.inventoryCount ?? 10) > 0 ? `In Stock (${product.inventoryCount ?? 10})` : 'Out of Stock'}
-                                                    </span>
-                                                </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right' }}>
-                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                                                        <button
-                                                            onClick={() => navigate(`/admin/edit-product/${product._id}`)}
-                                                            style={{ padding: '7px 14px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s ease' }}
-                                                        >
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteProduct(product._id, product.title)}
-                                                            style={{ padding: '7px 14px', backgroundColor: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s ease' }}
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="7" style={{ padding: '32px', textAlign: 'center', color: '#6b7280' }}>
-                                                No products found matching your filter.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
-
-                {/* TAB 3: ORDERS */}
-                {activeTab === 'orders' && (
-                    <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
-                        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 700 }}>Orders</h3>
-                        {orders.length > 0 ? (
-                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                                <thead>
-                                    <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                                        <th style={{ padding: '12px 16px' }}>Order ID</th>
-                                        <th style={{ padding: '12px 16px' }}>Customer</th>
-                                        <th style={{ padding: '12px 16px' }}>Total Amount</th>
-                                        <th style={{ padding: '12px 16px' }}>Status</th>
-                                        <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map(o => (
-                                        <tr key={o._id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                                            <td style={{ padding: '12px 16px', fontWeight: 600 }}>#{o._id.substring(0, 8)}</td>
-                                            <td style={{ padding: '12px 16px' }}>{o.user?.name || o.shippingAddress?.fullName || 'Guest Customer'}</td>
-                                            <td style={{ padding: '12px 16px', fontWeight: 700 }}>₹{o.totalPrice}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <span style={{ padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 700, backgroundColor: '#fef3c7', color: '#92400e' }}>
-                                                    {o.status || 'Pending'}
-                                                </span>
-                                            </td>
-                                            <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                                                <select
-                                                    value={o.status || 'Pending'}
-                                                    onChange={e => handleUpdateOrderStatus(o._id, e.target.value)}
-                                                    style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '11px' }}
-                                                >
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Processing">Processing</option>
-                                                    <option value="Shipped">Shipped</option>
-                                                    <option value="Delivered">Delivered</option>
-                                                    <option value="Cancelled">Cancelled</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                            {/* Category Distribution Breakdown */}
+                            <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '28px' }}>
+                                <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 20px 0', color: '#ffffff' }}>Category Distribution</h3>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                                    {[
+                                        { label: 'Clothing', count: categoryCounts.CLOTHING, color: '#3b82f6' },
+                                        { label: 'Shirts', count: categoryCounts.SHIRTS, color: '#10b981' },
+                                        { label: 'Pants & Shorts', count: categoryCounts.PANTS, color: '#f59e0b' },
+                                        { label: 'Shoes', count: categoryCounts.SHOES, color: '#ec4899' },
+                                        { label: 'Outerwear', count: categoryCounts.OUTERWEAR, color: '#8b5cf6' },
+                                        { label: 'Watches', count: categoryCounts.WATCHES, color: '#d4af37' }
+                                    ].map(cat => (
+                                        <div key={cat.label} style={{ backgroundColor: '#1e222d', padding: '16px', borderRadius: '8px', border: '1px solid #2d3345' }}>
+                                            <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '6px' }}>{cat.label}</div>
+                                            <div style={{ fontSize: '20px', fontWeight: 800, color: cat.color }}>{cat.count} Products</div>
+                                        </div>
                                     ))}
-                                </tbody>
-                            </table>
-                        ) : (
-                            <p style={{ color: '#6b7280', margin: 0 }}>No orders placed yet.</p>
-                        )}
-                    </div>
-                )}
-
-                {/* TAB 4: USERS */}
-                {activeTab === 'users' && (
-                    <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px' }}>
-                        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 700 }}>Users</h3>
-                        {users.length > 0 ? (
-                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                                <thead>
-                                    <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                                        <th style={{ padding: '12px 16px' }}>Name</th>
-                                        <th style={{ padding: '12px 16px' }}>Email</th>
-                                        <th style={{ padding: '12px 16px' }}>Role</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users.map(u => (
-                                        <tr key={u._id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                                            <td style={{ padding: '12px 16px', fontWeight: 600 }}>{u.name}</td>
-                                            <td style={{ padding: '12px 16px' }}>{u.email}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <span style={{ padding: '3px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, backgroundColor: u.role === 'admin' ? '#fee2e2' : '#e0e7ff', color: u.role === 'admin' ? '#b91c1c' : '#3730a3' }}>
-                                                    {u.role || 'user'}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        ) : (
-                            <p style={{ color: '#6b7280', margin: 0 }}>No registered users found.</p>
-                        )}
-                    </div>
-                )}
-
-                {/* TAB 5: CONTENT SETTINGS */}
-                {activeTab === 'settings' && (
-                    <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', maxWidth: '600px' }}>
-                        <h3 style={{ margin: '0 0 20px 0', fontSize: '16px', fontWeight: 700 }}>Store Content Settings</h3>
-                        
-                        <div style={{ marginBottom: '24px' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={showNotAvailableBadge}
-                                    onChange={e => setShowNotAvailableBadge(e.target.checked)}
-                                    style={{ width: '18px', height: '18px', accentColor: '#000' }}
-                                />
-                                <div>
-                                    <span style={{ fontSize: '14px', fontWeight: 600, display: 'block' }}>Show "Not Available" (N/A) Badge</span>
-                                    <span style={{ fontSize: '12px', color: '#6b7280' }}>Displays a red N/A badge on empty category tabs in Shop page when products count is 0.</span>
                                 </div>
-                            </label>
+                            </div>
                         </div>
+                    )}
 
-                        <div style={{ marginBottom: '24px' }}>
-                            <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>Shop Hero Image URL</label>
-                            <input
-                                type="text"
-                                value={shopHeroImg}
-                                onChange={e => setShopHeroImg(e.target.value)}
-                                placeholder="/assets/shop-hero.jpg"
-                                style={{ width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '13px' }}
-                            />
-                        </div>
+                    {/* TAB 2: PRODUCTS CATALOG */}
+                    {activeTab === 'products' && (
+                        <div>
+                            {/* Header & Add Action */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                                <div>
+                                    <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', margin: '0 0 6px 0' }}>Products Catalog</h1>
+                                    <p style={{ fontSize: '13px', color: '#9ca3af', margin: 0 }}>Manage, edit, and delete products in real-time.</p>
+                                </div>
+                                <button
+                                    onClick={() => navigate('/admin/products/add')}
+                                    style={{
+                                        backgroundColor: '#d4af37',
+                                        color: '#000000',
+                                        border: 'none',
+                                        padding: '12px 24px',
+                                        borderRadius: '6px',
+                                        fontSize: '13px',
+                                        fontWeight: 800,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        boxShadow: '0 4px 12px rgba(212, 175, 55, 0.2)'
+                                    }}
+                                >
+                                    <span>+</span> Add New Product
+                                </button>
+                            </div>
 
-                        <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '24px 0' }} />
-
-                        <h4 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 700, color: '#111' }}>
-                            Find Your Style - Category Card Images
-                        </h4>
-                        <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
-                            Set custom image URLs or paths for the Category Cards displayed on the Home Page "Find Your Style" section.
-                        </p>
-
-                        {[
-                            { key: 'shirts', label: 'Shirts Category Image', placeholder: '/assets/find-section-img-3.png' },
-                            { key: 'pants', label: 'Pants & Trousers Category Image', placeholder: '/assets/find-section-img-2.png' },
-                            { key: 'outerwear', label: 'Coats & Jackets (Outerwear) Image', placeholder: '/assets/find-section-img-1.png' },
-                            { key: 'shoes', label: 'Shoes & Sneakers Category Image', placeholder: '/assets/find-section-img-4.png' },
-                            { key: 'activewear', label: 'Activewear Category Image', placeholder: '/assets/find-section-img-1.png' },
-                            { key: 'watches', label: 'Watches Category Image', placeholder: '/assets/find-section-img-3.png' }
-                        ].map(cat => (
-                            <div key={cat.key} style={{ marginBottom: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '4px', color: '#374151' }}>
-                                        {cat.label}
-                                    </label>
+                            {/* Search & Category Filter Pills */}
+                            <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
+                                <div style={{ marginBottom: '16px' }}>
                                     <input
                                         type="text"
-                                        value={categoryImages[cat.key] || ''}
-                                        onChange={e => handleCategoryImgChange(cat.key, e.target.value)}
-                                        placeholder={cat.placeholder}
-                                        style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
+                                        placeholder="🔍 Search product title, category or ID..."
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            backgroundColor: '#1e222d',
+                                            border: '1px solid #2d3345',
+                                            color: '#ffffff',
+                                            padding: '12px 16px',
+                                            borderRadius: '6px',
+                                            fontSize: '13px',
+                                            outline: 'none'
+                                        }}
                                     />
                                 </div>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '4px',
-                                    overflow: 'hidden',
-                                    border: '1px solid #e5e7eb',
-                                    backgroundColor: '#f3f4f6',
-                                    flexShrink: 0,
-                                    marginTop: '16px'
-                                }}>
-                                    <img
-                                        src={resolveImageUrl(categoryImages[cat.key] || cat.placeholder)}
-                                        alt={cat.label}
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
-                                    />
+
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                    {Object.keys(categoryCounts).map(catKey => {
+                                        const count = categoryCounts[catKey];
+                                        const isActive = adminCategoryFilter === catKey;
+                                        return (
+                                            <button
+                                                key={catKey}
+                                                onClick={() => setAdminCategoryFilter(catKey)}
+                                                style={{
+                                                    backgroundColor: isActive ? '#ffffff' : '#1e222d',
+                                                    color: isActive ? '#000000' : '#9ca3af',
+                                                    border: '1px solid',
+                                                    borderColor: isActive ? '#ffffff' : '#2d3345',
+                                                    padding: '6px 14px',
+                                                    borderRadius: '20px',
+                                                    fontSize: '12px',
+                                                    fontWeight: 700,
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {catKey} ({count})
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
-                        ))}
 
-                        <button
-                            onClick={handleSaveSettings}
-                            style={{ marginTop: '16px', padding: '12px 24px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', width: '100%' }}
-                        >
-                            Save All Settings & Category Images
-                        </button>
-                    </div>
-                )}
+                            {/* Products List Grid */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {filteredProducts.length > 0 ? (
+                                    filteredProducts.map((product, idx) => (
+                                        <div 
+                                            key={product._id || idx}
+                                            className="admin-product-row"
+                                            style={{
+                                                backgroundColor: '#14161d',
+                                                border: '1px solid #232733',
+                                                borderRadius: '10px',
+                                                padding: '16px 20px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
+                                                gap: '20px',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            {/* Product Image & Info */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
+                                                <div style={{ 
+                                                    width: '56px', 
+                                                    height: '56px', 
+                                                    borderRadius: '6px', 
+                                                    overflow: 'hidden', 
+                                                    backgroundColor: '#1e222d', 
+                                                    border: '1px solid #2d3345',
+                                                    flexShrink: 0
+                                                }}>
+                                                    <img 
+                                                        src={resolveImageUrl(product.image)} 
+                                                        alt={product.title} 
+                                                        className="admin-product-img"
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                        onError={e => { e.target.onerror = null; e.target.src = '/assets/find-section-img-1.png'; }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                                        <span style={{ fontFamily: 'monospace', fontSize: '11px', color: '#d4af37', backgroundColor: 'rgba(212, 175, 55, 0.1)', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                                                            #{product._id ? String(product._id).substring(String(product._id).length - 6) : `P-${idx + 1}`}
+                                                        </span>
+                                                        <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#9ca3af', backgroundColor: '#1e222d', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                                                            {product.category}
+                                                        </span>
+                                                    </div>
+                                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#ffffff' }}>{product.title}</h4>
+                                                </div>
+                                            </div>
 
-            </main>
+                                            {/* Price & Inventory */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                                                <div>
+                                                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase' }}>Price</div>
+                                                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>₹{product.price}</div>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase' }}>Stock</div>
+                                                    <div style={{ fontSize: '13px', fontWeight: 700, color: (product.inventoryCount || 50) > 0 ? '#10b981' : '#ef4444' }}>
+                                                        {product.inventoryCount || 50} units
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Action Buttons */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                <button
+                                                    onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+                                                    style={{
+                                                        backgroundColor: '#1e222d',
+                                                        color: '#e5e7eb',
+                                                        border: '1px solid #2d3345',
+                                                        padding: '8px 16px',
+                                                        borderRadius: '6px',
+                                                        fontSize: '12px',
+                                                        fontWeight: 700,
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteProduct(product._id, product.title)}
+                                                    style={{
+                                                        backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                                                        color: '#ef4444',
+                                                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                                                        padding: '8px 16px',
+                                                        borderRadius: '6px',
+                                                        fontSize: '12px',
+                                                        fontWeight: 700,
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '10px', padding: '48px', textAlign: 'center', color: '#9ca3af' }}>
+                                        No products found in this category or search filter.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* TAB 3: ORDERS LIST */}
+                    {activeTab === 'orders' && (
+                        <div>
+                            <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', marginBottom: '24px' }}>Customer Orders</h1>
+                            <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '24px' }}>
+                                {orders.length > 0 ? (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                                        <thead>
+                                            <tr style={{ borderBottom: '1px solid #232733', color: '#9ca3af', textAlign: 'left' }}>
+                                                <th style={{ padding: '12px 16px' }}>Order ID</th>
+                                                <th style={{ padding: '12px 16px' }}>Customer</th>
+                                                <th style={{ padding: '12px 16px' }}>Total Price</th>
+                                                <th style={{ padding: '12px 16px' }}>Status</th>
+                                                <th style={{ padding: '12px 16px' }}>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {orders.map(o => (
+                                                <tr key={o._id} style={{ borderBottom: '1px solid #1e222d' }}>
+                                                    <td style={{ padding: '16px', fontFamily: 'monospace', fontWeight: 700, color: '#d4af37' }}>#{String(o._id).substring(0, 8)}</td>
+                                                    <td style={{ padding: '16px', color: '#ffffff' }}>{o.shippingAddress?.fullName || 'Customer'}</td>
+                                                    <td style={{ padding: '16px', fontWeight: 700, color: '#ffffff' }}>₹{o.totalPrice}</td>
+                                                    <td style={{ padding: '16px' }}>
+                                                        <span style={{ 
+                                                            padding: '4px 10px', 
+                                                            borderRadius: '12px', 
+                                                            fontSize: '11px', 
+                                                            fontWeight: 700, 
+                                                            backgroundColor: o.status === 'delivered' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)', 
+                                                            color: o.status === 'delivered' ? '#10b981' : '#f59e0b' 
+                                                        }}>
+                                                            {o.status || 'processing'}
+                                                        </span>
+                                                    </td>
+                                                    <td style={{ padding: '16px' }}>
+                                                        <select
+                                                            value={o.status || 'processing'}
+                                                            onChange={e => handleUpdateOrderStatus(o._id, e.target.value)}
+                                                            style={{ backgroundColor: '#1e222d', color: '#ffffff', border: '1px solid #2d3345', padding: '6px 12px', borderRadius: '4px', fontSize: '12px' }}
+                                                        >
+                                                            <option value="processing">Processing</option>
+                                                            <option value="shipped">Shipped</option>
+                                                            <option value="delivered">Delivered</option>
+                                                            <option value="cancelled">Cancelled</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p style={{ color: '#9ca3af', margin: 0, textAlign: 'center', padding: '24px 0' }}>No customer orders placed yet.</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* TAB 4: USERS LIST */}
+                    {activeTab === 'users' && (
+                        <div>
+                            <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', marginBottom: '24px' }}>Registered Users</h1>
+                            <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '24px' }}>
+                                {users.length > 0 ? (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                                        <thead>
+                                            <tr style={{ borderBottom: '1px solid #232733', color: '#9ca3af', textAlign: 'left' }}>
+                                                <th style={{ padding: '12px 16px' }}>Name</th>
+                                                <th style={{ padding: '12px 16px' }}>Email</th>
+                                                <th style={{ padding: '12px 16px' }}>Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {users.map(u => (
+                                                <tr key={u._id} style={{ borderBottom: '1px solid #1e222d' }}>
+                                                    <td style={{ padding: '16px', fontWeight: 700, color: '#ffffff' }}>{u.name}</td>
+                                                    <td style={{ padding: '16px', color: '#9ca3af' }}>{u.email}</td>
+                                                    <td style={{ padding: '16px' }}>
+                                                        <span style={{ padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, backgroundColor: u.role === 'admin' ? 'rgba(212, 175, 55, 0.2)' : 'rgba(59, 130, 246, 0.2)', color: u.role === 'admin' ? '#d4af37' : '#3b82f6' }}>
+                                                            {u.role || 'user'}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p style={{ color: '#9ca3af', margin: 0, textAlign: 'center', padding: '24px 0' }}>No registered users found.</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* TAB 5: CONTENT SETTINGS */}
+                    {activeTab === 'settings' && (
+                        <div style={{ maxWidth: '640px' }}>
+                            <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', marginBottom: '24px' }}>Store Content Settings</h1>
+                            <div style={{ backgroundColor: '#14161d', border: '1px solid #232733', borderRadius: '12px', padding: '28px' }}>
+                                
+                                <div style={{ marginBottom: '24px' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={showNotAvailableBadge}
+                                            onChange={e => setShowNotAvailableBadge(e.target.checked)}
+                                            style={{ width: '18px', height: '18px', accentColor: '#d4af37' }}
+                                        />
+                                        <div>
+                                            <span style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', display: 'block' }}>Show "Not Available" (N/A) Badge</span>
+                                            <span style={{ fontSize: '12px', color: '#9ca3af' }}>Displays a red N/A badge on empty category tabs when product count is 0.</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div style={{ marginBottom: '24px' }}>
+                                    <label style={{ fontSize: '13px', fontWeight: 700, color: '#e5e7eb', display: 'block', marginBottom: '8px' }}>Shop Hero Image URL</label>
+                                    <input
+                                        type="text"
+                                        value={shopHeroImg}
+                                        onChange={e => setShopHeroImg(e.target.value)}
+                                        placeholder="/assets/shop-hero.jpg"
+                                        style={{ width: '100%', padding: '12px 16px', backgroundColor: '#1e222d', border: '1px solid #2d3345', borderRadius: '6px', fontSize: '13px', color: '#ffffff', outline: 'none' }}
+                                    />
+                                </div>
+
+                                <hr style={{ border: 'none', borderTop: '1px solid #232733', margin: '28px 0' }} />
+
+                                <h4 style={{ margin: '0 0 12px 0', fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>
+                                    Find Your Style - Category Card Images
+                                </h4>
+                                <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '20px' }}>
+                                    Set custom image URLs for the 6 Category Cards on the Home Page.
+                                </p>
+
+                                {[
+                                    { key: 'shirts', label: 'Shirts Category Image', placeholder: '/assets/find-section-img-3.png' },
+                                    { key: 'pants', label: 'Pants & Trousers Category Image', placeholder: '/assets/find-section-img-2.png' },
+                                    { key: 'outerwear', label: 'Coats & Jackets Category Image', placeholder: '/assets/find-section-img-1.png' },
+                                    { key: 'shoes', label: 'Shoes & Sneakers Category Image', placeholder: '/assets/find-section-img-4.png' },
+                                    { key: 'activewear', label: 'Activewear Category Image', placeholder: '/assets/find-section-img-1.png' },
+                                    { key: 'watches', label: 'Watches Category Image', placeholder: '/assets/find-section-img-3.png' }
+                                ].map(cat => (
+                                    <div key={cat.key} style={{ marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#d1d5db' }}>
+                                                {cat.label}
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={categoryImages[cat.key] || ''}
+                                                onChange={e => handleCategoryImgChange(cat.key, e.target.value)}
+                                                placeholder={cat.placeholder}
+                                                style={{ width: '100%', padding: '10px 14px', backgroundColor: '#1e222d', border: '1px solid #2d3345', borderRadius: '6px', fontSize: '12px', color: '#ffffff', outline: 'none' }}
+                                            />
+                                        </div>
+                                        <div style={{
+                                            width: '52px',
+                                            height: '52px',
+                                            borderRadius: '6px',
+                                            overflow: 'hidden',
+                                            border: '1px solid #2d3345',
+                                            backgroundColor: '#1e222d',
+                                            flexShrink: 0,
+                                            marginTop: '16px'
+                                        }}>
+                                            <img
+                                                src={resolveImageUrl(categoryImages[cat.key] || cat.placeholder)}
+                                                alt={cat.label}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+
+                                <button
+                                    onClick={handleSaveSettings}
+                                    style={{ 
+                                        marginTop: '24px', 
+                                        padding: '14px 28px', 
+                                        backgroundColor: '#d4af37', 
+                                        color: '#000000', 
+                                        border: 'none', 
+                                        borderRadius: '6px', 
+                                        fontSize: '13px', 
+                                        fontWeight: 800, 
+                                        cursor: 'pointer', 
+                                        width: '100%',
+                                        boxShadow: '0 4px 12px rgba(212, 175, 55, 0.2)'
+                                    }}
+                                >
+                                    Save All Content Settings
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                </main>
+            </div>
         </div>
     );
 };

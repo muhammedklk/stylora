@@ -320,8 +320,6 @@ const AdminEditProduct = () => {
 
             // Invalidate the products cache so website shows updated product immediately
             localStorage.removeItem('stylora_products_cache');
-            window.dispatchEvent(new Event('storage'));
-            window.dispatchEvent(new CustomEvent('stylora_products_updated'));
 
             showToast('Product updated successfully!', 'success');
             navigate('/admin/dashboard?tab=products');
