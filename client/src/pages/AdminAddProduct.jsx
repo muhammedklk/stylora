@@ -131,7 +131,7 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
-import { SUB_CATEGORIES, CATEGORIES_LIST } from '../config/categories';
+import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS } from '../config/categories';
 
 const AdminAddProduct = () => {
     const navigate = useNavigate();
@@ -159,6 +159,7 @@ const AdminAddProduct = () => {
     
     // Dynamic sizes and colors
     const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL']);
+    const [tempCustomSize, setTempCustomSize] = useState('');
     const [colors, setColors] = useState([
         { name: 'Black', hex: '#1a1a1a' },
         { name: 'Gray', hex: '#7a7a7a' },
@@ -218,12 +219,45 @@ const AdminAddProduct = () => {
         };
     }, [imageFile, imageUrl]);
 
+    const [videoPreviewUrl, setVideoPreviewUrl] = useState('');
+    const videoObjectUrlRef = useRef(null);
+
+    useEffect(() => {
+        if (videoObjectUrlRef.current) {
+            URL.revokeObjectURL(videoObjectUrlRef.current);
+            videoObjectUrlRef.current = null;
+        }
+        if (videoFile) {
+            const url = URL.createObjectURL(videoFile);
+            videoObjectUrlRef.current = url;
+            setVideoPreviewUrl(url);
+        } else if (videoUrl) {
+            setVideoPreviewUrl(resolveImageUrl(videoUrl));
+        } else {
+            setVideoPreviewUrl('');
+        }
+        return () => {
+            if (videoObjectUrlRef.current) {
+                URL.revokeObjectURL(videoObjectUrlRef.current);
+            }
+        };
+    }, [videoFile, videoUrl]);
+
     const handleSizeToggle = (size) => {
         if (sizes.includes(size)) {
             setSizes(sizes.filter(s => s !== size));
         } else {
             setSizes([...sizes, size]);
         }
+    };
+
+    const handleAddCustomSize = () => {
+        if (!tempCustomSize.trim()) return;
+        const formatted = tempCustomSize.trim();
+        if (!sizes.includes(formatted)) {
+            setSizes([...sizes, formatted]);
+        }
+        setTempCustomSize('');
     };
 
     const handleColorHexChange = (e) => {
@@ -502,6 +536,8 @@ const AdminAddProduct = () => {
                                         setCategory(newCat);
                                         const availSub = SUB_CATEGORIES[newCat] || [];
                                         setSubCategory(availSub.length > 0 ? availSub[0] : '');
+                                        const catPresets = CATEGORY_SIZE_PRESETS[newCat] || ['S', 'M', 'L', 'XL'];
+                                        setSizes(catPresets.slice(0, Math.min(5, catPresets.length)));
                                     }}
                                     style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
                                 >
@@ -580,9 +616,11 @@ const AdminAddProduct = () => {
                             
                             {/* Sizes Pill Selector */}
                             <div>
-                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Available Sizes</label>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                                    {standardSizes.map(sz => (
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>
+                                    Available Sizes ({category === 'pants' ? 'Waist 26 - 46' : category === 'shoes' ? 'Shoe Sizes (UK)' : 'Sizes'})
+                                </label>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
+                                    {(CATEGORY_SIZE_PRESETS[category] || ['S', 'M', 'L', 'XL']).map(sz => (
                                         <button
                                             key={sz}
                                             type="button"
@@ -602,6 +640,46 @@ const AdminAddProduct = () => {
                                             {sz}
                                         </button>
                                     ))}
+
+                                    {/* Render custom sizes added by user that are not in default preset */}
+                                    {sizes.filter(s => !(CATEGORY_SIZE_PRESETS[category] || []).includes(s)).map(sz => (
+                                        <button
+                                            key={sz}
+                                            type="button"
+                                            onClick={() => handleSizeToggle(sz)}
+                                            style={{
+                                                background: '#000000',
+                                                color: '#ffffff',
+                                                border: '1px solid #000000',
+                                                padding: '4px 10px',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                cursor: 'pointer',
+                                                borderRadius: '4px',
+                                                transition: 'all 0.15s ease'
+                                            }}
+                                        >
+                                            {sz} ×
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Custom Size Add Input */}
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <input 
+                                        type="text" 
+                                        placeholder={category === 'pants' ? 'Add Waist Size (e.g. 26)' : category === 'shoes' ? 'Add Size (e.g. UK 6.5)' : 'Add Custom Size'} 
+                                        value={tempCustomSize} 
+                                        onChange={e => setTempCustomSize(e.target.value)}
+                                        style={{ height: '28px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 6px', fontSize: '10px', flex: 1, outline: 'none' }}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={handleAddCustomSize}
+                                        style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, cursor: 'pointer', borderRadius: '4px' }}
+                                    >
+                                        + Add
+                                    </button>
                                 </div>
                             </div>
 
@@ -714,9 +792,9 @@ const AdminAddProduct = () => {
                                 />
                             )}
 
-                            {/* Image Live Preview */}
+                            {/* Image Live Preview (Tall Square Box) */}
                             <div style={{ 
-                                height: '90px', 
+                                height: '220px', 
                                 width: '100%', 
                                 marginTop: '8px', 
                                 borderRadius: '6px', 
@@ -725,12 +803,20 @@ const AdminAddProduct = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                position: 'relative'
                             }}>
                                 {imagePreviewUrl ? (
-                                    <img src={imagePreviewUrl} alt="Preview" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                                    <img src={imagePreviewUrl} alt="Product Preview" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
                                 ) : (
-                                    <span style={{ fontSize: '10px', color: '#94a3b8' }}>No Image Selected</span>
+                                    <div style={{ textAlign: 'center', color: '#94a3b8' }}>
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ margin: '0 auto 6px', display: 'block' }}>
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                                            <polyline points="21 15 16 10 5 21"/>
+                                        </svg>
+                                        <span style={{ fontSize: '11px', fontWeight: 600 }}>No Image Selected</span>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -774,6 +860,41 @@ const AdminAddProduct = () => {
                                         style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '5px', borderRadius: '4px' }}
                                     />
                                 )}
+
+                                {/* Video Live Preview (Tall Square Box) */}
+                                <div style={{ 
+                                    height: '160px', 
+                                    width: '100%', 
+                                    marginTop: '8px', 
+                                    borderRadius: '6px', 
+                                    border: '1px dashed #cbd5e1', 
+                                    backgroundColor: '#f8fafc',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden',
+                                    position: 'relative'
+                                }}>
+                                    {videoPreviewUrl ? (
+                                        videoFile || videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') ? (
+                                            <video src={videoPreviewUrl} controls style={{ maxHeight: '100%', maxWidth: '100%' }} />
+                                        ) : (
+                                            <iframe 
+                                                src={videoUrl.includes('youtube.com/watch?v=') ? videoUrl.replace('watch?v=', 'embed/') : videoUrl} 
+                                                title="Video Preview"
+                                                style={{ width: '100%', height: '100%', border: 'none' }}
+                                            />
+                                        )
+                                    ) : (
+                                        <div style={{ textAlign: 'center', color: '#94a3b8' }}>
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ margin: '0 auto 6px', display: 'block' }}>
+                                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                            </svg>
+                                            <span style={{ fontSize: '11px', fontWeight: 600 }}>No Video Selected</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Main Submit Button */}
@@ -790,7 +911,7 @@ const AdminAddProduct = () => {
                                     fontSize: '12px', 
                                     fontWeight: 800, 
                                     cursor: submitting ? 'not-allowed' : 'pointer',
-                                    marginTop: '12px',
+                                    marginTop: '10px',
                                     boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
                                 }}
                             >

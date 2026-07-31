@@ -130,7 +130,7 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
-import { SUB_CATEGORIES, CATEGORIES_LIST } from '../config/categories';
+import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS } from '../config/categories';
 
 const AdminEditProduct = () => {
     const { id } = useParams();
@@ -617,9 +617,11 @@ const AdminEditProduct = () => {
 
                                         {/* Sizes Configuration */}
                                         <div className="col-md-6">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '12px', display: 'block' }}>Available Sizes</label>
+                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '12px', display: 'block' }}>
+                                                Available Sizes ({category === 'pants' ? 'Waist 26 - 46' : category === 'shoes' ? 'Shoe Sizes (UK)' : 'Sizes'})
+                                            </label>
                                             <div className="d-flex flex-wrap">
-                                                {standardSizes.map(sz => (
+                                                {(CATEGORY_SIZE_PRESETS[category] || ['S', 'M', 'L', 'XL']).map(sz => (
                                                     <button
                                                         key={sz}
                                                         type="button"
@@ -639,6 +641,30 @@ const AdminEditProduct = () => {
                                                         }}
                                                     >
                                                         {sz}
+                                                    </button>
+                                                ))}
+
+                                                {/* Render custom or existing sizes not in default preset */}
+                                                {sizes.filter(s => !(CATEGORY_SIZE_PRESETS[category] || []).includes(s)).map(sz => (
+                                                    <button
+                                                        key={sz}
+                                                        type="button"
+                                                        onClick={() => handleSizeToggle(sz)}
+                                                        style={{
+                                                            background: '#1a1a1a',
+                                                            color: '#fff',
+                                                            border: '1px solid #1a1a1a',
+                                                            padding: '8px 16px',
+                                                            fontSize: '12px',
+                                                            fontWeight: 600,
+                                                            cursor: 'pointer',
+                                                            borderRadius: '2px',
+                                                            transition: 'all 0.15s ease',
+                                                            marginRight: '8px',
+                                                            marginBottom: '8px'
+                                                        }}
+                                                    >
+                                                        {sz} ×
                                                     </button>
                                                 ))}
                                             </div>

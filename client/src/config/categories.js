@@ -21,3 +21,15 @@ export const CATEGORIES_LIST = [
     { value: 'activewear', label: 'Activewear' },
     { value: 'clothing', label: 'General Clothing' }
 ];
+
+export const CATEGORY_SIZE_PRESETS = {
+    't-shirts': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
+    'shirts': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
+    'outerwear': ['S', 'M', 'L', 'XL', 'XXL'],
+    'activewear': ['S', 'M', 'L', 'XL', 'XXL'],
+    'clothing': ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    'pants': ['26', '28', '30', '32', '34', '36', '38', '40', '42', '44', '46'],
+    'shoes': ['UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10', 'UK 11', 'UK 12'],
+    'watches': ['One Size', 'Free Size', 'Adjustable'],
+    'accessories': ['One Size', 'Free Size', 'Small', 'Medium', 'Large']
+};
