@@ -348,458 +348,463 @@ const AdminAddProduct = () => {
     const standardSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
 
     return (
-        <main className="account-main">
-            {/* Header Hero */}
-            <section className="shop-hero" style={{ background: '#0f0f0f' }}>
-                <div className="hero-overlay" style={{ background: 'rgba(0,0,0,0.85)' }}></div>
-                <div className="shop-hero-content">
-                    <span className="shop-hero-tag" style={{ color: '#d4af37' }}>[ Product Catalog Control • Item #{productNumber} ]</span>
-                    <h1 className="shop-hero-title" style={{ color: '#fff' }}>Add New Product (#{productNumber})</h1>
-                    <p className="shop-hero-subtitle" style={{ color: '#aaa' }}>Create item #{productNumber} in your store catalog.</p>
+        <div style={{ 
+            height: '100vh', 
+            backgroundColor: '#f8fafc', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            fontFamily: 'var(--font-primary, sans-serif)',
+            overflow: 'hidden'
+        }}>
+            {/* Top Compact Header Bar */}
+            <header style={{ 
+                height: '56px', 
+                backgroundColor: '#0a0a0a', 
+                borderBottom: '1px solid #1f2937', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                padding: '0 24px',
+                color: '#ffffff',
+                flexShrink: 0
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <button 
+                        onClick={() => navigate('/admin/dashboard?tab=products')}
+                        style={{ 
+                            backgroundColor: 'rgba(255,255,255,0.1)', 
+                            color: '#ffffff', 
+                            border: 'none', 
+                            padding: '6px 12px', 
+                            borderRadius: '4px', 
+                            fontSize: '11px', 
+                            fontWeight: 700, 
+                            cursor: 'pointer' 
+                        }}
+                    >
+                        ← Back to Admin
+                    </button>
+                    <span style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>
+                        Add Product <span style={{ color: '#d4af37' }}>(#{productNumber})</span>
+                    </span>
+                    <span style={{ 
+                        backgroundColor: '#1f2937', 
+                        color: '#d4af37', 
+                        fontSize: '10px', 
+                        fontWeight: 800, 
+                        padding: '3px 10px', 
+                        borderRadius: '12px',
+                        border: '1px solid #d4af37'
+                    }}>
+                        Item #{productNumber}
+                    </span>
                 </div>
-            </section>
 
-            {/* Form Section */}
-            <section className="account-section py-5">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-md-10">
-                            <div className="account-panel active p-5" style={{ backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '4px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                                <div className="mb-4 pb-3" style={{ borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div>
-                                        <h2 className="panel-title" style={{ color: '#111', fontSize: '20px', fontWeight: 700, margin: 0 }}>Product Specifications</h2>
-                                        <p className="panel-subtitle" style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Provide brand, media (image & video), pricing, sizes, and colors.</p>
-                                    </div>
-                                    <div style={{
-                                        backgroundColor: '#0a0a0a',
-                                        color: '#d4af37',
-                                        border: '1px solid #d4af37',
-                                        borderRadius: '20px',
-                                        padding: '6px 16px',
-                                        fontSize: '12px',
-                                        fontWeight: 800,
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '6px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                                    }}>
-                                        <span>📦 Adding Product #{productNumber}</span>
-                                    </div>
-                                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <button 
+                        type="button"
+                        onClick={() => navigate('/admin/dashboard?tab=products')}
+                        style={{ 
+                            backgroundColor: 'transparent', 
+                            color: '#9ca3af', 
+                            border: '1px solid #374151', 
+                            padding: '6px 14px', 
+                            borderRadius: '4px', 
+                            fontSize: '11px', 
+                            fontWeight: 600, 
+                            cursor: 'pointer' 
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                        style={{ 
+                            backgroundColor: '#10b981', 
+                            color: '#ffffff', 
+                            border: 'none', 
+                            padding: '7px 20px', 
+                            borderRadius: '4px', 
+                            fontSize: '11px', 
+                            fontWeight: 800, 
+                            cursor: submitting ? 'not-allowed' : 'pointer',
+                            boxShadow: '0 2px 8px rgba(16,185,129,0.3)'
+                        }}
+                    >
+                        {submitting ? 'Saving...' : '✓ Publish Product'}
+                    </button>
+                </div>
+            </header>
 
-                                {error && (
-                                    <div className="alert alert-danger p-3 mb-4" style={{ fontSize: '13px', backgroundColor: '#fff5f5', color: '#e53e3e', border: '1px solid #fed7d7', borderRadius: '4px' }}>
-                                        {error}
-                                    </div>
-                                )}
+            {/* Single Screen Form Body Grid (Zero Page Scrolling) */}
+            <form onSubmit={handleSubmit} style={{ 
+                flex: 1, 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 340px', 
+                gap: '16px', 
+                padding: '16px 24px', 
+                overflow: 'hidden',
+                boxSizing: 'border-box'
+            }}>
+                
+                {/* Left Column: Form Specifications (Fits cleanly in 1 Viewport) */}
+                <div style={{ 
+                    backgroundColor: '#ffffff', 
+                    borderRadius: '8px', 
+                    border: '1px solid #e2e8f0', 
+                    padding: '18px 22px', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    overflow: 'hidden'
+                }}>
+                    {error && (
+                        <div style={{ fontSize: '11px', backgroundColor: '#fee2e2', color: '#dc2626', padding: '8px 12px', borderRadius: '4px', margin: 0 }}>
+                            {error}
+                        </div>
+                    )}
 
-                                <form onSubmit={handleSubmit}>
-                                    <div className="row g-4">
-                                        {/* Brand & Title */}
-                                        <div className="col-md-4">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Brand Name</label>
-                                            <input 
-                                                type="text" 
-                                                className="account-input" 
-                                                value={brand} 
-                                                onChange={e => setBrand(e.target.value)} 
-                                                required 
-                                                placeholder="e.g. STYLORA, NIKE, etc."
-                                                style={{ height: '52px' }}
-                                            />
-                                        </div>
-
-                                        <div className="col-md-8">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Product Title</label>
-                                            <input 
-                                                type="text" 
-                                                className="account-input" 
-                                                value={title} 
-                                                onChange={e => setTitle(e.target.value)} 
-                                                required 
-                                                placeholder="e.g. Classic Cotton Oxford Shirt"
-                                                style={{ height: '52px' }}
-                                            />
-                                        </div>
-
-                                        {/* Category & Sub-Category */}
-                                        <div className="col-md-3">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Category</label>
-                                            <select 
-                                                className="account-input" 
-                                                value={category} 
-                                                onChange={e => {
-                                                    const newCat = e.target.value;
-                                                    setCategory(newCat);
-                                                    const availSub = SUB_CATEGORIES[newCat] || [];
-                                                    setSubCategory(availSub.length > 0 ? availSub[0] : '');
-                                                }}
-                                                style={{ height: '52px' }}
-                                            >
-                                                {CATEGORIES_LIST.map(cat => (
-                                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div className="col-md-3">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981', marginBottom: '8px', display: 'block' }}>Sub-Category / Style</label>
-                                            <select 
-                                                className="account-input" 
-                                                value={subCategory} 
-                                                onChange={e => setSubCategory(e.target.value)}
-                                                style={{ height: '52px', border: '1.5px solid #10b981', backgroundColor: '#f0fdf4' }}
-                                            >
-                                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
-                                                    <option key={sub} value={sub}>{sub}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div className="col-md-3">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Selling Price (₹)</label>
-                                            <input 
-                                                type="number" 
-                                                className="account-input" 
-                                                value={price} 
-                                                onChange={e => setPrice(e.target.value)} 
-                                                required 
-                                                placeholder="₹"
-                                                min="0"
-                                                style={{ height: '52px' }}
-                                            />
-                                        </div>
-
-                                        <div className="col-md-3">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Original Price (₹) - <span style={{ color: '#888', textTransform: 'none' }}>Optional</span></label>
-                                            <input 
-                                                type="number" 
-                                                className="account-input" 
-                                                value={originalPrice} 
-                                                onChange={e => setOriginalPrice(e.target.value)} 
-                                                placeholder="e.g. 1999 (to show discount)"
-                                                min="0"
-                                                style={{ height: '52px' }}
-                                            />
-                                        </div>
-
-                                        <div className="col-md-3">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Inventory Stock</label>
-                                            <input 
-                                                type="number" 
-                                                className="account-input" 
-                                                value={inventoryCount} 
-                                                onChange={e => setInventoryCount(e.target.value)} 
-                                                required
-                                                min="0"
-                                                style={{ height: '52px' }}
-                                            />
-                                        </div>
-
-                                        {/* Description */}
-                                        <div className="col-12">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Description</label>
-                                            <textarea 
-                                                className="account-input" 
-                                                rows="3" 
-                                                value={description} 
-                                                onChange={e => setDescription(e.target.value)} 
-                                                required 
-                                                style={{ minHeight: '80px', resize: 'vertical' }}
-                                                placeholder="Provide detailed material description and characteristics..."
-                                            ></textarea>
-                                        </div>
-
-                                        {/* Product Video Source Options */}
-                                        <div className="col-12">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Product Video Media</label>
-                                            
-                                            <div className="d-flex gap-2 mb-3" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px' }}>
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setVideoType('url')}
-                                                    style={{
-                                                        background: videoType === 'url' ? '#111' : '#f5f5f5',
-                                                        color: videoType === 'url' ? '#fff' : '#444',
-                                                        border: 'none',
-                                                        padding: '8px 16px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        borderRadius: '2px',
-                                                        transition: 'all 0.2s'
-                                                    }}
-                                                >
-                                                    VIDEO URL / LINK
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setVideoType('file')}
-                                                    style={{
-                                                        background: videoType === 'file' ? '#111' : '#f5f5f5',
-                                                        color: videoType === 'file' ? '#fff' : '#444',
-                                                        border: 'none',
-                                                        padding: '8px 16px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        borderRadius: '2px',
-                                                        transition: 'all 0.2s'
-                                                    }}
-                                                >
-                                                    UPLOAD VIDEO FILE
-                                                </button>
-                                            </div>
-
-                                            {videoType === 'url' ? (
-                                                <div>
-                                                    <input 
-                                                        type="text" 
-                                                        className="account-input" 
-                                                        placeholder="e.g. https://www.youtube.com/embed/dQw4w9WgXcQ or assets/videos/demo.mp4"
-                                                        value={videoUrl} 
-                                                        onChange={e => setVideoUrl(e.target.value)} 
-                                                    />
-                                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '6px', display: 'block' }}>Enter a YouTube share link (embed link) or direct video file path.</span>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <input 
-                                                        type="file" 
-                                                        accept="video/*"
-                                                        className="account-input" 
-                                                        onChange={e => setVideoFile(e.target.files[0])}
-                                                        style={{ padding: '12px' }}
-                                                    />
-                                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '6px', display: 'block' }}>Upload a demo video. Supported formats: MP4, WEBM, MOV. Max 50MB.</span>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Sizes Configuration */}
-                                        <div className="col-md-6">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '12px', display: 'block' }}>Available Sizes</label>
-                                            <div className="d-flex flex-wrap">
-                                                {standardSizes.map(sz => (
-                                                    <button
-                                                        key={sz}
-                                                        type="button"
-                                                        onClick={() => handleSizeToggle(sz)}
-                                                        style={{
-                                                            background: sizes.includes(sz) ? '#1a1a1a' : '#fff',
-                                                            color: sizes.includes(sz) ? '#fff' : '#1a1a1a',
-                                                            border: '1px solid #1a1a1a',
-                                                            padding: '8px 16px',
-                                                            fontSize: '12px',
-                                                            fontWeight: 600,
-                                                            cursor: 'pointer',
-                                                            borderRadius: '2px',
-                                                            transition: 'all 0.15s ease',
-                                                            marginRight: '8px',
-                                                            marginBottom: '8px'
-                                                        }}
-                                                    >
-                                                        {sz}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Colors Configuration */}
-                                        <div className="col-md-6">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '12px', display: 'block' }}>Available Colors</label>
-                                            
-                                            {/* List of active colors */}
-                                            <div className="d-flex flex-wrap gap-2 mb-3">
-                                                {colors.map((c, i) => (
-                                                    <div 
-                                                        key={i} 
-                                                        style={{ 
-                                                            display: 'flex', 
-                                                            alignItems: 'center', 
-                                                            gap: '8px', 
-                                                            backgroundColor: '#fafafa', 
-                                                            border: '1px solid #eee', 
-                                                            padding: '6px 12px', 
-                                                            borderRadius: '20px',
-                                                            marginRight: '8px',
-                                                            marginBottom: '8px'
-                                                        }}
-                                                    >
-                                                        <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: c.hex, border: c.name === 'White' ? '1px solid #ddd' : 'none' }}></span>
-                                                        <input 
-                                                            type="text" 
-                                                            value={c.name}
-                                                            onChange={(e) => handleColorNameEdit(i, e.target.value)}
-                                                            style={{
-                                                                border: 'none',
-                                                                background: 'transparent',
-                                                                fontSize: '11px',
-                                                                fontWeight: 500,
-                                                                width: '70px',
-                                                                outline: 'none',
-                                                                padding: 0,
-                                                                margin: 0
-                                                            }}
-                                                            title="Edit color name"
-                                                        />
-                                                        <button 
-                                                            type="button" 
-                                                            onClick={() => handleRemoveColor(c.name)}
-                                                            style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '12px', padding: '0 2px', color: '#888', fontWeight: 'bold' }}
-                                                        >
-                                                            ×
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Add dynamic color inputs */}
-                                            <div className="d-flex gap-2">
-                                                <input 
-                                                    type="text" 
-                                                    className="account-input" 
-                                                    placeholder="Color Name" 
-                                                    value={tempColorName} 
-                                                    onChange={e => setTempColorName(e.target.value)}
-                                                    style={{ height: '42px', flex: 1 }}
-                                                />
-                                                <input 
-                                                    type="color" 
-                                                    value={tempColorHex} 
-                                                    onChange={handleColorHexChange}
-                                                    style={{ width: '42px', height: '42px', border: '1px solid #eee', cursor: 'pointer', padding: '2px', borderRadius: '2px', backgroundColor: 'transparent' }}
-                                                    title="Select color hex"
-                                                />
-                                                <button 
-                                                    type="button" 
-                                                    onClick={handleAddColor}
-                                                    style={{
-                                                        background: '#1a1a1a',
-                                                        color: '#fff',
-                                                        border: 'none',
-                                                        padding: '0 16px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        borderRadius: '2px'
-                                                    }}
-                                                >
-                                                    ADD
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Image Upload Option Tabs */}
-                                        <div className="col-12">
-                                            <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', marginBottom: '8px', display: 'block' }}>Product Image Media</label>
-                                            
-                                            <div className="d-flex gap-2 mb-3" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px' }}>
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setImageType('url')}
-                                                    style={{
-                                                        background: imageType === 'url' ? '#111' : '#f5f5f5',
-                                                        color: imageType === 'url' ? '#fff' : '#444',
-                                                        border: 'none',
-                                                        padding: '8px 16px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        borderRadius: '2px',
-                                                        transition: 'all 0.2s'
-                                                    }}
-                                                >
-                                                    IMAGE PATH / URL
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setImageType('file')}
-                                                    style={{
-                                                        background: imageType === 'file' ? '#111' : '#f5f5f5',
-                                                        color: imageType === 'file' ? '#fff' : '#444',
-                                                        border: 'none',
-                                                        padding: '8px 16px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        borderRadius: '2px',
-                                                        transition: 'all 0.2s'
-                                                    }}
-                                                >
-                                                    UPLOAD IMAGE FILE
-                                                </button>
-                                            </div>
-
-                                            {imageType === 'url' ? (
-                                                <div>
-                                                    <input 
-                                                        type="text" 
-                                                        className="account-input" 
-                                                        placeholder="e.g. assets/find-section-img-1.png or external link" 
-                                                        value={imageUrl} 
-                                                        onChange={e => setImageUrl(e.target.value)} 
-                                                    />
-                                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '6px', display: 'block' }}>Provide an existing image file path relative to assets/ or a valid web link.</span>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <input 
-                                                        type="file" 
-                                                        accept="image/*"
-                                                        className="account-input" 
-                                                        onChange={e => setImageFile(e.target.files[0])}
-                                                        style={{ padding: '12px' }}
-                                                    />
-                                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '6px', display: 'block' }}>Supported formats: JPG, PNG, WEBP. Uploads to server uploads folder.</span>
-                                                </div>
-                                            )}
-
-                                            {imagePreviewUrl && (
-                                                <div className="mt-3 p-3" style={{ border: '1px dashed #eee', display: 'inline-block', borderRadius: '4px' }}>
-                                                    <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '8px' }}>Current Preview:</span>
-                                                    <img 
-                                                         src={imagePreviewUrl} 
-                                                         alt="Preview" 
-                                                         style={{ maxHeight: '120px', maxWidth: '200px', objectFit: 'contain' }}
-                                                    />
-                                                    {imageFile && (
-                                                        <span style={{ fontSize: '11px', color: '#22c55e', display: 'block', marginTop: '6px' }}>
-                                                            ✓ {imageFile.name}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Action Buttons Section */}
-                                    <div className="mt-5 pt-4 d-flex justify-content-end gap-3" style={{ borderTop: '1px solid #eee' }}>
-                                        <button 
-                                            type="button" 
-                                            className="buy-now-btn" 
-                                            style={{ padding: '14px 28px', width: 'auto', border: '1px solid #000', fontSize: '12px', fontWeight: 600 }} 
-                                            onClick={() => navigate('/admin/dashboard')}
-                                            disabled={submitting}
-                                        >
-                                            CANCEL
-                                        </button>
-                                        <button 
-                                            type="submit" 
-                                            className="checkout-btn" 
-                                            style={{ padding: '14px 28px', width: 'auto', fontSize: '12px', fontWeight: 600 }}
-                                            disabled={submitting}
-                                        >
-                                            {submitting ? 'CREATING...' : 'SAVE PRODUCT'}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                    {/* Row 1: Brand & Title */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '12px' }}>
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Brand Name</label>
+                            <input 
+                                type="text" 
+                                value={brand} 
+                                onChange={e => setBrand(e.target.value)} 
+                                required 
+                                placeholder="STYLORA"
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Product Title</label>
+                            <input 
+                                type="text" 
+                                value={title} 
+                                onChange={e => setTitle(e.target.value)} 
+                                required 
+                                placeholder="e.g. Classic Cotton Oxford Shirt"
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                            />
                         </div>
                     </div>
+
+                    {/* Row 2: Category, Sub-Category, Price, Original Price, Stock */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Category</label>
+                            <select 
+                                value={category} 
+                                onChange={e => {
+                                    const newCat = e.target.value;
+                                    setCategory(newCat);
+                                    const availSub = SUB_CATEGORIES[newCat] || [];
+                                    setSubCategory(availSub.length > 0 ? availSub[0] : '');
+                                }}
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
+                            >
+                                {CATEGORIES_LIST.map(cat => (
+                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#059669', marginBottom: '4px', display: 'block' }}>Sub-Category</label>
+                            <select 
+                                value={subCategory} 
+                                onChange={e => setSubCategory(e.target.value)}
+                                style={{ width: '100%', height: '36px', border: '1.5px solid #10b981', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#f0fdf4', boxSizing: 'border-box', fontWeight: 600 }}
+                            >
+                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                    <option key={sub} value={sub}>{sub}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Price (₹)</label>
+                            <input 
+                                type="number" 
+                                value={price} 
+                                onChange={e => setPrice(e.target.value)} 
+                                required 
+                                placeholder="₹"
+                                min="0"
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#9ca3af', marginBottom: '4px', display: 'block' }}>Original (₹)</label>
+                            <input 
+                                type="number" 
+                                value={originalPrice} 
+                                onChange={e => setOriginalPrice(e.target.value)} 
+                                placeholder="e.g. 1999"
+                                min="0"
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Stock (Auto #{productNumber})</label>
+                            <input 
+                                type="number" 
+                                value={inventoryCount} 
+                                onChange={e => setInventoryCount(e.target.value)} 
+                                required
+                                min="0"
+                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Row 3: Description */}
+                    <div>
+                        <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Description</label>
+                        <textarea 
+                            rows="2" 
+                            value={description} 
+                            onChange={e => setDescription(e.target.value)} 
+                            required 
+                            placeholder="Provide detailed material description..."
+                            style={{ width: '100%', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '8px 10px', fontSize: '11px', outline: 'none', resize: 'none', boxSizing: 'border-box' }}
+                        ></textarea>
+                    </div>
+
+                    {/* Row 4: Sizes & Colors Config */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
+                        
+                        {/* Sizes Pill Selector */}
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Available Sizes</label>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                {standardSizes.map(sz => (
+                                    <button
+                                        key={sz}
+                                        type="button"
+                                        onClick={() => handleSizeToggle(sz)}
+                                        style={{
+                                            background: sizes.includes(sz) ? '#000000' : '#ffffff',
+                                            color: sizes.includes(sz) ? '#ffffff' : '#4b5563',
+                                            border: sizes.includes(sz) ? '1px solid #000000' : '1px solid #cbd5e1',
+                                            padding: '4px 10px',
+                                            fontSize: '11px',
+                                            fontWeight: 700,
+                                            cursor: 'pointer',
+                                            borderRadius: '4px',
+                                            transition: 'all 0.15s ease'
+                                        }}
+                                    >
+                                        {sz}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Colors Dynamic Config */}
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Colors</label>
+                            
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px', maxHeight: '42px', overflowY: 'auto' }}>
+                                {colors.map((c, i) => (
+                                    <div 
+                                        key={i} 
+                                        style={{ 
+                                            display: 'inline-flex', 
+                                            alignItems: 'center', 
+                                            gap: '4px', 
+                                            backgroundColor: '#f8fafc', 
+                                            border: '1px solid #e2e8f0', 
+                                            padding: '2px 8px', 
+                                            borderRadius: '12px'
+                                        }}
+                                    >
+                                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: c.hex, border: c.name === 'White' ? '1px solid #cbd5e1' : 'none' }}></span>
+                                        <span style={{ fontSize: '10px', fontWeight: 600, color: '#334155' }}>{c.name}</span>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => handleRemoveColor(c.name)}
+                                            style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '11px', color: '#94a3b8', padding: 0, fontWeight: 'bold' }}
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Color Name" 
+                                    value={tempColorName} 
+                                    onChange={e => setTempColorName(e.target.value)}
+                                    style={{ height: '28px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 6px', fontSize: '10px', flex: 1, outline: 'none' }}
+                                />
+                                <input 
+                                    type="color" 
+                                    value={tempColorHex} 
+                                    onChange={handleColorHexChange}
+                                    style={{ width: '28px', height: '28px', border: '1px solid #cbd5e1', cursor: 'pointer', padding: '1px', borderRadius: '4px', backgroundColor: 'transparent' }}
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={handleAddColor}
+                                    style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, cursor: 'pointer', borderRadius: '4px' }}
+                                >
+                                    + Add
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </section>
-        </main>
+
+                {/* Right Column: Media Preview & Video Upload (Fits cleanly in 1 Viewport) */}
+                <div style={{ 
+                    backgroundColor: '#ffffff', 
+                    borderRadius: '8px', 
+                    border: '1px solid #e2e8f0', 
+                    padding: '18px', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    overflow: 'hidden'
+                }}>
+                    
+                    {/* Image Upload Box */}
+                    <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Image</label>
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <button 
+                                    type="button"
+                                    onClick={() => setImageType('url')}
+                                    style={{ background: imageType === 'url' ? '#0f172a' : '#f1f5f9', color: imageType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                >
+                                    URL
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => setImageType('file')}
+                                    style={{ background: imageType === 'file' ? '#0f172a' : '#f1f5f9', color: imageType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                >
+                                    File
+                                </button>
+                            </div>
+                        </div>
+
+                        {imageType === 'url' ? (
+                            <input 
+                                type="text" 
+                                placeholder="e.g. assets/find-section-img-1.png or URL" 
+                                value={imageUrl} 
+                                onChange={e => setImageUrl(e.target.value)} 
+                                style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                        ) : (
+                            <input 
+                                type="file" 
+                                accept="image/*"
+                                onChange={e => setImageFile(e.target.files[0])}
+                                style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
+                            />
+                        )}
+
+                        {/* Image Live Preview */}
+                        <div style={{ 
+                            height: '120px', 
+                            width: '100%', 
+                            marginTop: '8px', 
+                            borderRadius: '6px', 
+                            border: '1px dashed #cbd5e1', 
+                            backgroundColor: '#f8fafc',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden'
+                        }}>
+                            {imagePreviewUrl ? (
+                                <img src={imagePreviewUrl} alt="Preview" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                            ) : (
+                                <span style={{ fontSize: '10px', color: '#94a3b8' }}>No Image Selected</span>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Video Upload Box */}
+                    <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Video Media</label>
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <button 
+                                    type="button"
+                                    onClick={() => setVideoType('url')}
+                                    style={{ background: videoType === 'url' ? '#0f172a' : '#f1f5f9', color: videoType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                >
+                                    URL
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => setVideoType('file')}
+                                    style={{ background: videoType === 'file' ? '#0f172a' : '#f1f5f9', color: videoType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                >
+                                    File
+                                </button>
+                            </div>
+                        </div>
+
+                        {videoType === 'url' ? (
+                            <input 
+                                type="text" 
+                                placeholder="YouTube embed link or video path"
+                                value={videoUrl} 
+                                onChange={e => setVideoUrl(e.target.value)} 
+                                style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                        ) : (
+                            <input 
+                                type="file" 
+                                accept="video/*"
+                                onChange={e => setVideoFile(e.target.files[0])}
+                                style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
+                            />
+                        )}
+                    </div>
+
+                    {/* Bottom Action Submit Button */}
+                    <button 
+                        type="submit"
+                        disabled={submitting}
+                        style={{ 
+                            width: '100%',
+                            backgroundColor: '#0f172a', 
+                            color: '#ffffff', 
+                            border: 'none', 
+                            padding: '10px', 
+                            borderRadius: '4px', 
+                            fontSize: '12px', 
+                            fontWeight: 800, 
+                            cursor: submitting ? 'not-allowed' : 'pointer',
+                            marginTop: 'auto',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                        }}
+                    >
+                        {submitting ? 'Publishing Product...' : `✓ Save & Publish Item #${productNumber}`}
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
     );
 };
 
