@@ -51,55 +51,24 @@ const Header = ({ toggleSidebar }) => {
                 <ul className="nav-links">
                     <li className="has-dropdown">
                         <Link to="/shop">Men <span className="arrow-icon"></span></Link>
-                        <ul className="dropdown" style={{ minWidth: '220px' }}>
+                        <ul className="dropdown" style={{ minWidth: '180px' }}>
                             <li><Link to="/shop?category=new-arrivals">New Arrivals</Link></li>
-                            <li style={{ borderTop: '1px solid #333', marginTop: '4px', paddingTop: '4px' }}>
-                                <strong style={{ color: '#d4af37', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shirts</strong>
-                            </li>
-                            <li><Link to="/shop?category=shirts&search=Checked">Checked Shirts</Link></li>
-                            <li><Link to="/shop?category=shirts&search=Plain">Plain Shirts</Link></li>
-                            <li><Link to="/shop?category=shirts&search=Formal">Formal Shirts</Link></li>
-                            <li><Link to="/shop?category=shirts&search=Printed">Printed Shirts</Link></li>
-
-                            <li style={{ borderTop: '1px solid #333', marginTop: '4px', paddingTop: '4px' }}>
-                                <strong style={{ color: '#d4af37', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pants & Jeans</strong>
-                            </li>
-                            <li><Link to="/shop?category=pants&search=Formal">Formal Trousers</Link></li>
-                            <li><Link to="/shop?category=pants&search=Baggy">Baggy Jeans</Link></li>
-                            <li><Link to="/shop?category=pants&search=Straight">Straight Fit Jeans</Link></li>
-                            <li><Link to="/shop?category=pants&search=Cotton">Cotton Pants</Link></li>
-                            <li><Link to="/shop?category=pants&search=Bootcut">Bootcut Pants</Link></li>
-                            <li><Link to="/shop?category=pants&search=Track">Track Pants</Link></li>
-
-                            <li style={{ borderTop: '1px solid #333', marginTop: '4px', paddingTop: '4px' }}>
-                                <strong style={{ color: '#d4af37', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shoes</strong>
-                            </li>
-                            <li><Link to="/shop?category=shoes&search=Sneakers">Sneakers</Link></li>
-                            <li><Link to="/shop?category=shoes&search=Formal">Formal Shoes</Link></li>
-                            <li><Link to="/shop?category=shoes&search=Loafers">Loafers</Link></li>
-                            <li><Link to="/shop?category=shoes&search=Boots">Boots</Link></li>
+                            <li><Link to="/shop?category=shirts">Shirts</Link></li>
+                            <li><Link to="/shop?category=pants">Pants & Jeans</Link></li>
+                            <li><Link to="/shop?category=shoes">Shoes</Link></li>
+                            <li><Link to="/shop?category=activewear">Activewear</Link></li>
+                            <li><Link to="/shop?category=outerwear">Outerwear</Link></li>
                         </ul>
                     </li>
                     <li className="has-dropdown">
                         <Link to="/accessories">Accessories <span className="arrow-icon"></span></Link>
-                        <ul className="dropdown" style={{ minWidth: '220px' }}>
-                            <li style={{ paddingTop: '4px' }}>
-                                <strong style={{ color: '#d4af37', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Watches</strong>
-                            </li>
-                            <li><Link to="/shop?category=watches&search=Analog">Analog Watches</Link></li>
-                            <li><Link to="/shop?category=watches&search=Digital">Digital Watches</Link></li>
-                            <li><Link to="/shop?category=watches&search=Smartwatches">Smartwatches</Link></li>
-                            <li><Link to="/shop?category=watches&search=Luxury">Luxury Watches</Link></li>
-
-                            <li style={{ borderTop: '1px solid #333', marginTop: '4px', paddingTop: '4px' }}>
-                                <strong style={{ color: '#d4af37', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Accessories</strong>
-                            </li>
+                        <ul className="dropdown" style={{ minWidth: '180px' }}>
+                            <li><Link to="/shop?category=watches">Watches</Link></li>
                             <li><Link to="/accessories?category=bags">Bags & Backpacks</Link></li>
                             <li><Link to="/accessories?category=sunglasses">Sunglasses</Link></li>
                             <li><Link to="/accessories?category=belts-wallets">Belts & Wallets</Link></li>
                             <li><Link to="/accessories?category=hats-caps">Hats & Caps</Link></li>
                             <li><Link to="/accessories?category=jewelry">Jewelry</Link></li>
-                            <li><Link to="/accessories?category=socks">Socks</Link></li>
                         </ul>
                     </li>
                     <li><Link to="/about">Our Story</Link></li>
