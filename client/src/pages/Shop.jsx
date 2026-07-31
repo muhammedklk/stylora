@@ -339,13 +339,23 @@ const Shop = () => {
             <section className="shop-section">
                 <div className="container">
 
-                    {/* Top Filter Bar Row with Right-Side Filter Button */}
+                    {/* Top Filter Bar Row with Sticky Top Positioning & Soft Backdrop */}
                     <div style={{
+                        position: 'sticky',
+                        top: '70px',
+                        zIndex: 900,
+                        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        padding: '14px 0',
+                        margin: '0 0 24px 0',
+                        borderBottom: '1px solid #f1f5f9',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: '16px',
-                        marginBottom: '30px'
+                        transition: 'all 0.25s ease'
                     }}>
                         {/* Left Side: Scrollable Category Tabs with Custom Dropdowns */}
                         <div className="shop-filter-bar" style={{ 
