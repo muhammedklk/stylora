@@ -140,8 +140,8 @@ const AdminAddProduct = () => {
     // Form states
     const [title, setTitle] = useState('');
     const [brand, setBrand] = useState('STYLORA');
-    const [category, setCategory] = useState('shirts');
-    const [subCategory, setSubCategory] = useState('Checked');
+    const [category, setCategory] = useState('t-shirts');
+    const [subCategory, setSubCategory] = useState('Oversized');
     const [price, setPrice] = useState('');
     const [originalPrice, setOriginalPrice] = useState('');
     const [description, setDescription] = useState('');

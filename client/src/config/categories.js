@@ -1,4 +1,5 @@
 export const SUB_CATEGORIES = {
+    't-shirts': ['Oversized', 'Polo', 'Printed', 'Plain Solid', 'V-Neck', 'Full Sleeve', 'Graphic'],
     shirts: ['Checked', 'Plain', 'Formal', 'Printed'],
     pants: ['Formal', 'Baggy Jeans', 'Straight Fit Jeans', 'Cotton Pants', 'Bootcut', 'Track Pants'],
     shoes: ['Sneakers', 'Formal Shoes', 'Loafers', 'Boots', 'Sports & Running'],
@@ -10,6 +11,7 @@ export const SUB_CATEGORIES = {
 };
 
 export const CATEGORIES_LIST = [
+    { value: 't-shirts', label: 'T-Shirts' },
     { value: 'shirts', label: 'Shirts' },
     { value: 'pants', label: 'Pants & Trousers' },
     { value: 'shoes', label: 'Shoes & Footwear' },

@@ -53,6 +53,7 @@ const Header = ({ toggleSidebar }) => {
                         <Link to="/shop">Men <span className="arrow-icon"></span></Link>
                         <ul className="dropdown" style={{ minWidth: '180px' }}>
                             <li><Link to="/shop?category=new-arrivals">New Arrivals</Link></li>
+                            <li><Link to="/shop?category=t-shirts">T-Shirts</Link></li>
                             <li><Link to="/shop?category=shirts">Shirts</Link></li>
                             <li><Link to="/shop?category=pants">Pants & Jeans</Link></li>
                             <li><Link to="/shop?category=shoes">Shoes</Link></li>
