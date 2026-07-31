@@ -744,10 +744,10 @@ const AdminDashboard = () => {
                                                         borderRadius: '12px',
                                                         fontSize: '11px',
                                                         fontWeight: 700,
-                                                        backgroundColor: (product.inventoryCount ?? 10) > 0 ? '#dcfce7' : '#fee2e2',
-                                                        color: (product.inventoryCount ?? 10) > 0 ? '#15803d' : '#b91c1c'
+                                                        backgroundColor: (product.inventoryCount ?? 100) > 0 ? '#dcfce7' : '#fee2e2',
+                                                        color: (product.inventoryCount ?? 100) > 0 ? '#15803d' : '#b91c1c'
                                                     }}>
-                                                        {(product.inventoryCount ?? 10) > 0 ? `In Stock (${product.inventoryCount ?? 10})` : 'Out of Stock'}
+                                                        {(product.inventoryCount ?? 100) > 0 ? `In Stock (${product.inventoryCount ?? 100})` : 'Out of Stock'}
                                                     </span>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right' }}>

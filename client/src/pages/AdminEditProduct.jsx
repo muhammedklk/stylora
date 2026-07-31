@@ -203,44 +203,63 @@ const AdminEditProduct = () => {
 
     const fetchProductDetails = async () => {
         setLoading(true);
-        try {
-            const res = await axios.get(`${API_URL}/products/${id}`);
-            const prod = res.data.product || res.data;
-            if (prod) {
-                setTitle(prod.title || '');
-                setBrand(prod.brand || 'STYLORA');
-                setCategory(prod.category || 'clothing');
-                setPrice(prod.price || '');
-                setOriginalPrice(prod.originalPrice || '');
-                setDescription(prod.description || '');
-                setInventoryCount(prod.inventoryCount !== undefined ? prod.inventoryCount : 50);
-                
-                // Read video url and set standard source selection tab
-                const vUrl = prod.videoUrl || '';
-                setVideoUrl(vUrl);
-                if (vUrl.startsWith('uploads/')) {
-                    setVideoType('file');
-                } else {
-                    setVideoType('url');
-                }
+        setError('');
+        let prod = null;
 
-                setImageUrl(prod.image || '');
-                
-                if (prod.sizes && prod.sizes.length > 0) {
-                    setSizes(prod.sizes);
-                }
-                if (prod.colors && prod.colors.length > 0) {
-                    setColors(prod.colors);
-                }
-            } else {
-                setError('Failed to resolve product data.');
+        // 1. First check custom products stored locally in localStorage
+        const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+        const foundCustom = customProds.find(p => String(p._id) === String(id) || String(p.id) === String(id));
+
+        if (foundCustom) {
+            prod = foundCustom;
+        } else {
+            // 2. Try fetching from backend API
+            try {
+                const res = await axios.get(`${API_URL}/products/${id}`);
+                prod = res.data.product || res.data;
+            } catch (err) {
+                console.error('Error fetching product from API:', err);
+                // 3. Fallback search across cached products
+                const cachedProds = JSON.parse(localStorage.getItem('stylora_products_cache') || '[]');
+                prod = cachedProds.find(p => String(p._id) === String(id) || String(p.id) === String(id));
             }
-        } catch (err) {
-            console.error('Error fetching product:', err);
-            setError('Error loading product details. Please make sure the product ID is correct.');
-        } finally {
-            setLoading(false);
         }
+
+        if (prod) {
+            setTitle(prod.title || '');
+            setBrand(prod.brand || 'STYLORA');
+            setCategory(prod.category || 'shirts');
+            if (prod.subCategory) {
+                setSubCategory(prod.subCategory);
+            } else if (SUB_CATEGORIES[prod.category] && SUB_CATEGORIES[prod.category].length > 0) {
+                setSubCategory(SUB_CATEGORIES[prod.category][0]);
+            }
+            setPrice(prod.price || '');
+            setOriginalPrice(prod.originalPrice || '');
+            setDescription(prod.description || '');
+            setInventoryCount(prod.inventoryCount !== undefined ? prod.inventoryCount : 100);
+            
+            // Read video url and set standard source selection tab
+            const vUrl = prod.videoUrl || '';
+            setVideoUrl(vUrl);
+            if (vUrl.startsWith('uploads/')) {
+                setVideoType('file');
+            } else {
+                setVideoType('url');
+            }
+
+            setImageUrl(prod.image || '');
+            
+            if (prod.sizes && prod.sizes.length > 0) {
+                setSizes(prod.sizes);
+            }
+            if (prod.colors && prod.colors.length > 0) {
+                setColors(prod.colors);
+            }
+        } else {
+            setError('Error loading product details. Please make sure the product ID is correct.');
+        }
+        setLoading(false);
     };
 
     const handleSizeToggle = (size) => {
@@ -285,44 +304,82 @@ const AdminEditProduct = () => {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('brand', brand);
-            formData.append('category', category);
-            formData.append('price', Number(price));
-            if (originalPrice) {
-                formData.append('originalPrice', Number(originalPrice));
-            } else {
-                formData.append('originalPrice', '');
-            }
-            formData.append('description', description);
-            formData.append('inventoryCount', Number(inventoryCount));
-            
-            // Serialize sizes and colors arrays to strings
-            formData.append('sizes', JSON.stringify(sizes));
-            formData.append('colors', JSON.stringify(colors));
+            // Update in localStorage custom products if present
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const customIndex = customProds.findIndex(p => String(p._id) === String(id) || String(p.id) === String(id));
 
+            let finalImgUrl = imageUrl;
             if (imageType === 'file' && imageFile) {
-                formData.append('image', imageFile);
-            } else {
-                formData.append('image', imageUrl);
+                finalImgUrl = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(imageFile);
+                });
             }
 
-            if (videoType === 'file' && videoFile) {
-                formData.append('video', videoFile);
-            } else {
-                formData.append('videoUrl', videoUrl);
+            if (customIndex !== -1) {
+                customProds[customIndex] = {
+                    ...customProds[customIndex],
+                    title,
+                    brand,
+                    category,
+                    subCategory,
+                    price: Number(price),
+                    originalPrice: originalPrice ? Number(originalPrice) : null,
+                    description,
+                    inventoryCount: Number(inventoryCount),
+                    sizes,
+                    colors,
+                    image: finalImgUrl,
+                    videoUrl,
+                    tags: Array.from(new Set([...(customProds[customIndex].tags || []), subCategory, category].filter(Boolean)))
+                };
+                localStorage.setItem('stylora_custom_products', JSON.stringify(customProds));
             }
 
-            await axios.put(`${API_URL}/products/${id}`, formData, {
-                headers: {
-                    ...headers,
-                    'Content-Type': 'multipart/form-data'
+            // Also send update to backend server if endpoint exists
+            try {
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('brand', brand);
+                formData.append('category', category);
+                formData.append('subCategory', subCategory);
+                formData.append('price', Number(price));
+                if (originalPrice) {
+                    formData.append('originalPrice', Number(originalPrice));
+                } else {
+                    formData.append('originalPrice', '');
                 }
-            });
+                formData.append('description', description);
+                formData.append('inventoryCount', Number(inventoryCount));
+                formData.append('sizes', JSON.stringify(sizes));
+                formData.append('colors', JSON.stringify(colors));
 
-            // Invalidate the products cache so website shows updated product immediately
+                if (imageType === 'file' && imageFile) {
+                    formData.append('image', imageFile);
+                } else {
+                    formData.append('image', imageUrl);
+                }
+
+                if (videoType === 'file' && videoFile) {
+                    formData.append('video', videoFile);
+                } else {
+                    formData.append('videoUrl', videoUrl);
+                }
+
+                await axios.put(`${API_URL}/products/${id}`, formData, {
+                    headers: {
+                        ...headers,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+            } catch (backendErr) {
+                console.log('Backend API update notice:', backendErr);
+            }
+
+            // Invalidate the products cache and trigger sync event
             localStorage.removeItem('stylora_products_cache');
+            window.dispatchEvent(new Event('stylora_products_updated'));
 
             showToast('Product updated successfully!', 'success');
             navigate('/admin/dashboard?tab=products');

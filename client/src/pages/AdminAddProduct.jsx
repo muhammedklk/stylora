@@ -260,7 +260,7 @@ const AdminAddProduct = () => {
             price: Number(price) || 0,
             originalPrice: originalPrice ? Number(originalPrice) : undefined,
             description: description.trim() || '',
-            inventoryCount: Number(inventoryCount) || 50,
+            inventoryCount: Number(inventoryCount) || 100,
             image: resolvedImageDataUrl,
             tags: tagList,
             sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
