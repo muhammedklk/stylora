@@ -177,16 +177,20 @@ const AdminAddProduct = () => {
     const [productNumber, setProductNumber] = useState(1);
 
     useEffect(() => {
-        // Calculate next sequence product number dynamically
+        // Calculate next sequence product number dynamically and set default stock count
         const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
         const count = customProds.length;
-        setProductNumber(count + 1);
+        const nextNum = count + 1;
+        setProductNumber(nextNum);
+        setInventoryCount(nextNum);
 
-        // Fetch from API to ensure accurate total count
+        // Fetch from API to ensure accurate total count and stock sequence
         axios.get(`${API_URL}/products`).then(res => {
             if (Array.isArray(res.data)) {
                 const apiCount = res.data.length;
-                setProductNumber(Math.max(count, apiCount) + 1);
+                const finalNext = Math.max(count, apiCount) + 1;
+                setProductNumber(finalNext);
+                setInventoryCount(finalNext);
             }
         }).catch(err => console.log(err));
     }, []);
@@ -277,7 +281,7 @@ const AdminAddProduct = () => {
             price: Number(price) || 0,
             originalPrice: originalPrice ? Number(originalPrice) : undefined,
             description: description.trim() || '',
-            inventoryCount: Number(inventoryCount) || 100,
+            inventoryCount: Number(inventoryCount) || productNumber,
             image: resolvedImageDataUrl,
             tags: tagList,
             sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
