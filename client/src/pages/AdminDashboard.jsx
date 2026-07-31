@@ -87,6 +87,9 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetchAdminData();
+        const handleSync = () => fetchAdminData();
+        window.addEventListener('stylora_products_updated', handleSync);
+        return () => window.removeEventListener('stylora_products_updated', handleSync);
     }, []);
 
     const fetchAdminData = async () => {
