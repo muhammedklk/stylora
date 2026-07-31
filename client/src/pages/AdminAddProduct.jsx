@@ -131,7 +131,7 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
-import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS } from '../config/categories';
+import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS, getSubCategories } from '../config/categories';
 
 const AdminAddProduct = () => {
     const navigate = useNavigate();
@@ -569,7 +569,7 @@ const AdminAddProduct = () => {
                                     onChange={e => {
                                         const newCat = e.target.value;
                                         setCategory(newCat);
-                                        const availSub = SUB_CATEGORIES[newCat] || [];
+                                        const availSub = getSubCategories(newCat);
                                         setSubCategory(availSub.length > 0 ? availSub[0] : '');
                                         const catPresets = CATEGORY_SIZE_PRESETS[newCat] || ['S', 'M', 'L', 'XL'];
                                         setSizes(catPresets.slice(0, Math.min(5, catPresets.length)));
@@ -589,7 +589,7 @@ const AdminAddProduct = () => {
                                     onChange={e => setSubCategory(e.target.value)}
                                     style={{ width: '100%', height: '36px', border: '1.5px solid #10b981', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#f0fdf4', boxSizing: 'border-box', fontWeight: 600 }}
                                 >
-                                    {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                    {getSubCategories(category).map(sub => (
                                         <option key={sub} value={sub}>{sub}</option>
                                     ))}
                                 </select>

@@ -130,7 +130,7 @@ const getColorNameFromHex = (hex) => {
     }
 };
 
-import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS } from '../config/categories';
+import { SUB_CATEGORIES, CATEGORIES_LIST, CATEGORY_SIZE_PRESETS, getSubCategories } from '../config/categories';
 
 const AdminEditProduct = () => {
     const { id } = useParams();
@@ -504,7 +504,7 @@ const AdminEditProduct = () => {
                                                 onChange={e => {
                                                     const newCat = e.target.value;
                                                     setCategory(newCat);
-                                                    const availSub = SUB_CATEGORIES[newCat] || [];
+                                                    const availSub = getSubCategories(newCat);
                                                     setSubCategory(availSub.length > 0 ? availSub[0] : '');
                                                 }}
                                                 style={{ height: '52px' }}
@@ -523,7 +523,7 @@ const AdminEditProduct = () => {
                                                 onChange={e => setSubCategory(e.target.value)}
                                                 style={{ height: '52px', border: '1.5px solid #10b981', backgroundColor: '#f0fdf4' }}
                                             >
-                                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                                {getSubCategories(category).map(sub => (
                                                     <option key={sub} value={sub}>{sub}</option>
                                                 ))}
                                             </select>
