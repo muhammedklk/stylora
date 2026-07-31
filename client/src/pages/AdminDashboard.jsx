@@ -304,8 +304,8 @@ const AdminDashboard = () => {
         if (adminCategoryFilter === 'ACCESSORIES') {
             return (p.tags && p.tags.includes('Accessories')) || ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'].includes(p.category?.toLowerCase());
         }
-        return p.category?.toLowerCase() === adminCategoryFilter.toLowerCase();
-    });
+    const allBestsellers = adminProducts.filter(p => p.tags && p.tags.includes('Bestseller'));
+    const homeFeaturedCount = Math.min(allBestsellers.length, 5);
 
     const handleSignOut = () => {
         localStorage.removeItem('token');
@@ -938,12 +938,8 @@ const AdminDashboard = () => {
                     </div>
                 )}
 
-                {activeTab === 'bestsellers' && (() => {
-                    const allBestsellers = adminProducts.filter(p => p.tags && p.tags.includes('Bestseller'));
-                    const homeFeaturedCount = Math.min(allBestsellers.length, 5);
-
-                    return (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {activeTab === 'bestsellers' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             {/* Header info banner */}
                             <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div>
@@ -1142,10 +1138,8 @@ const AdminDashboard = () => {
                                     })}
                                 </div>
 
-                            </div>
-                        </div>
-                    );
-                })()
+                    </div>
+                )}
 
                 {activeTab === 'category-cards' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
