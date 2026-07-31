@@ -355,6 +355,8 @@ const Shop = () => {
                                             </span>
                                         )}
                                     </button>
+                                );
+                            })}
                         </div>
 
                         {/* Dynamic Sub-Category Filter Pills */}
