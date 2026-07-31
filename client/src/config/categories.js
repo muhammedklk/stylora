@@ -1,5 +1,5 @@
 export const SUB_CATEGORIES = {
-    't-shirts': ['Oversized', 'Polo', 'Printed', 'Plain Solid', 'V-Neck', 'Full Sleeve', 'Graphic'],
+    't-shirts': ['Oversized', 'Polo', 'Printed', 'Striped', 'Plain Solid', 'V-Neck', 'Full Sleeve', 'Graphic'],
     shirts: ['Checked', 'Plain', 'Formal', 'Printed'],
     pants: ['Formal', 'Baggy Jeans', 'Straight Fit Jeans', 'Cotton Pants', 'Bootcut', 'Track Pants'],
     shoes: ['Sneakers', 'Formal Shoes', 'Loafers', 'Boots', 'Sports & Running'],

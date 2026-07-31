@@ -30,6 +30,8 @@ const ProductCard = ({ product, isFeatured = false }) => {
     const hasDiscount = product.originalPrice && product.originalPrice > product.price;
     const discountPercentage = hasDiscount ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
 
+    const isBestsellerProduct = product.tags && product.tags.includes('Bestseller');
+
     return (
         <div className="product-item">
             <div className={`product-card ${isFeatured ? 'featured-card' : ''}`}>
@@ -48,6 +50,24 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         zIndex: 3
                     }}>
                         {discountPercentage}% OFF
+                    </div>
+                )}
+                {isBestsellerProduct && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        backgroundColor: '#000000',
+                        color: '#d4af37',
+                        border: '1px solid #d4af37',
+                        fontSize: '9px',
+                        fontWeight: 800,
+                        padding: '3px 7px',
+                        borderRadius: '2px',
+                        letterSpacing: '0.05em',
+                        zIndex: 3
+                    }}>
+                        ⭐ BESTSELLER
                     </div>
                 )}
                 <div className="card-inner">

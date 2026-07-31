@@ -490,7 +490,7 @@ const AdminEditProduct = () => {
                                                     style={{ accentColor: '#d4af37', width: '16px', height: '16px', cursor: 'pointer', margin: 0 }}
                                                 />
                                                 <span style={{ fontSize: '11px', fontWeight: 800, color: isBestseller ? '#b45309' : '#4b5563' }}>
-                                                    ⭐ Home Bestseller
+                                                    ⭐ Bestseller Item
                                                 </span>
                                             </label>
                                         </div>
