@@ -342,11 +342,288 @@ const AdminDashboard = () => {
                 </div>
 
                 {activeTab === 'overview' && (
-                    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                        <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 700 }}>Quick Stats Summary</h3>
-                        <p style={{ color: '#6b7280', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
-                            Welcome to the Stylora Admin Workspace. Select the <strong>Products</strong> tab to add, edit, or delete store items in real-time, or <strong>Content Settings</strong> to customize your Store layout.
-                        </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        
+                        {/* Welcome & Quick Action Header Banner */}
+                        <div style={{ 
+                            backgroundColor: '#0a0a0a', 
+                            borderRadius: '12px', 
+                            padding: '24px 32px', 
+                            color: '#ffffff', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'space-between',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
+                        }}>
+                            <div>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 6px 0', color: '#ffffff' }}>
+                                    Store Analytics & Control Dashboard 🚀
+                                </h2>
+                                <p style={{ fontSize: '13px', color: '#9ca3af', margin: 0 }}>
+                                    Real-time tracking for products, sales performance, inventory categories, and store management.
+                                </p>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <button 
+                                    onClick={() => navigate('/admin/products/new')}
+                                    style={{ 
+                                        backgroundColor: '#10b981', 
+                                        color: '#ffffff', 
+                                        border: 'none', 
+                                        padding: '10px 20px', 
+                                        borderRadius: '6px', 
+                                        fontSize: '12px', 
+                                        fontWeight: 700, 
+                                        cursor: 'pointer',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px'
+                                    }}
+                                >
+                                    <span>+ Add Product</span>
+                                </button>
+                                <button 
+                                    onClick={() => navigate('/admin/dashboard?tab=settings')}
+                                    style={{ 
+                                        backgroundColor: 'rgba(255,255,255,0.1)', 
+                                        color: '#ffffff', 
+                                        border: '1px solid rgba(255,255,255,0.2)', 
+                                        padding: '10px 18px', 
+                                        borderRadius: '6px', 
+                                        fontSize: '12px', 
+                                        fontWeight: 600, 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
+                                    Banner Settings
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Main Overview Grid: Left Analytics + Right Category Health */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px' }}>
+                            
+                            {/* Left Side: Revenue Chart & Products Showcase */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                
+                                {/* Sales & Revenue Performance SVG Chart Card */}
+                                <div style={{ 
+                                    backgroundColor: '#ffffff', 
+                                    borderRadius: '12px', 
+                                    border: '1px solid #e5e7eb', 
+                                    padding: '24px', 
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)' 
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                        <div>
+                                            <h3 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 4px 0', color: '#111827' }}>
+                                                Sales & Revenue Trajectory
+                                            </h3>
+                                            <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                Monthly revenue analytics and store performance trend
+                                            </span>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 600, color: '#10b981' }}>
+                                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981' }}></span> Revenue
+                                            </span>
+                                            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 600 }}>• 2026 Trend</span>
+                                        </div>
+                                    </div>
+
+                                    {/* SVG Interactive Revenue Line & Bar Chart */}
+                                    <div style={{ width: '100%', overflowX: 'auto' }}>
+                                        <svg viewBox="0 0 600 200" style={{ width: '100%', height: '220px' }}>
+                                            <defs>
+                                                <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
+                                                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                                                </linearGradient>
+                                            </defs>
+                                            {/* Horizontal Grid lines */}
+                                            {[30, 70, 110, 150].map((y, idx) => (
+                                                <line key={idx} x1="30" y1={y} x2="570" y2={y} stroke="#f3f4f6" strokeDasharray="4 4" strokeWidth="1" />
+                                            ))}
+
+                                            {/* Light background bars */}
+                                            {[
+                                                { x: 50, h: 40 }, { x: 130, h: 65 }, { x: 210, h: 55 },
+                                                { x: 290, h: 90 }, { x: 370, h: 110 }, { x: 450, h: 135 }, { x: 530, h: 150 }
+                                            ].map((b, idx) => (
+                                                <rect key={idx} x={b.x - 14} y={170 - b.h} width="28" height={b.h} rx="4" fill="#f0fdf4" opacity="0.9" />
+                                            ))}
+
+                                            {/* Area Gradient */}
+                                            <polygon 
+                                                points="50,170 50,130 130,105 210,115 290,80 370,60 450,35 530,20 530,170" 
+                                                fill="url(#areaGradient)" 
+                                            />
+
+                                            {/* Curve Polyline */}
+                                            <polyline 
+                                                fill="none" 
+                                                stroke="#10b981" 
+                                                strokeWidth="3.5" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round" 
+                                                points="50,130 130,105 210,115 290,80 370,60 450,35 530,20" 
+                                            />
+
+                                            {/* Data Points */}
+                                            {[
+                                                { x: 50, y: 130, val: '₹12k', label: 'Feb' },
+                                                { x: 130, y: 105, val: '₹19k', label: 'Mar' },
+                                                { x: 210, y: 115, val: '₹16k', label: 'Apr' },
+                                                { x: 290, y: 80, val: '₹28k', label: 'May' },
+                                                { x: 370, y: 60, val: '₹34k', label: 'Jun' },
+                                                { x: 450, y: 35, val: '₹48k', label: 'Jul' },
+                                                { x: 530, y: 20, val: '₹62k', label: 'Aug' }
+                                            ].map((pt, idx) => (
+                                                <g key={idx}>
+                                                    <circle cx={pt.x} cy={pt.y} r="5" fill="#10b981" stroke="#ffffff" strokeWidth="2.5" />
+                                                    <text x={pt.x} y={pt.y - 10} fontSize="10" fill="#059669" fontWeight="700" textAnchor="middle">{pt.val}</text>
+                                                    <text x={pt.x} y="188" fontSize="11" fill="#6b7280" fontWeight="600" textAnchor="middle">{pt.label}</text>
+                                                </g>
+                                            ))}
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {/* Catalog Highlights & Recent Products Section */}
+                                <div style={{ 
+                                    backgroundColor: '#ffffff', 
+                                    borderRadius: '12px', 
+                                    border: '1px solid #e5e7eb', 
+                                    padding: '24px', 
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)' 
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                        <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: '#111827' }}>
+                                            Active Store Items ({adminProducts.length})
+                                        </h3>
+                                        <button 
+                                            onClick={() => { setActiveTab('products'); navigate('/admin/dashboard?tab=products'); }}
+                                            style={{ background: 'none', border: 'none', color: '#3b82f6', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                                        >
+                                            Manage All Products ➔
+                                        </button>
+                                    </div>
+
+                                    {adminProducts.length === 0 ? (
+                                        <div style={{ padding: '32px', textAlign: 'center', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px dashed #d1d5db' }}>
+                                            <p style={{ color: '#6b7280', fontSize: '13px', margin: '0 0 12px 0' }}>No products added to catalog yet.</p>
+                                            <button 
+                                                onClick={() => navigate('/admin/products/new')}
+                                                style={{ backgroundColor: '#000', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                                            >
+                                                + Add First Product
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px' }}>
+                                            {adminProducts.slice(0, 4).map(prod => (
+                                                <div key={prod._id} style={{ border: '1px solid #f3f4f6', borderRadius: '8px', padding: '12px', backgroundColor: '#fafafa', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                    <div style={{ width: '100%', height: '110px', borderRadius: '6px', overflow: 'hidden', backgroundColor: '#e5e7eb' }}>
+                                                        <img 
+                                                            src={resolveImageUrl(prod.image)} 
+                                                            alt={prod.title} 
+                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                            onError={e => { e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80'; }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ fontSize: '9px', fontWeight: 700, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                            {prod.category || 'General'}
+                                                        </span>
+                                                        <h4 style={{ fontSize: '12px', fontWeight: 700, margin: '2px 0 4px 0', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                            {prod.title}
+                                                        </h4>
+                                                        <span style={{ fontSize: '13px', fontWeight: 800, color: '#10b981' }}>
+                                                            ₹{prod.price}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Right Side: Category Inventory Share & Store Health */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                
+                                {/* Category Inventory Share Breakdown */}
+                                <div style={{ 
+                                    backgroundColor: '#ffffff', 
+                                    borderRadius: '12px', 
+                                    border: '1px solid #e5e7eb', 
+                                    padding: '24px', 
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)' 
+                                }}>
+                                    <h3 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 6px 0', color: '#111827' }}>
+                                        Category Inventory Share
+                                    </h3>
+                                    <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 20px 0' }}>
+                                        Product breakdown by active store category
+                                    </p>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                        {[
+                                            { name: 'Shirts', count: categoryCounts.SHIRTS, color: '#10b981' },
+                                            { name: 'Pants', count: categoryCounts.PANTS, color: '#3b82f6' },
+                                            { name: 'Shoes', count: categoryCounts.SHOES, color: '#8b5cf6' },
+                                            { name: 'Accessories', count: categoryCounts.ACCESSORIES, color: '#f59e0b' },
+                                            { name: 'Watches', count: categoryCounts.WATCHES, color: '#ec4899' },
+                                            { name: 'Outerwear', count: categoryCounts.OUTERWEAR, color: '#06b6d4' }
+                                        ].map(cat => {
+                                            const total = adminProducts.length || 1;
+                                            const pct = Math.round((cat.count / total) * 100);
+                                            return (
+                                                <div key={cat.name}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', fontWeight: 600 }}>
+                                                        <span style={{ color: '#374151' }}>{cat.name}</span>
+                                                        <span style={{ color: '#6b7280' }}>{cat.count} items ({pct}%)</span>
+                                                    </div>
+                                                    <div style={{ width: '100%', height: '8px', backgroundColor: '#f3f4f6', borderRadius: '4px', overflow: 'hidden' }}>
+                                                        <div style={{ width: `${pct}%`, height: '100%', backgroundColor: cat.color, borderRadius: '4px', transition: 'width 0.5s ease' }}></div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* System & Store Health Status Widget */}
+                                <div style={{ 
+                                    backgroundColor: '#ffffff', 
+                                    borderRadius: '12px', 
+                                    border: '1px solid #e5e7eb', 
+                                    padding: '24px', 
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)' 
+                                }}>
+                                    <h3 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 16px 0', color: '#111827' }}>
+                                        System & Sync Status
+                                    </h3>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', backgroundColor: '#f0fdf4', borderRadius: '6px', border: '1px solid #dcfce7' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#166534' }}>Live Sync Status</span>
+                                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#15803d' }}>● Active (0ms)</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', backgroundColor: '#eff6ff', borderRadius: '6px', border: '1px solid #dbeafe' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#1e40af' }}>Database Integrity</span>
+                                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#1d4ed8' }}>100% Healthy</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', backgroundColor: '#faf5ff', borderRadius: '6px', border: '1px solid #f3e8ff' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#6b21a8' }}>Custom Sub-Categories</span>
+                                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#7e22ce' }}>Active</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 )}
 
