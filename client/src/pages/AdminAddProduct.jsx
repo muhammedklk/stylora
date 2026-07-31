@@ -349,16 +349,15 @@ const AdminAddProduct = () => {
 
     return (
         <div style={{ 
-            height: '100vh', 
+            minHeight: '100vh', 
             backgroundColor: '#f8fafc', 
             display: 'flex', 
             flexDirection: 'column', 
-            fontFamily: 'var(--font-primary, sans-serif)',
-            overflow: 'hidden'
+            fontFamily: 'var(--font-primary, sans-serif)'
         }}>
             {/* Top Compact Header Bar */}
             <header style={{ 
-                height: '56px', 
+                height: '54px', 
                 backgroundColor: '#0a0a0a', 
                 borderBottom: '1px solid #1f2937', 
                 display: 'flex', 
@@ -370,6 +369,7 @@ const AdminAddProduct = () => {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <button 
+                        type="button"
                         onClick={() => navigate('/admin/dashboard?tab=products')}
                         style={{ 
                             backgroundColor: 'rgba(255,255,255,0.1)', 
@@ -384,7 +384,7 @@ const AdminAddProduct = () => {
                     >
                         ← Back to Admin
                     </button>
-                    <span style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>
                         Add Product <span style={{ color: '#d4af37' }}>(#{productNumber})</span>
                     </span>
                     <span style={{ 
@@ -392,7 +392,7 @@ const AdminAddProduct = () => {
                         color: '#d4af37', 
                         fontSize: '10px', 
                         fontWeight: 800, 
-                        padding: '3px 10px', 
+                        padding: '2px 10px', 
                         borderRadius: '12px',
                         border: '1px solid #d4af37'
                     }}>
@@ -438,372 +438,368 @@ const AdminAddProduct = () => {
                 </div>
             </header>
 
-            {/* Single Screen Form Body Grid (Zero Page Scrolling) */}
-            <form onSubmit={handleSubmit} style={{ 
-                flex: 1, 
-                display: 'grid', 
-                gridTemplateColumns: '1fr 340px', 
-                gap: '16px', 
-                padding: '16px 24px', 
-                overflow: 'hidden',
-                boxSizing: 'border-box'
-            }}>
-                
-                {/* Left Column: Form Specifications (Fits cleanly in 1 Viewport) */}
-                <div style={{ 
-                    backgroundColor: '#ffffff', 
-                    borderRadius: '8px', 
-                    border: '1px solid #e2e8f0', 
-                    padding: '18px 22px', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'space-between',
-                    gap: '12px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                    overflow: 'hidden'
-                }}>
-                    {error && (
-                        <div style={{ fontSize: '11px', backgroundColor: '#fee2e2', color: '#dc2626', padding: '8px 12px', borderRadius: '4px', margin: 0 }}>
-                            {error}
-                        </div>
-                    )}
-
-                    {/* Row 1: Brand & Title */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '12px' }}>
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Brand Name</label>
-                            <input 
-                                type="text" 
-                                value={brand} 
-                                onChange={e => setBrand(e.target.value)} 
-                                required 
-                                placeholder="STYLORA"
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
-                            />
-                        </div>
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Product Title</label>
-                            <input 
-                                type="text" 
-                                value={title} 
-                                onChange={e => setTitle(e.target.value)} 
-                                required 
-                                placeholder="e.g. Classic Cotton Oxford Shirt"
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Row 2: Category, Sub-Category, Price, Original Price, Stock */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Category</label>
-                            <select 
-                                value={category} 
-                                onChange={e => {
-                                    const newCat = e.target.value;
-                                    setCategory(newCat);
-                                    const availSub = SUB_CATEGORIES[newCat] || [];
-                                    setSubCategory(availSub.length > 0 ? availSub[0] : '');
-                                }}
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
-                            >
-                                {CATEGORIES_LIST.map(cat => (
-                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#059669', marginBottom: '4px', display: 'block' }}>Sub-Category</label>
-                            <select 
-                                value={subCategory} 
-                                onChange={e => setSubCategory(e.target.value)}
-                                style={{ width: '100%', height: '36px', border: '1.5px solid #10b981', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#f0fdf4', boxSizing: 'border-box', fontWeight: 600 }}
-                            >
-                                {(SUB_CATEGORIES[category] || ['General']).map(sub => (
-                                    <option key={sub} value={sub}>{sub}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Price (₹)</label>
-                            <input 
-                                type="number" 
-                                value={price} 
-                                onChange={e => setPrice(e.target.value)} 
-                                required 
-                                placeholder="₹"
-                                min="0"
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
-                            />
-                        </div>
-
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#9ca3af', marginBottom: '4px', display: 'block' }}>Original (₹)</label>
-                            <input 
-                                type="number" 
-                                value={originalPrice} 
-                                onChange={e => setOriginalPrice(e.target.value)} 
-                                placeholder="e.g. 1999"
-                                min="0"
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
-                            />
-                        </div>
-
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Stock (Auto #{productNumber})</label>
-                            <input 
-                                type="number" 
-                                value={inventoryCount} 
-                                onChange={e => setInventoryCount(e.target.value)} 
-                                required
-                                min="0"
-                                style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Row 3: Description */}
-                    <div>
-                        <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Description</label>
-                        <textarea 
-                            rows="2" 
-                            value={description} 
-                            onChange={e => setDescription(e.target.value)} 
-                            required 
-                            placeholder="Provide detailed material description..."
-                            style={{ width: '100%', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '8px 10px', fontSize: '11px', outline: 'none', resize: 'none', boxSizing: 'border-box' }}
-                        ></textarea>
-                    </div>
-
-                    {/* Row 4: Sizes & Colors Config */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
-                        
-                        {/* Sizes Pill Selector */}
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Available Sizes</label>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                                {standardSizes.map(sz => (
-                                    <button
-                                        key={sz}
-                                        type="button"
-                                        onClick={() => handleSizeToggle(sz)}
-                                        style={{
-                                            background: sizes.includes(sz) ? '#000000' : '#ffffff',
-                                            color: sizes.includes(sz) ? '#ffffff' : '#4b5563',
-                                            border: sizes.includes(sz) ? '1px solid #000000' : '1px solid #cbd5e1',
-                                            padding: '4px 10px',
-                                            fontSize: '11px',
-                                            fontWeight: 700,
-                                            cursor: 'pointer',
-                                            borderRadius: '4px',
-                                            transition: 'all 0.15s ease'
-                                        }}
-                                    >
-                                        {sz}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Colors Dynamic Config */}
-                        <div>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Colors</label>
-                            
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px', maxHeight: '42px', overflowY: 'auto' }}>
-                                {colors.map((c, i) => (
-                                    <div 
-                                        key={i} 
-                                        style={{ 
-                                            display: 'inline-flex', 
-                                            alignItems: 'center', 
-                                            gap: '4px', 
-                                            backgroundColor: '#f8fafc', 
-                                            border: '1px solid #e2e8f0', 
-                                            padding: '2px 8px', 
-                                            borderRadius: '12px'
-                                        }}
-                                    >
-                                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: c.hex, border: c.name === 'White' ? '1px solid #cbd5e1' : 'none' }}></span>
-                                        <span style={{ fontSize: '10px', fontWeight: 600, color: '#334155' }}>{c.name}</span>
-                                        <button 
-                                            type="button" 
-                                            onClick={() => handleRemoveColor(c.name)}
-                                            style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '11px', color: '#94a3b8', padding: 0, fontWeight: 'bold' }}
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <input 
-                                    type="text" 
-                                    placeholder="Color Name" 
-                                    value={tempColorName} 
-                                    onChange={e => setTempColorName(e.target.value)}
-                                    style={{ height: '28px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 6px', fontSize: '10px', flex: 1, outline: 'none' }}
-                                />
-                                <input 
-                                    type="color" 
-                                    value={tempColorHex} 
-                                    onChange={handleColorHexChange}
-                                    style={{ width: '28px', height: '28px', border: '1px solid #cbd5e1', cursor: 'pointer', padding: '1px', borderRadius: '4px', backgroundColor: 'transparent' }}
-                                />
-                                <button 
-                                    type="button" 
-                                    onClick={handleAddColor}
-                                    style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, cursor: 'pointer', borderRadius: '4px' }}
-                                >
-                                    + Add
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                {/* Right Column: Media Preview & Video Upload (Fits cleanly in 1 Viewport) */}
-                <div style={{ 
-                    backgroundColor: '#ffffff', 
-                    borderRadius: '8px', 
-                    border: '1px solid #e2e8f0', 
-                    padding: '18px', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'space-between',
-                    gap: '12px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                    overflow: 'hidden'
+            {/* Compact Form Grid Container (No Excessive Empty Spacing) */}
+            <div style={{ padding: '16px 24px', flex: 1 }}>
+                <form onSubmit={handleSubmit} style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: '1fr 340px', 
+                    gap: '16px', 
+                    alignItems: 'start'
                 }}>
                     
-                    {/* Image Upload Box */}
-                    <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Image</label>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <button 
-                                    type="button"
-                                    onClick={() => setImageType('url')}
-                                    style={{ background: imageType === 'url' ? '#0f172a' : '#f1f5f9', color: imageType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                >
-                                    URL
-                                </button>
-                                <button 
-                                    type="button"
-                                    onClick={() => setImageType('file')}
-                                    style={{ background: imageType === 'file' ? '#0f172a' : '#f1f5f9', color: imageType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                >
-                                    File
-                                </button>
+                    {/* Left Column: Compact Specifications Card */}
+                    <div style={{ 
+                        backgroundColor: '#ffffff', 
+                        borderRadius: '8px', 
+                        border: '1px solid #e2e8f0', 
+                        padding: '18px 22px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        justifyContent: 'flex-start',
+                        gap: '14px',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+                    }}>
+                        {error && (
+                            <div style={{ fontSize: '11px', backgroundColor: '#fee2e2', color: '#dc2626', padding: '8px 12px', borderRadius: '4px', margin: 0 }}>
+                                {error}
+                            </div>
+                        )}
+
+                        {/* Row 1: Brand & Title */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '12px' }}>
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Brand Name</label>
+                                <input 
+                                    type="text" 
+                                    value={brand} 
+                                    onChange={e => setBrand(e.target.value)} 
+                                    required 
+                                    placeholder="STYLORA"
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Product Title</label>
+                                <input 
+                                    type="text" 
+                                    value={title} 
+                                    onChange={e => setTitle(e.target.value)} 
+                                    required 
+                                    placeholder="e.g. Classic Cotton Oxford Shirt"
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                                />
                             </div>
                         </div>
 
-                        {imageType === 'url' ? (
-                            <input 
-                                type="text" 
-                                placeholder="e.g. assets/find-section-img-1.png or URL" 
-                                value={imageUrl} 
-                                onChange={e => setImageUrl(e.target.value)} 
-                                style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
-                            />
-                        ) : (
-                            <input 
-                                type="file" 
-                                accept="image/*"
-                                onChange={e => setImageFile(e.target.files[0])}
-                                style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
-                            />
-                        )}
+                        {/* Row 2: Category, Sub-Category, Price, Original Price, Stock */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Category</label>
+                                <select 
+                                    value={category} 
+                                    onChange={e => {
+                                        const newCat = e.target.value;
+                                        setCategory(newCat);
+                                        const availSub = SUB_CATEGORIES[newCat] || [];
+                                        setSubCategory(availSub.length > 0 ? availSub[0] : '');
+                                    }}
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
+                                >
+                                    {CATEGORIES_LIST.map(cat => (
+                                        <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        {/* Image Live Preview */}
-                        <div style={{ 
-                            height: '120px', 
-                            width: '100%', 
-                            marginTop: '8px', 
-                            borderRadius: '6px', 
-                            border: '1px dashed #cbd5e1', 
-                            backgroundColor: '#f8fafc',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            overflow: 'hidden'
-                        }}>
-                            {imagePreviewUrl ? (
-                                <img src={imagePreviewUrl} alt="Preview" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#059669', marginBottom: '4px', display: 'block' }}>Sub-Category</label>
+                                <select 
+                                    value={subCategory} 
+                                    onChange={e => setSubCategory(e.target.value)}
+                                    style={{ width: '100%', height: '36px', border: '1.5px solid #10b981', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', backgroundColor: '#f0fdf4', boxSizing: 'border-box', fontWeight: 600 }}
+                                >
+                                    {(SUB_CATEGORIES[category] || ['General']).map(sub => (
+                                        <option key={sub} value={sub}>{sub}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Price (₹)</label>
+                                <input 
+                                    type="number" 
+                                    value={price} 
+                                    onChange={e => setPrice(e.target.value)} 
+                                    required 
+                                    placeholder="₹"
+                                    min="0"
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#9ca3af', marginBottom: '4px', display: 'block' }}>Original (₹)</label>
+                                <input 
+                                    type="number" 
+                                    value={originalPrice} 
+                                    onChange={e => setOriginalPrice(e.target.value)} 
+                                    placeholder="e.g. 1999"
+                                    min="0"
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Stock (Auto #{productNumber})</label>
+                                <input 
+                                    type="number" 
+                                    value={inventoryCount} 
+                                    onChange={e => setInventoryCount(e.target.value)} 
+                                    required
+                                    min="0"
+                                    style={{ width: '100%', height: '36px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 10px', fontSize: '12px', outline: 'none', fontWeight: 700, boxSizing: 'border-box' }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Row 3: Description */}
+                        <div>
+                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '4px', display: 'block' }}>Description</label>
+                            <textarea 
+                                rows="2" 
+                                value={description} 
+                                onChange={e => setDescription(e.target.value)} 
+                                required 
+                                placeholder="Provide detailed material description..."
+                                style={{ width: '100%', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '8px 10px', fontSize: '11px', outline: 'none', resize: 'none', boxSizing: 'border-box' }}
+                            ></textarea>
+                        </div>
+
+                        {/* Row 4: Sizes & Colors Config */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', borderTop: '1px solid #f1f5f9', paddingTop: '12px' }}>
+                            
+                            {/* Sizes Pill Selector */}
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Available Sizes</label>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                    {standardSizes.map(sz => (
+                                        <button
+                                            key={sz}
+                                            type="button"
+                                            onClick={() => handleSizeToggle(sz)}
+                                            style={{
+                                                background: sizes.includes(sz) ? '#000000' : '#ffffff',
+                                                color: sizes.includes(sz) ? '#ffffff' : '#4b5563',
+                                                border: sizes.includes(sz) ? '1px solid #000000' : '1px solid #cbd5e1',
+                                                padding: '4px 10px',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                cursor: 'pointer',
+                                                borderRadius: '4px',
+                                                transition: 'all 0.15s ease'
+                                            }}
+                                        >
+                                            {sz}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Colors Dynamic Config */}
+                            <div>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', marginBottom: '6px', display: 'block' }}>Colors</label>
+                                
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>
+                                    {colors.map((c, i) => (
+                                        <div 
+                                            key={i} 
+                                            style={{ 
+                                                display: 'inline-flex', 
+                                                alignItems: 'center', 
+                                                gap: '4px', 
+                                                backgroundColor: '#f8fafc', 
+                                                border: '1px solid #e2e8f0', 
+                                                padding: '2px 8px', 
+                                                borderRadius: '12px'
+                                            }}
+                                        >
+                                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: c.hex, border: c.name === 'White' ? '1px solid #cbd5e1' : 'none' }}></span>
+                                            <span style={{ fontSize: '10px', fontWeight: 600, color: '#334155' }}>{c.name}</span>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleRemoveColor(c.name)}
+                                                style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '11px', color: '#94a3b8', padding: 0, fontWeight: 'bold' }}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Color Name" 
+                                        value={tempColorName} 
+                                        onChange={e => setTempColorName(e.target.value)}
+                                        style={{ height: '28px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 6px', fontSize: '10px', flex: 1, outline: 'none' }}
+                                    />
+                                    <input 
+                                        type="color" 
+                                        value={tempColorHex} 
+                                        onChange={handleColorHexChange}
+                                        style={{ width: '28px', height: '28px', border: '1px solid #cbd5e1', cursor: 'pointer', padding: '1px', borderRadius: '4px', backgroundColor: 'transparent' }}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={handleAddColor}
+                                        style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, cursor: 'pointer', borderRadius: '4px' }}
+                                    >
+                                        + Add
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Right Column: Media Preview & Video Upload */}
+                    <div style={{ 
+                        backgroundColor: '#ffffff', 
+                        borderRadius: '8px', 
+                        border: '1px solid #e2e8f0', 
+                        padding: '18px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        justifyContent: 'flex-start',
+                        gap: '16px',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+                    }}>
+                        
+                        {/* Image Upload Box */}
+                        <div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Image</label>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setImageType('url')}
+                                        style={{ background: imageType === 'url' ? '#0f172a' : '#f1f5f9', color: imageType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                    >
+                                        URL
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setImageType('file')}
+                                        style={{ background: imageType === 'file' ? '#0f172a' : '#f1f5f9', color: imageType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                    >
+                                        File
+                                    </button>
+                                </div>
+                            </div>
+
+                            {imageType === 'url' ? (
+                                <input 
+                                    type="text" 
+                                    placeholder="e.g. assets/find-section-img-1.png or URL" 
+                                    value={imageUrl} 
+                                    onChange={e => setImageUrl(e.target.value)} 
+                                    style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
+                                />
                             ) : (
-                                <span style={{ fontSize: '10px', color: '#94a3b8' }}>No Image Selected</span>
+                                <input 
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={e => setImageFile(e.target.files[0])}
+                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
+                                />
+                            )}
+
+                            {/* Image Live Preview */}
+                            <div style={{ 
+                                height: '110px', 
+                                width: '100%', 
+                                marginTop: '8px', 
+                                borderRadius: '6px', 
+                                border: '1px dashed #cbd5e1', 
+                                backgroundColor: '#f8fafc',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                overflow: 'hidden'
+                            }}>
+                                {imagePreviewUrl ? (
+                                    <img src={imagePreviewUrl} alt="Preview" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                                ) : (
+                                    <span style={{ fontSize: '10px', color: '#94a3b8' }}>No Image Selected</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Video Upload Box */}
+                        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Video Media</label>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setVideoType('url')}
+                                        style={{ background: videoType === 'url' ? '#0f172a' : '#f1f5f9', color: videoType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                    >
+                                        URL
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setVideoType('file')}
+                                        style={{ background: videoType === 'file' ? '#0f172a' : '#f1f5f9', color: videoType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                    >
+                                        File
+                                    </button>
+                                </div>
+                            </div>
+
+                            {videoType === 'url' ? (
+                                <input 
+                                    type="text" 
+                                    placeholder="YouTube embed link or video path"
+                                    value={videoUrl} 
+                                    onChange={e => setVideoUrl(e.target.value)} 
+                                    style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
+                                />
+                            ) : (
+                                <input 
+                                    type="file" 
+                                    accept="video/*"
+                                    onChange={e => setVideoFile(e.target.files[0])}
+                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
+                                />
                             )}
                         </div>
+
+                        {/* Bottom Action Submit Button */}
+                        <button 
+                            type="submit"
+                            disabled={submitting}
+                            style={{ 
+                                width: '100%',
+                                backgroundColor: '#0f172a', 
+                                color: '#ffffff', 
+                                border: 'none', 
+                                padding: '11px', 
+                                borderRadius: '4px', 
+                                fontSize: '12px', 
+                                fontWeight: 800, 
+                                cursor: submitting ? 'not-allowed' : 'pointer',
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                            }}
+                        >
+                            {submitting ? 'Publishing Product...' : `✓ Save & Publish Item #${productNumber}`}
+                        </button>
+
                     </div>
 
-                    {/* Video Upload Box */}
-                    <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                            <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Video Media</label>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <button 
-                                    type="button"
-                                    onClick={() => setVideoType('url')}
-                                    style={{ background: videoType === 'url' ? '#0f172a' : '#f1f5f9', color: videoType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                >
-                                    URL
-                                </button>
-                                <button 
-                                    type="button"
-                                    onClick={() => setVideoType('file')}
-                                    style={{ background: videoType === 'file' ? '#0f172a' : '#f1f5f9', color: videoType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                >
-                                    File
-                                </button>
-                            </div>
-                        </div>
-
-                        {videoType === 'url' ? (
-                            <input 
-                                type="text" 
-                                placeholder="YouTube embed link or video path"
-                                value={videoUrl} 
-                                onChange={e => setVideoUrl(e.target.value)} 
-                                style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
-                            />
-                        ) : (
-                            <input 
-                                type="file" 
-                                accept="video/*"
-                                onChange={e => setVideoFile(e.target.files[0])}
-                                style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
-                            />
-                        )}
-                    </div>
-
-                    {/* Bottom Action Submit Button */}
-                    <button 
-                        type="submit"
-                        disabled={submitting}
-                        style={{ 
-                            width: '100%',
-                            backgroundColor: '#0f172a', 
-                            color: '#ffffff', 
-                            border: 'none', 
-                            padding: '10px', 
-                            borderRadius: '4px', 
-                            fontSize: '12px', 
-                            fontWeight: 800, 
-                            cursor: submitting ? 'not-allowed' : 'pointer',
-                            marginTop: 'auto',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
-                        }}
-                    >
-                        {submitting ? 'Publishing Product...' : `✓ Save & Publish Item #${productNumber}`}
-                    </button>
-
-                </div>
-
-            </form>
+                </form>
+            </div>
         </div>
     );
 };
