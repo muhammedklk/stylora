@@ -438,18 +438,17 @@ const AdminAddProduct = () => {
                 </div>
             </header>
 
-            {/* Compact Form Grid Container with Balanced Side Spacing */}
+            {/* Compact Form Grid Container (Media Section Placed Below Specifications) */}
             <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center' }}>
                 <form onSubmit={handleSubmit} style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: '1fr 340px', 
+                    display: 'flex',
+                    flexDirection: 'column',
                     gap: '16px', 
-                    alignItems: 'start',
-                    maxWidth: '1380px',
+                    maxWidth: '1180px',
                     width: '100%'
                 }}>
                     
-                    {/* Left Column: Compact Specifications Card */}
+                    {/* Main Specifications Card */}
                     <div style={{ 
                         backgroundColor: '#ffffff', 
                         borderRadius: '8px', 
@@ -457,7 +456,6 @@ const AdminAddProduct = () => {
                         padding: '18px 22px', 
                         display: 'flex', 
                         flexDirection: 'column', 
-                        justifyContent: 'flex-start',
                         gap: '14px',
                         boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
                     }}>
@@ -665,37 +663,36 @@ const AdminAddProduct = () => {
                         </div>
                     </div>
 
-                    {/* Right Column: Media Preview & Video Upload */}
+                    {/* Media Upload Section (Placed Directly Below Main Specifications) */}
                     <div style={{ 
                         backgroundColor: '#ffffff', 
                         borderRadius: '8px', 
                         border: '1px solid #e2e8f0', 
-                        padding: '18px', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        justifyContent: 'flex-start',
-                        gap: '16px',
+                        padding: '18px 22px', 
+                        display: 'grid', 
+                        gridTemplateColumns: '1fr 1fr', 
+                        gap: '20px', 
                         boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
                     }}>
                         
-                        {/* Image Upload Box */}
+                        {/* Left Side: Product Image Upload */}
                         <div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Image</label>
+                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Image Media</label>
                                 <div style={{ display: 'flex', gap: '4px' }}>
                                     <button 
                                         type="button"
                                         onClick={() => setImageType('url')}
                                         style={{ background: imageType === 'url' ? '#0f172a' : '#f1f5f9', color: imageType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
                                     >
-                                        URL
+                                        URL / Link
                                     </button>
                                     <button 
                                         type="button"
                                         onClick={() => setImageType('file')}
                                         style={{ background: imageType === 'file' ? '#0f172a' : '#f1f5f9', color: imageType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
                                     >
-                                        File
+                                        Upload File
                                     </button>
                                 </div>
                             </div>
@@ -706,20 +703,20 @@ const AdminAddProduct = () => {
                                     placeholder="e.g. assets/find-section-img-1.png or URL" 
                                     value={imageUrl} 
                                     onChange={e => setImageUrl(e.target.value)} 
-                                    style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
+                                    style={{ width: '100%', height: '34px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', boxSizing: 'border-box' }}
                                 />
                             ) : (
                                 <input 
                                     type="file" 
                                     accept="image/*"
                                     onChange={e => setImageFile(e.target.files[0])}
-                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
+                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '5px', borderRadius: '4px' }}
                                 />
                             )}
 
                             {/* Image Live Preview */}
                             <div style={{ 
-                                height: '110px', 
+                                height: '90px', 
                                 width: '100%', 
                                 marginTop: '8px', 
                                 borderRadius: '6px', 
@@ -738,65 +735,69 @@ const AdminAddProduct = () => {
                             </div>
                         </div>
 
-                        {/* Video Upload Box */}
-                        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                                <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Video Media</label>
-                                <div style={{ display: 'flex', gap: '4px' }}>
-                                    <button 
-                                        type="button"
-                                        onClick={() => setVideoType('url')}
-                                        style={{ background: videoType === 'url' ? '#0f172a' : '#f1f5f9', color: videoType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                    >
-                                        URL
-                                    </button>
-                                    <button 
-                                        type="button"
-                                        onClick={() => setVideoType('file')}
-                                        style={{ background: videoType === 'file' ? '#0f172a' : '#f1f5f9', color: videoType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
-                                    >
-                                        File
-                                    </button>
+                        {/* Right Side: Product Video Media Upload & Submit */}
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                    <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>Product Video Media</label>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setVideoType('url')}
+                                            style={{ background: videoType === 'url' ? '#0f172a' : '#f1f5f9', color: videoType === 'url' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                        >
+                                            URL / Link
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setVideoType('file')}
+                                            style={{ background: videoType === 'file' ? '#0f172a' : '#f1f5f9', color: videoType === 'file' ? '#fff' : '#64748b', border: 'none', padding: '3px 8px', fontSize: '9px', fontWeight: 700, borderRadius: '3px', cursor: 'pointer' }}
+                                        >
+                                            Upload File
+                                        </button>
+                                    </div>
                                 </div>
+
+                                {videoType === 'url' ? (
+                                    <input 
+                                        type="text" 
+                                        placeholder="YouTube embed link or video file path"
+                                        value={videoUrl} 
+                                        onChange={e => setVideoUrl(e.target.value)} 
+                                        style={{ width: '100%', height: '34px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '11px', outline: 'none', boxSizing: 'border-box' }}
+                                    />
+                                ) : (
+                                    <input 
+                                        type="file" 
+                                        accept="video/*"
+                                        onChange={e => setVideoFile(e.target.files[0])}
+                                        style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '5px', borderRadius: '4px' }}
+                                    />
+                                )}
                             </div>
 
-                            {videoType === 'url' ? (
-                                <input 
-                                    type="text" 
-                                    placeholder="YouTube embed link or video path"
-                                    value={videoUrl} 
-                                    onChange={e => setVideoUrl(e.target.value)} 
-                                    style={{ width: '100%', height: '32px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '0 8px', fontSize: '10px', outline: 'none', boxSizing: 'border-box' }}
-                                />
-                            ) : (
-                                <input 
-                                    type="file" 
-                                    accept="video/*"
-                                    onChange={e => setVideoFile(e.target.files[0])}
-                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px' }}
-                                />
-                            )}
-                        </div>
+                            {/* Main Submit Button */}
+                            <button 
+                                type="submit"
+                                disabled={submitting}
+                                style={{ 
+                                    width: '100%',
+                                    backgroundColor: '#0f172a', 
+                                    color: '#ffffff', 
+                                    border: 'none', 
+                                    padding: '12px', 
+                                    borderRadius: '4px', 
+                                    fontSize: '12px', 
+                                    fontWeight: 800, 
+                                    cursor: submitting ? 'not-allowed' : 'pointer',
+                                    marginTop: '12px',
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                                }}
+                            >
+                                {submitting ? 'Publishing Product...' : `✓ Save & Publish Item #${productNumber}`}
+                            </button>
 
-                        {/* Bottom Action Submit Button */}
-                        <button 
-                            type="submit"
-                            disabled={submitting}
-                            style={{ 
-                                width: '100%',
-                                backgroundColor: '#0f172a', 
-                                color: '#ffffff', 
-                                border: 'none', 
-                                padding: '11px', 
-                                borderRadius: '4px', 
-                                fontSize: '12px', 
-                                fontWeight: 800, 
-                                cursor: submitting ? 'not-allowed' : 'pointer',
-                                boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
-                            }}
-                        >
-                            {submitting ? 'Publishing Product...' : `✓ Save & Publish Item #${productNumber}`}
-                        </button>
+                        </div>
 
                     </div>
 
