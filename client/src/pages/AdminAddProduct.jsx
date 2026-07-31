@@ -438,13 +438,15 @@ const AdminAddProduct = () => {
                 </div>
             </header>
 
-            {/* Compact Form Grid Container (No Excessive Empty Spacing) */}
-            <div style={{ padding: '16px 24px', flex: 1 }}>
+            {/* Compact Form Grid Container with Left & Right Side Spacing */}
+            <div style={{ padding: '24px 48px', flex: 1, display: 'flex', justifyContent: 'center' }}>
                 <form onSubmit={handleSubmit} style={{ 
                     display: 'grid', 
-                    gridTemplateColumns: '1fr 340px', 
-                    gap: '16px', 
-                    alignItems: 'start'
+                    gridTemplateColumns: '1fr 320px', 
+                    gap: '20px', 
+                    alignItems: 'start',
+                    maxWidth: '1140px',
+                    width: '100%'
                 }}>
                     
                     {/* Left Column: Compact Specifications Card */}
