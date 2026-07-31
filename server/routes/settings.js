@@ -65,7 +65,8 @@ router.put('/', authMiddleware, adminMiddleware, upload.fields([
             'aboutTitle', 'aboutContent', 'aboutSubContent',
             'contactEmail', 'contactPhone', 'contactAddress',
             'socialInstagram', 'socialTwitter',
-            'policyShipping', 'policyReturns', 'policyPrivacy', 'policyTerms'
+            'policyShipping', 'policyReturns', 'policyPrivacy', 'policyTerms',
+            'showNotAvailableBadge', 'categoryImages', 'homeBestsellerSlots'
         ];
 
         fields.forEach(field => {

@@ -21,6 +21,10 @@ const siteSettingsSchema = new mongoose.Schema({
     socialInstagram: { type: String, default: "https://instagram.com/styleora" },
     socialTwitter: { type: String, default: "https://twitter.com/styleora" },
     
+    showNotAvailableBadge: { type: Boolean, default: false },
+    categoryImages: { type: Object, default: {} },
+    homeBestsellerSlots: { type: Array, default: ['', '', '', '', ''] },
+
     policyShipping: { 
         type: String, 
         default: "We offer free standard shipping on all orders within India. Orders are processed within 24-48 hours and typically arrive within 3-5 business days. Once your package is shipped, you will receive a tracking link via email to monitor its progress." 

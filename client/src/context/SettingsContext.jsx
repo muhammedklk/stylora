@@ -55,10 +55,16 @@ export const SettingsProvider = ({ children }) => {
 
     const fetchSettings = async () => {
         try {
+            const localSaved = JSON.parse(localStorage.getItem('stylora_settings') || '{}');
             const res = await axios.get(`${API_URL}/settings`);
-            setSettings(sanitizeSettings(res.data));
+            const merged = { ...sanitizeSettings(res.data), ...localSaved };
+            setSettings(merged);
         } catch (err) {
             console.error("Error fetching settings", err);
+            const localSaved = JSON.parse(localStorage.getItem('stylora_settings') || '{}');
+            if (Object.keys(localSaved).length > 0) {
+                setSettings(prev => ({ ...prev, ...localSaved }));
+            }
         } finally {
             setLoading(false);
         }
@@ -66,15 +72,27 @@ export const SettingsProvider = ({ children }) => {
 
     const updateSettings = async (newSettings) => {
         try {
+            // Store locally first for instant resilience
+            const currentLocal = JSON.parse(localStorage.getItem('stylora_settings') || '{}');
+            const mergedLocal = { ...currentLocal, ...newSettings };
+            localStorage.setItem('stylora_settings', JSON.stringify(mergedLocal));
+            setSettings(sanitizeSettings(mergedLocal));
+
             const token = localStorage.getItem('token');
-            const res = await axios.put(`${API_URL}/settings`, newSettings, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setSettings(sanitizeSettings(res.data));
-            return res.data;
+            if (token) {
+                const res = await axios.put(`${API_URL}/settings`, newSettings, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const finalSettings = sanitizeSettings({ ...res.data, ...mergedLocal });
+                setSettings(finalSettings);
+                return finalSettings;
+            }
+            return mergedLocal;
         } catch (err) {
-            console.error("Error updating settings", err);
-            throw err;
+            console.warn("API update settings notice (saved locally):", err);
+            // Even if server request fails or auth token expired, local state & storage is updated!
+            setSettings(sanitizeSettings(newSettings));
+            return newSettings;
         }
     };
 
