@@ -103,7 +103,10 @@ const AdminDashboard = () => {
                 fetchedProducts = productsData;
             }
 
-            const cleanProducts = filterOutDeleted(fetchedProducts);
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const mergedProducts = [...customProds, ...fetchedProducts];
+
+            const cleanProducts = filterOutDeleted(mergedProducts);
             setAdminProducts(cleanProducts);
 
             let fetchedOrders = [];

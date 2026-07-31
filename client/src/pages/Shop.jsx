@@ -136,8 +136,10 @@ const Shop = () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
             const rawData = Array.isArray(res.data) ? res.data : [];
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const merged = [...customProds, ...rawData];
             const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-            const data = rawData.filter(p => !deletedIds.includes(String(p._id)));
+            const data = merged.filter(p => !deletedIds.includes(String(p._id)));
 
             // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
