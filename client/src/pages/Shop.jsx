@@ -366,17 +366,24 @@ const Shop = () => {
                                 const isSelectedCategory = activeFilter === tab.cat;
 
                                 return (
-                                    <div key={tab.name} className="cat-dropdown-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
+                                    <div 
+                                        key={tab.name} 
+                                        className="cat-dropdown-wrapper" 
+                                        style={{ position: 'relative', display: 'inline-block' }}
+                                        onMouseEnter={() => {
+                                            if (hasSubCategories) {
+                                                setOpenCategoryDropdown(tab.cat);
+                                            }
+                                        }}
+                                        onMouseLeave={() => {
+                                            setOpenCategoryDropdown(null);
+                                        }}
+                                    >
                                         <button 
                                             className={`shop-filter-tab ${isSelectedCategory ? 'active' : ''}`}
                                             onClick={() => {
                                                 handleFilterChange(tab.cat);
-                                                if (hasSubCategories) {
-                                                    setOpenCategoryDropdown(isOpen ? null : tab.cat);
-                                                } else {
-                                                    setOpenCategoryDropdown(null);
-                                                    setActiveSubCategory('all');
-                                                }
+                                                setActiveSubCategory('all');
                                             }}
                                             style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                                         >
@@ -424,19 +431,22 @@ const Shop = () => {
                                         {hasSubCategories && isOpen && (
                                             <div style={{
                                                 position: 'absolute',
-                                                top: 'calc(100% + 8px)',
+                                                top: '100%',
                                                 left: 0,
-                                                zIndex: 300,
-                                                minWidth: '185px',
-                                                backgroundColor: '#ffffff',
-                                                borderRadius: '10px',
-                                                boxShadow: '0 14px 35px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.06)',
-                                                border: '1px solid #e5e7eb',
-                                                padding: '6px 0',
-                                                overflow: 'hidden',
-                                                animation: 'dropdownPopSmooth 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
-                                                transformOrigin: 'top left'
+                                                paddingTop: '6px',
+                                                zIndex: 300
                                             }}>
+                                                <div style={{
+                                                    minWidth: '185px',
+                                                    backgroundColor: '#ffffff',
+                                                    borderRadius: '10px',
+                                                    boxShadow: '0 14px 35px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.06)',
+                                                    border: '1px solid #e5e7eb',
+                                                    padding: '6px 0',
+                                                    overflow: 'hidden',
+                                                    animation: 'dropdownPopSmooth 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                                                    transformOrigin: 'top left'
+                                                }}>
                                                 <button
                                                     onClick={() => {
                                                         setActiveSubCategory('all');
@@ -527,6 +537,7 @@ const Shop = () => {
                                                         )}
                                                     </button>
                                                 ))}
+                                                </div>
                                             </div>
                                         )}
                                     </div>
