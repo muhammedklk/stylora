@@ -306,54 +306,54 @@ const Home = () => {
                                     className="style-item" 
                                     key={catItem.id}
                                     onClick={() => navigate(`/shop?category=${catItem.cat}`)}
-                                    style={{ cursor: 'pointer', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}
+                                    style={{ 
+                                        cursor: 'pointer', 
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '12px'
+                                    }}
                                 >
-                                    <div className="style-card" style={{ height: '420px', position: 'relative', width: '100%' }}>
+                                    <div className="style-card-img-wrapper" style={{ 
+                                        height: '320px', 
+                                        width: '100%', 
+                                        backgroundColor: '#f5f5f7', 
+                                        borderRadius: '8px', 
+                                        overflow: 'hidden', 
+                                        position: 'relative'
+                                    }}>
                                         <img 
                                             src={imgUrl} 
                                             alt={catItem.name} 
                                             className="style-image" 
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            style={{ 
+                                                width: '100%', 
+                                                height: '100%', 
+                                                objectFit: 'cover',
+                                                transition: 'transform 0.4s ease'
+                                            }}
                                             onError={(e) => {
                                                 e.target.onerror = null;
                                                 e.target.src = catItem.fallback;
                                             }}
                                         />
-                                        <div style={{
-                                            position: 'absolute',
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            padding: '24px',
-                                            background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 65%, transparent 100%)',
-                                            color: '#fff',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'flex-start',
-                                            justifyContent: 'flex-end'
+                                    </div>
+                                    <div style={{ padding: '0 4px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <span style={{ 
+                                            fontSize: '11px', 
+                                            textTransform: 'uppercase', 
+                                            letterSpacing: '0.08em', 
+                                            color: '#71717a', 
+                                            fontWeight: 600 
                                         }}>
-                                            <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#d4af37', fontWeight: 700, marginBottom: '6px' }}>
-                                                {catItem.tag}
-                                            </span>
-                                            <h3 style={{ margin: '0 0 12px 0', fontSize: '20px', fontWeight: 800, color: '#fff', letterSpacing: '0.02em' }}>
+                                            {catItem.tag}
+                                        </span>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#111827', letterSpacing: '-0.01em' }}>
                                                 {catItem.name}
                                             </h3>
-                                            <div style={{
-                                                width: '100%',
-                                                padding: '12px 0',
-                                                backgroundColor: '#fff',
-                                                color: '#000',
-                                                border: 'none',
-                                                fontSize: '11px',
-                                                fontWeight: 700,
-                                                letterSpacing: '0.08em',
-                                                textTransform: 'uppercase',
-                                                borderRadius: '2px',
-                                                textAlign: 'center',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-                                            }}>
-                                                Explore {catItem.name} →
-                                            </div>
+                                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                Explore →
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

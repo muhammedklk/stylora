@@ -1186,23 +1186,27 @@ const AdminDashboard = () => {
                                     <div key={cat.key} style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
                                         
                                         {/* Live Image Card Preview Box */}
-                                        <div style={{ height: '220px', width: '100%', position: 'relative', backgroundColor: '#111' }}>
-                                            <img 
-                                                src={resolveImageUrl(currentImg)} 
-                                                alt={cat.name} 
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
-                                            />
-                                            {/* Card Overlay Preview */}
-                                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)', color: '#fff' }}>
-                                                <span style={{ fontSize: '9px', fontWeight: 800, color: '#d4af37', letterSpacing: '0.1em' }}>{cat.tag}</span>
-                                                <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '2px 0 0 0', color: '#fff' }}>{cat.name}</h3>
+                                        <div style={{ padding: '12px', backgroundColor: '#fafafa', borderBottom: '1px solid #f3f4f6' }}>
+                                            <div style={{ height: '180px', width: '100%', borderRadius: '6px', overflow: 'hidden', position: 'relative', backgroundColor: '#f3f4f6' }}>
+                                                <img 
+                                                    src={resolveImageUrl(currentImg)} 
+                                                    alt={cat.name} 
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
+                                                />
+                                                {isCustom && (
+                                                    <span style={{ position: 'absolute', top: '10px', right: '10px', backgroundColor: '#10b981', color: '#fff', fontSize: '9px', fontWeight: 800, padding: '3px 8px', borderRadius: '10px' }}>
+                                                        CUSTOM IMAGE
+                                                    </span>
+                                                )}
                                             </div>
-                                            {isCustom && (
-                                                <span style={{ position: 'absolute', top: '12px', right: '12px', backgroundColor: '#10b981', color: '#fff', fontSize: '9px', fontWeight: 800, padding: '3px 8px', borderRadius: '10px' }}>
-                                                    CUSTOM IMAGE
-                                                </span>
-                                            )}
+                                            <div style={{ marginTop: '8px' }}>
+                                                <span style={{ fontSize: '10px', fontWeight: 700, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{cat.tag}</span>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px' }}>
+                                                    <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: '#111827' }}>{cat.name}</h3>
+                                                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#111827' }}>Explore →</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {/* Control Box */}
