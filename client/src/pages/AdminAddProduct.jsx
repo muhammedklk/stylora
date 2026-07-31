@@ -174,6 +174,23 @@ const AdminAddProduct = () => {
     const [imagePreviewUrl, setImagePreviewUrl] = useState('');
     const objectUrlRef = useRef(null);
 
+    const [productNumber, setProductNumber] = useState(1);
+
+    useEffect(() => {
+        // Calculate next sequence product number dynamically
+        const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+        const count = customProds.length;
+        setProductNumber(count + 1);
+
+        // Fetch from API to ensure accurate total count
+        axios.get(`${API_URL}/products`).then(res => {
+            if (Array.isArray(res.data)) {
+                const apiCount = res.data.length;
+                setProductNumber(Math.max(count, apiCount) + 1);
+            }
+        }).catch(err => console.log(err));
+    }, []);
+
     // Update image preview whenever imageFile or imageUrl changes
     useEffect(() => {
         // Revoke previous object URL to prevent memory leaks
@@ -332,9 +349,9 @@ const AdminAddProduct = () => {
             <section className="shop-hero" style={{ background: '#0f0f0f' }}>
                 <div className="hero-overlay" style={{ background: 'rgba(0,0,0,0.85)' }}></div>
                 <div className="shop-hero-content">
-                    <span className="shop-hero-tag" style={{ color: '#d4af37' }}>[ Product Catalog Control ]</span>
-                    <h1 className="shop-hero-title" style={{ color: '#fff' }}>Add New Product</h1>
-                    <p className="shop-hero-subtitle" style={{ color: '#aaa' }}>Create a new detailed item in your storefront catalog.</p>
+                    <span className="shop-hero-tag" style={{ color: '#d4af37' }}>[ Product Catalog Control • Item #{productNumber} ]</span>
+                    <h1 className="shop-hero-title" style={{ color: '#fff' }}>Add New Product (#{productNumber})</h1>
+                    <p className="shop-hero-subtitle" style={{ color: '#aaa' }}>Create item #{productNumber} in your store catalog.</p>
                 </div>
             </section>
 
@@ -344,9 +361,26 @@ const AdminAddProduct = () => {
                     <div className="row justify-content-center">
                         <div className="col-md-10">
                             <div className="account-panel active p-5" style={{ backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '4px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                                <div className="mb-4 pb-3" style={{ borderBottom: '1px solid #eee' }}>
-                                    <h2 className="panel-title" style={{ color: '#111', fontSize: '20px', fontWeight: 700, margin: 0 }}>Product Specifications</h2>
-                                    <p className="panel-subtitle" style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Provide brand, media (image & video), pricing, sizes, and colors.</p>
+                                <div className="mb-4 pb-3" style={{ borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <h2 className="panel-title" style={{ color: '#111', fontSize: '20px', fontWeight: 700, margin: 0 }}>Product Specifications</h2>
+                                        <p className="panel-subtitle" style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Provide brand, media (image & video), pricing, sizes, and colors.</p>
+                                    </div>
+                                    <div style={{
+                                        backgroundColor: '#0a0a0a',
+                                        color: '#d4af37',
+                                        border: '1px solid #d4af37',
+                                        borderRadius: '20px',
+                                        padding: '6px 16px',
+                                        fontSize: '12px',
+                                        fontWeight: 800,
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                    }}>
+                                        <span>📦 Adding Product #{productNumber}</span>
+                                    </div>
                                 </div>
 
                                 {error && (
