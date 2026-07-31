@@ -64,7 +64,19 @@ const Shop = () => {
     const [filteredProducts, setFilteredProducts] = useState(() => getInitialProducts());
     const [activeFilter, setActiveFilter] = useState(initialCategory);
     const [activeSubCategory, setActiveSubCategory] = useState('all');
+    const [openCategoryDropdown, setOpenCategoryDropdown] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    // Close dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest('.cat-dropdown-wrapper')) {
+                setOpenCategoryDropdown(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // Amazon/Flipkart Style Sidebar Filter States
     const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -323,41 +335,136 @@ const Shop = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: '16px',
-                        marginBottom: SUB_CATEGORIES[activeFilter] ? '14px' : '30px'
+                        marginBottom: '30px'
                     }}>
-                        {/* Left Side: Scrollable Category Tabs */}
-                        <div className="shop-filter-bar" style={{ flex: 1, margin: 0 }}>
+                        {/* Left Side: Scrollable Category Tabs with Custom Dropdowns */}
+                        <div className="shop-filter-bar" style={{ flex: 1, margin: 0, overflow: 'visible' }}>
                             {filterTabs.map(tab => {
                                 const count = !loading ? countForCategory(tab.cat) : null;
                                 const isEmpty = count !== null && count === 0;
+                                const hasSubCategories = SUB_CATEGORIES[tab.cat] && SUB_CATEGORIES[tab.cat].length > 0;
+                                const isOpen = openCategoryDropdown === tab.cat;
+                                const isSelectedCategory = activeFilter === tab.cat;
+
                                 return (
-                                    <button 
-                                        key={tab.name}
-                                        className={`shop-filter-tab ${activeFilter === tab.cat ? 'active' : ''}`}
-                                        onClick={() => {
-                                            handleFilterChange(tab.cat);
-                                            setActiveSubCategory('all');
-                                        }}
-                                        style={{ position: 'relative' }}
-                                    >
-                                        {tab.name}
-                                        {showNotAvailableBadge && isEmpty && (
-                                            <span style={{
-                                                marginLeft: '6px',
-                                                fontSize: '9px',
-                                                fontWeight: 700,
-                                                backgroundColor: '#fee2e2',
-                                                color: '#dc2626',
-                                                padding: '2px 6px',
-                                                borderRadius: '10px',
-                                                letterSpacing: '0.03em',
-                                                verticalAlign: 'middle',
-                                                textTransform: 'uppercase'
-                                            }}>
-                                                N/A
+                                    <div key={tab.name} className="cat-dropdown-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
+                                        <button 
+                                            className={`shop-filter-tab ${isSelectedCategory ? 'active' : ''}`}
+                                            onClick={() => {
+                                                handleFilterChange(tab.cat);
+                                                if (hasSubCategories) {
+                                                    setOpenCategoryDropdown(isOpen ? null : tab.cat);
+                                                } else {
+                                                    setOpenCategoryDropdown(null);
+                                                    setActiveSubCategory('all');
+                                                }
+                                            }}
+                                            style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                                        >
+                                            <span>
+                                                {tab.name}
+                                                {isSelectedCategory && activeSubCategory !== 'all' ? ` (${activeSubCategory})` : ''}
                                             </span>
+
+                                            {hasSubCategories && (
+                                                <svg 
+                                                    width="10" 
+                                                    height="10" 
+                                                    viewBox="0 0 24 24" 
+                                                    fill="none" 
+                                                    stroke="currentColor" 
+                                                    strokeWidth="2.5"
+                                                    style={{
+                                                        transition: 'transform 0.2s ease',
+                                                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                                                    }}
+                                                >
+                                                    <path d="M6 9l6 6 6-6"/>
+                                                </svg>
+                                            )}
+
+                                            {showNotAvailableBadge && isEmpty && (
+                                                <span style={{
+                                                    marginLeft: '4px',
+                                                    fontSize: '9px',
+                                                    fontWeight: 700,
+                                                    backgroundColor: '#fee2e2',
+                                                    color: '#dc2626',
+                                                    padding: '2px 6px',
+                                                    borderRadius: '10px',
+                                                    letterSpacing: '0.03em',
+                                                    verticalAlign: 'middle',
+                                                    textTransform: 'uppercase'
+                                                }}>
+                                                    N/A
+                                                </span>
+                                            )}
+                                        </button>
+
+                                        {/* Custom Floating Dropdown Popup */}
+                                        {hasSubCategories && isOpen && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 'calc(100% + 8px)',
+                                                left: 0,
+                                                zIndex: 300,
+                                                minWidth: '170px',
+                                                backgroundColor: '#ffffff',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
+                                                border: '1px solid #e5e7eb',
+                                                padding: '6px 0',
+                                                overflow: 'hidden',
+                                                animation: 'fadeIn 0.15s ease-in-out'
+                                            }}>
+                                                <button
+                                                    onClick={() => {
+                                                        setActiveSubCategory('all');
+                                                        setOpenCategoryDropdown(null);
+                                                    }}
+                                                    style={{
+                                                        display: 'block',
+                                                        width: '100%',
+                                                        textAlign: 'left',
+                                                        padding: '9px 16px',
+                                                        fontSize: '11px',
+                                                        fontWeight: activeSubCategory === 'all' ? 700 : 500,
+                                                        backgroundColor: activeSubCategory === 'all' ? '#000000' : 'transparent',
+                                                        color: activeSubCategory === 'all' ? '#ffffff' : '#374151',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.15s ease'
+                                                    }}
+                                                >
+                                                    All {tab.name}
+                                                </button>
+                                                {SUB_CATEGORIES[tab.cat].map(sub => (
+                                                    <button
+                                                        key={sub}
+                                                        onClick={() => {
+                                                            setActiveSubCategory(sub);
+                                                            setOpenCategoryDropdown(null);
+                                                        }}
+                                                        style={{
+                                                            display: 'block',
+                                                            width: '100%',
+                                                            textAlign: 'left',
+                                                            padding: '9px 16px',
+                                                            fontSize: '11px',
+                                                            fontWeight: activeSubCategory === sub ? 700 : 500,
+                                                            backgroundColor: activeSubCategory === sub ? '#000000' : 'transparent',
+                                                            color: activeSubCategory === sub ? '#ffffff' : '#374151',
+                                                            border: 'none',
+                                                            cursor: 'pointer',
+                                                            transition: 'all 0.15s ease'
+                                                        }}
+                                                    >
+                                                        {sub}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         )}
-                                    </button>
+                                    </div>
                                 );
                             })}
                         </div>
@@ -408,57 +515,6 @@ const Shop = () => {
                             )}
                         </button>
                     </div>
-
-                    {/* Dedicated Row Below: Dynamic Sub-Category Filter Pills */}
-                    {SUB_CATEGORIES[activeFilter] && (
-                        <div style={{ 
-                            display: 'flex', 
-                            gap: '10px', 
-                            overflowX: 'auto', 
-                            padding: '12px 0', 
-                            marginBottom: '30px', 
-                            borderTop: '1px solid #f3f4f6', 
-                            borderBottom: '1px solid #f3f4f6' 
-                        }}>
-                            <button
-                                onClick={() => setActiveSubCategory('all')}
-                                style={{
-                                    padding: '6px 16px',
-                                    borderRadius: '20px',
-                                    fontSize: '11px',
-                                    fontWeight: activeSubCategory === 'all' ? 700 : 500,
-                                    border: activeSubCategory === 'all' ? '1.5px solid #000' : '1px solid #e5e7eb',
-                                    backgroundColor: activeSubCategory === 'all' ? '#000' : '#ffffff',
-                                    color: activeSubCategory === 'all' ? '#fff' : '#4b5563',
-                                    cursor: 'pointer',
-                                    whiteSpace: 'nowrap',
-                                    transition: 'all 0.2s ease'
-                                }}
-                            >
-                                ALL {activeFilter.toUpperCase()}
-                            </button>
-                            {SUB_CATEGORIES[activeFilter].map(sub => (
-                                <button
-                                    key={sub}
-                                    onClick={() => setActiveSubCategory(sub)}
-                                    style={{
-                                        padding: '6px 16px',
-                                        borderRadius: '20px',
-                                        fontSize: '11px',
-                                        fontWeight: activeSubCategory === sub ? 700 : 500,
-                                        border: activeSubCategory === sub ? '1.5px solid #000' : '1px solid #e5e7eb',
-                                        backgroundColor: activeSubCategory === sub ? '#000' : '#ffffff',
-                                        color: activeSubCategory === sub ? '#fff' : '#4b5563',
-                                        cursor: 'pointer',
-                                        whiteSpace: 'nowrap',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    {sub}
-                                </button>
-                            ))}
-                        </div>
-                    )}
 
                     {/* Products Grid */}
                     <div className="shop-grid">
