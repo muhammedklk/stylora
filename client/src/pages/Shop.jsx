@@ -301,7 +301,7 @@ const Shop = () => {
 
     return (
         <div>
-            {/* Shimmer & FadeIn Animations */}
+            {/* Shimmer, FadeIn & Smooth Dropdown Animations */}
             <style>{`
                 @keyframes shimmer {
                     0% { background-position: -200% 0; }
@@ -310,6 +310,16 @@ const Shop = () => {
                 @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
+                }
+                @keyframes dropdownPopSmooth {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(-8px) scale(0.96);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
                 }
             `}</style>
 
@@ -417,14 +427,15 @@ const Shop = () => {
                                                 top: 'calc(100% + 8px)',
                                                 left: 0,
                                                 zIndex: 300,
-                                                minWidth: '170px',
+                                                minWidth: '185px',
                                                 backgroundColor: '#ffffff',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
+                                                borderRadius: '10px',
+                                                boxShadow: '0 14px 35px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.06)',
                                                 border: '1px solid #e5e7eb',
                                                 padding: '6px 0',
                                                 overflow: 'hidden',
-                                                animation: 'fadeIn 0.15s ease-in-out'
+                                                animation: 'dropdownPopSmooth 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                                                transformOrigin: 'top left'
                                             }}>
                                                 <button
                                                     onClick={() => {
@@ -432,21 +443,44 @@ const Shop = () => {
                                                         setOpenCategoryDropdown(null);
                                                     }}
                                                     style={{
-                                                        display: 'block',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
                                                         width: '100%',
                                                         textAlign: 'left',
-                                                        padding: '9px 16px',
+                                                        padding: '10px 16px',
                                                         fontSize: '11px',
                                                         fontWeight: activeSubCategory === 'all' ? 700 : 500,
                                                         backgroundColor: activeSubCategory === 'all' ? '#000000' : 'transparent',
                                                         color: activeSubCategory === 'all' ? '#ffffff' : '#374151',
                                                         border: 'none',
+                                                        borderLeft: activeSubCategory === 'all' ? '3px solid #d4af37' : '3px solid transparent',
                                                         cursor: 'pointer',
-                                                        transition: 'all 0.15s ease'
+                                                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                                                    }}
+                                                    onMouseEnter={e => {
+                                                        if (activeSubCategory !== 'all') {
+                                                            e.currentTarget.style.backgroundColor = '#f9fafb';
+                                                            e.currentTarget.style.color = '#000000';
+                                                            e.currentTarget.style.paddingLeft = '20px';
+                                                            e.currentTarget.style.borderLeftColor = '#d4af37';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={e => {
+                                                        if (activeSubCategory !== 'all') {
+                                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                                            e.currentTarget.style.color = '#374151';
+                                                            e.currentTarget.style.paddingLeft = '16px';
+                                                            e.currentTarget.style.borderLeftColor = 'transparent';
+                                                        }
                                                     }}
                                                 >
-                                                    All {tab.name}
+                                                    <span>All {tab.name}</span>
+                                                    {activeSubCategory === 'all' && (
+                                                        <span style={{ fontSize: '10px', color: '#d4af37', fontWeight: 800 }}>✓</span>
+                                                    )}
                                                 </button>
+
                                                 {SUB_CATEGORIES[tab.cat].map(sub => (
                                                     <button
                                                         key={sub}
@@ -455,20 +489,42 @@ const Shop = () => {
                                                             setOpenCategoryDropdown(null);
                                                         }}
                                                         style={{
-                                                            display: 'block',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'space-between',
                                                             width: '100%',
                                                             textAlign: 'left',
-                                                            padding: '9px 16px',
+                                                            padding: '10px 16px',
                                                             fontSize: '11px',
                                                             fontWeight: activeSubCategory === sub ? 700 : 500,
                                                             backgroundColor: activeSubCategory === sub ? '#000000' : 'transparent',
                                                             color: activeSubCategory === sub ? '#ffffff' : '#374151',
                                                             border: 'none',
+                                                            borderLeft: activeSubCategory === sub ? '3px solid #d4af37' : '3px solid transparent',
                                                             cursor: 'pointer',
-                                                            transition: 'all 0.15s ease'
+                                                            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            if (activeSubCategory !== sub) {
+                                                                e.currentTarget.style.backgroundColor = '#f9fafb';
+                                                                e.currentTarget.style.color = '#000000';
+                                                                e.currentTarget.style.paddingLeft = '20px';
+                                                                e.currentTarget.style.borderLeftColor = '#d4af37';
+                                                            }
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            if (activeSubCategory !== sub) {
+                                                                e.currentTarget.style.backgroundColor = 'transparent';
+                                                                e.currentTarget.style.color = '#374151';
+                                                                e.currentTarget.style.paddingLeft = '16px';
+                                                                e.currentTarget.style.borderLeftColor = 'transparent';
+                                                            }
                                                         }}
                                                     >
-                                                        {sub}
+                                                        <span>{sub}</span>
+                                                        {activeSubCategory === sub && (
+                                                            <span style={{ fontSize: '10px', color: '#d4af37', fontWeight: 800 }}>✓</span>
+                                                        )}
                                                     </button>
                                                 ))}
                                             </div>
