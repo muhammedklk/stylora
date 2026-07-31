@@ -317,13 +317,13 @@ const Shop = () => {
             <section className="shop-section">
                 <div className="container">
 
-                    {/* Filter Bar Row with Right-Side Filter Button */}
+                    {/* Top Filter Bar Row with Right-Side Filter Button */}
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: '16px',
-                        marginBottom: '30px'
+                        marginBottom: SUB_CATEGORIES[activeFilter] ? '14px' : '30px'
                     }}>
                         {/* Left Side: Scrollable Category Tabs */}
                         <div className="shop-filter-bar" style={{ flex: 1, margin: 0 }}>
@@ -334,10 +334,13 @@ const Shop = () => {
                                     <button 
                                         key={tab.name}
                                         className={`shop-filter-tab ${activeFilter === tab.cat ? 'active' : ''}`}
-                                        onClick={() => handleFilterChange(tab.cat)}
+                                        onClick={() => {
+                                            handleFilterChange(tab.cat);
+                                            setActiveSubCategory('all');
+                                        }}
                                         style={{ position: 'relative' }}
                                     >
-                                        {tab.name} {count !== null && <span style={{ opacity: 0.8, fontSize: '10px', marginLeft: '4px', fontWeight: 600 }}>({count})</span>}
+                                        {tab.name}
                                         {showNotAvailableBadge && isEmpty && (
                                             <span style={{
                                                 marginLeft: '6px',
@@ -358,47 +361,6 @@ const Shop = () => {
                                 );
                             })}
                         </div>
-
-                        {/* Dynamic Sub-Category Filter Pills */}
-                        {SUB_CATEGORIES[activeFilter] && (
-                            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '10px 0 4px 0', width: '100%', borderTop: '1px solid #f3f4f6', marginTop: '12px' }}>
-                                <button
-                                    onClick={() => setActiveSubCategory('all')}
-                                    style={{
-                                        padding: '5px 14px',
-                                        borderRadius: '16px',
-                                        fontSize: '11px',
-                                        fontWeight: activeSubCategory === 'all' ? 700 : 500,
-                                        border: activeSubCategory === 'all' ? '1px solid #000' : '1px solid #e5e7eb',
-                                        backgroundColor: activeSubCategory === 'all' ? '#000' : '#ffffff',
-                                        color: activeSubCategory === 'all' ? '#fff' : '#4b5563',
-                                        cursor: 'pointer',
-                                        whiteSpace: 'nowrap'
-                                    }}
-                                >
-                                    All {activeFilter.toUpperCase()}
-                                </button>
-                                {SUB_CATEGORIES[activeFilter].map(sub => (
-                                    <button
-                                        key={sub}
-                                        onClick={() => setActiveSubCategory(sub)}
-                                        style={{
-                                            padding: '5px 14px',
-                                            borderRadius: '16px',
-                                            fontSize: '11px',
-                                            fontWeight: activeSubCategory === sub ? 700 : 500,
-                                            border: activeSubCategory === sub ? '1px solid #000' : '1px solid #e5e7eb',
-                                            backgroundColor: activeSubCategory === sub ? '#000' : '#ffffff',
-                                            color: activeSubCategory === sub ? '#fff' : '#4b5563',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {sub}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
 
                         {/* Right Side: Amazon/Flipkart Style Filters Button */}
                         <button 
@@ -446,6 +408,57 @@ const Shop = () => {
                             )}
                         </button>
                     </div>
+
+                    {/* Dedicated Row Below: Dynamic Sub-Category Filter Pills */}
+                    {SUB_CATEGORIES[activeFilter] && (
+                        <div style={{ 
+                            display: 'flex', 
+                            gap: '10px', 
+                            overflowX: 'auto', 
+                            padding: '12px 0', 
+                            marginBottom: '30px', 
+                            borderTop: '1px solid #f3f4f6', 
+                            borderBottom: '1px solid #f3f4f6' 
+                        }}>
+                            <button
+                                onClick={() => setActiveSubCategory('all')}
+                                style={{
+                                    padding: '6px 16px',
+                                    borderRadius: '20px',
+                                    fontSize: '11px',
+                                    fontWeight: activeSubCategory === 'all' ? 700 : 500,
+                                    border: activeSubCategory === 'all' ? '1.5px solid #000' : '1px solid #e5e7eb',
+                                    backgroundColor: activeSubCategory === 'all' ? '#000' : '#ffffff',
+                                    color: activeSubCategory === 'all' ? '#fff' : '#4b5563',
+                                    cursor: 'pointer',
+                                    whiteSpace: 'nowrap',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                ALL {activeFilter.toUpperCase()}
+                            </button>
+                            {SUB_CATEGORIES[activeFilter].map(sub => (
+                                <button
+                                    key={sub}
+                                    onClick={() => setActiveSubCategory(sub)}
+                                    style={{
+                                        padding: '6px 16px',
+                                        borderRadius: '20px',
+                                        fontSize: '11px',
+                                        fontWeight: activeSubCategory === sub ? 700 : 500,
+                                        border: activeSubCategory === sub ? '1.5px solid #000' : '1px solid #e5e7eb',
+                                        backgroundColor: activeSubCategory === sub ? '#000' : '#ffffff',
+                                        color: activeSubCategory === sub ? '#fff' : '#4b5563',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                >
+                                    {sub}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Products Grid */}
                     <div className="shop-grid">
