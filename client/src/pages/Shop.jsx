@@ -135,8 +135,11 @@ const Shop = () => {
     const fetchProducts = async () => {
         try {
             const res = await axios.get(`${API_URL}/products`);
-            const data = Array.isArray(res.data) ? res.data : [];
-            // Save to cache (even if empty [])
+            const rawData = Array.isArray(res.data) ? res.data : [];
+            const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
+            const data = rawData.filter(p => !deletedIds.includes(String(p._id)));
+
+            // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
             setProducts(data);
             applyFilterAndSearch(
