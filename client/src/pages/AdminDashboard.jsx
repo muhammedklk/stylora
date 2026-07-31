@@ -423,7 +423,7 @@ const AdminDashboard = () => {
                                                             alt={product.title}
                                                             className="admin-product-img"
                                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                            onError={(e) => { e.target.onerror = null; e.target.src = '/assets/find-section-img-1.png'; }}
+                                                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80'; }}
                                                         />
                                                     </div>
                                                 </td>

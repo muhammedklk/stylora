@@ -64,9 +64,73 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+import { useLocation } from 'react-router-dom';
 
+function AppContent() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <div className="app-container">
+      {!isAdminRoute && <Header toggleSidebar={() => setSidebarOpen(true)} />}
+    
+      {!isAdminRoute && (
+        <SidebarDrawer 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+        />
+      )}
+      
+      <main style={{ minHeight: '80vh' }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/accessories" element={<Accessories />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/policies/:policyType" element={<PolicyPage />} />
+          
+          {/* Protected Account View Dashboard */}
+          <Route path="/account" element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute>
+          } />
+          
+          {/* Auth Credentials Pages */}
+          <Route path="/login" element={<LoginRegister />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* Admin Workspace Suite */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } />
+          <Route path="/admin/products/add" element={
+            <AdminRoute>
+              <AdminAddProduct />
+            </AdminRoute>
+          } />
+          <Route path="/admin/products/edit/:id" element={
+            <AdminRoute>
+              <AdminEditProduct />
+            </AdminRoute>
+          } />
+        </Routes>
+      </main>
+
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <MobileBottomNav />}
+    </div>
+  );
+}
+
+function App() {
   return (
     <ErrorBoundary>
       <Router>
@@ -75,64 +139,12 @@ function App() {
             <SettingsProvider>
               <CartProvider>
                 <WishlistProvider>
-                  <div className="app-container">
-                  <Header toggleSidebar={() => setSidebarOpen(true)} />
-                
-                <SidebarDrawer 
-                  isOpen={sidebarOpen} 
-                  onClose={() => setSidebarOpen(false)} 
-                />
-                
-                <main style={{ minHeight: '80vh' }}>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/accessories" element={<Accessories />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/policies/:policyType" element={<PolicyPage />} />
-                    
-                    {/* Protected Account View Dashboard */}
-                    <Route path="/account" element={
-                      <ProtectedRoute>
-                        <Account />
-                      </ProtectedRoute>
-                    } />
-                    
-                    {/* Auth Credentials Pages */}
-                    <Route path="/login" element={<LoginRegister />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-
-                    {/* Admin Workspace Suite */}
-                    <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/admin/dashboard" element={
-                      <AdminRoute>
-                        <AdminDashboard />
-                      </AdminRoute>
-                    } />
-                    <Route path="/admin/products/add" element={
-                      <AdminRoute>
-                        <AdminAddProduct />
-                      </AdminRoute>
-                    } />
-                    <Route path="/admin/products/edit/:id" element={
-                      <AdminRoute>
-                        <AdminEditProduct />
-                      </AdminRoute>
-                    } />
-                  </Routes>
-                </main>
-
-                <Footer />
-                <MobileBottomNav />
-              </div>
-            </WishlistProvider>
-          </CartProvider>
-        </SettingsProvider>
-      </AuthProvider>
-      </ToastProvider>
+                  <AppContent />
+                </WishlistProvider>
+              </CartProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </ToastProvider>
       </Router>
     </ErrorBoundary>
   );
