@@ -965,6 +965,7 @@ const AdminDashboard = () => {
                                         </span>
                                     </div>
                                 </div>
+                            </div>
                             {/* Visual Home Showcase Layout Grid Control */}
                             <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1.5px solid #d4af37', padding: '24px', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.08)' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
