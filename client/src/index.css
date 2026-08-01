@@ -2895,17 +2895,17 @@ ul {
 }
 
 .product-view-grid {
-    align-items: flex-start;
-    position: relative;
+    align-items: stretch;
 }
 
 .product-image-display {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 85px;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 90px;
     align-self: flex-start;
+    height: fit-content;
     margin-top: 0;
     padding-top: 0;
 }
