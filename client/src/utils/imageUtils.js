@@ -15,7 +15,7 @@ export const enhanceImageClarity = (file, maxWidth = 3840, maxHeight = 3840, qua
 
         const reader = new FileReader();
         reader.onload = (e) => {
-            // Preserve full original camera resolution
+            // Preserve full original camera resolution & original background
             processImageSrc(e.target.result, maxWidth, maxHeight, quality, resolve);
         };
         reader.onerror = () => resolve('');
@@ -50,25 +50,14 @@ function processImageSrc(src, maxWidth, maxHeight, quality, resolve) {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
 
-            // Pass 1: Render raw image
+            // Pass 1: Draw original image with its EXACT original background colors intact!
             ctx.drawImage(img, 0, 0, width, height);
 
-            // Pass 2: High Definition Auto Contrast Stretch & Adaptive Sharpening
+            // Pass 2: High Definition Adaptive Sharpening WITHOUT altering original background color tint
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             const w = imageData.width;
             const h = imageData.height;
-
-            // Find min/max brightness for Auto Contrast Stretch
-            let minLum = 255;
-            let maxLum = 0;
-            for (let i = 0; i < data.length; i += 16) {
-                const lum = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-                if (lum < minLum) minLum = lum;
-                if (lum > maxLum) maxLum = lum;
-            }
-
-            const range = Math.max(1, maxLum - minLum);
 
             // Copy for 3x3 Sharpen Kernel
             const buff = new Uint8ClampedArray(data);
@@ -76,20 +65,18 @@ function processImageSrc(src, maxWidth, maxHeight, quality, resolve) {
             for (let y = 1; y < h - 1; y++) {
                 for (let x = 1; x < w - 1; x++) {
                     const idx = (y * w + x) * 4;
+                    const alpha = buff[idx + 3];
+                    if (alpha < 10) continue; // preserve transparency
+
                     for (let c = 0; c < 3; c++) {
                         const center = buff[idx + c];
-                        
-                        // Auto contrast stretch
-                        let stretched = ((center - minLum) * 255) / range;
-                        stretched = Math.min(255, Math.max(0, stretched));
-
-                        // 3x3 High frequency sharpen filter
                         const top = buff[((y - 1) * w + x) * 4 + c];
                         const bottom = buff[((y + 1) * w + x) * 4 + c];
                         const left = buff[(y * w + (x - 1)) * 4 + c];
                         const right = buff[(y * w + (x + 1)) * 4 + c];
 
-                        let sharp = stretched * 2.2 - (top + bottom + left + right) * 0.3;
+                        // Subtle edge sharpening preserving exact background colors
+                        let sharp = center * 1.6 - (top + bottom + left + right) * 0.15;
                         data[idx + c] = Math.min(255, Math.max(0, sharp));
                     }
                 }
@@ -97,8 +84,9 @@ function processImageSrc(src, maxWidth, maxHeight, quality, resolve) {
 
             ctx.putImageData(imageData, 0, 0);
 
-            // Export at 98% Ultra High Clarity Quality
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            // Preserve PNG format if original is PNG to keep original background transparency/tint!
+            const format = (typeof src === 'string' && src.startsWith('data:image/png')) ? 'image/png' : 'image/jpeg';
+            const dataUrl = canvas.toDataURL(format, quality);
             resolve(dataUrl);
         } catch (canvasErr) {
             resolve(src);
