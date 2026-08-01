@@ -68,18 +68,14 @@ const About = () => {
     return (
         <div className="about-page-wrapper light-theme" style={{ backgroundColor: '#faf9f6', color: '#111' }}>
             {/* 1. HERO BANNER */}
-            <section className="about-hero" style={{ backgroundImage: getHeroBg(settings?.aboutHeroImage) }}>
-                <div className="about-hero-overlay"></div>
-                <div className="about-hero-content">
-                    <span className="about-hero-tag">[ EST. 2026 • THE STYLORA NARRATIVE ]</span>
-                    <h1 className="about-hero-title">Crafted for Motion.<br />Born to Endure.</h1>
-                    <p className="about-hero-subtitle">
+            <section className="cpage-hero" style={{ backgroundImage: getHeroBg(settings?.aboutHeroImage) }}>
+                <div className="cpage-hero-overlay"></div>
+                <div className="cpage-hero-inner">
+                    <span className="cpage-hero-eyebrow">THE STYLORA NARRATIVE</span>
+                    <h1 className="cpage-hero-title">Crafted for Motion.<br />Born to Endure.</h1>
+                    <p className="cpage-hero-sub">
                         Redefining modern menswear through understated luxury, ethical craftsmanship, and relentless attention to architectural detail.
                     </p>
-                </div>
-                <div className="scroll-indicator">
-                    <span className="scroll-text">DISCOVER OUR STORY</span>
-                    <div className="scroll-line"></div>
                 </div>
             </section>
 
