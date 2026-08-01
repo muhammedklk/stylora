@@ -12,7 +12,7 @@ const useQuery = () => {
 
 const isAccessoryProduct = (p) => {
     if (!p) return false;
-    const accessoryCats = ['watches', 'shoes', 'footwear', 'sneakers', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
+    const accessoryCats = ['watches', 'shoes', 'footwear', 'sneakers', 'sandals', 'slides', 'flipflops', 'flip-flops', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
     const catLower = p.category ? p.category.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
     if (accessoryCats.some(ac => ac.replace(/[^a-z0-9]/g, '') === catLower)) return true;
     if (p.tags && p.tags.some(t => t.toLowerCase() === 'accessories')) return true;
@@ -118,6 +118,7 @@ const Accessories = () => {
                             { name: 'All', cat: 'all' },
                             { name: 'Watches', cat: 'watches' },
                             { name: 'Shoes & Footwear', cat: 'shoes' },
+                            { name: 'Sandals & Slides', cat: 'sandals' },
                             { name: 'Bags', cat: 'bags' },
                             { name: 'Sunglasses', cat: 'sunglasses' },
                             { name: 'Belts & Wallets', cat: 'belts-wallets' },

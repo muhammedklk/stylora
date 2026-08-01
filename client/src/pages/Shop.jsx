@@ -37,7 +37,7 @@ const isMockProduct = (p) => {
 
 const isClothingProduct = (p) => {
     if (!p) return false;
-    const nonApparelCats = ['watches', 'shoes', 'footwear', 'sneakers', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
+    const nonApparelCats = ['watches', 'shoes', 'footwear', 'sneakers', 'sandals', 'slides', 'flipflops', 'flip-flops', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
     const catLower = p.category ? p.category.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
     if (nonApparelCats.some(nac => nac.replace(/[^a-z0-9]/g, '') === catLower)) return false;
     if (p.tags && p.tags.some(t => t.toLowerCase() === 'accessories')) return false;

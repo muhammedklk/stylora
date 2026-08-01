@@ -2,7 +2,7 @@ export const SUB_CATEGORIES = {
     't-shirts': ['Oversized', 'Polo', 'Printed', 'Striped', 'Plain Solid', 'V-Neck', 'Full Sleeve', 'Graphic'],
     shirts: ['Checked', 'Plain', 'Formal', 'Printed'],
     pants: ['Formal', 'Baggy Jeans', 'Straight Fit Jeans', 'Cotton Pants', 'Bootcut', 'Track Pants'],
-    shoes: ['Sneakers', 'Formal Shoes', 'Loafers', 'Boots', 'Sports & Running'],
+    shoes: ['Sneakers', 'Formal Shoes', 'Loafers', 'Boots', 'Sports & Running', 'Sandals & Slides'],
     accessories: ['Bags & Backpacks', 'Sunglasses', 'Belts & Wallets', 'Hats & Caps', 'Jewelry', 'Socks'],
     watches: ['Analog Watches', 'Digital Watches', 'Smartwatches', 'Luxury Watches', 'Chronograph'],
     outerwear: ['Coats', 'Jackets', 'Hoodies', 'Sweaters'],
@@ -15,6 +15,7 @@ export const CATEGORIES_LIST = [
     { value: 'shirts', label: 'Shirts' },
     { value: 'pants', label: 'Pants & Trousers' },
     { value: 'shoes', label: 'Shoes & Footwear' },
+    { value: 'sandals', label: 'Sandals & Slides' },
     { value: 'accessories', label: 'Accessories' },
     { value: 'watches', label: 'Watches' },
     { value: 'outerwear', label: 'Outerwear (Coats, Jackets, Hoodies)' },
@@ -30,6 +31,7 @@ export const CATEGORY_SIZE_PRESETS = {
     'clothing': ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     'pants': ['26', '28', '30', '32', '34', '36', '38', '40', '42', '44', '46'],
     'shoes': ['UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10', 'UK 11', 'UK 12'],
+    'sandals': ['UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10', 'UK 11', 'UK 12'],
     'watches': ['One Size', 'Free Size', 'Adjustable'],
     'accessories': ['One Size', 'Free Size', 'Small', 'Medium', 'Large']
 };

@@ -65,6 +65,7 @@ const Header = ({ toggleSidebar }) => {
                         <ul className="dropdown" style={{ minWidth: '180px' }}>
                             <li><Link to="/accessories?category=watches">Watches</Link></li>
                             <li><Link to="/accessories?category=shoes">Shoes & Footwear</Link></li>
+                            <li><Link to="/accessories?category=sandals">Sandals & Slides</Link></li>
                             <li><Link to="/accessories?category=bags">Bags & Backpacks</Link></li>
                             <li><Link to="/accessories?category=sunglasses">Sunglasses</Link></li>
                             <li><Link to="/accessories?category=belts-wallets">Belts & Wallets</Link></li>

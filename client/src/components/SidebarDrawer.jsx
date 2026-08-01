@@ -86,6 +86,7 @@ const SidebarDrawer = ({ isOpen, onClose }) => {
                             >
                                 <li><Link to="/accessories?category=watches" onClick={onClose}>Watches</Link></li>
                                 <li><Link to="/accessories?category=shoes" onClick={onClose}>Shoes & Footwear</Link></li>
+                                <li><Link to="/accessories?category=sandals" onClick={onClose}>Sandals & Slides</Link></li>
                                 <li><Link to="/accessories?category=bags" onClick={onClose}>Bags</Link></li>
                                 <li><Link to="/accessories?category=sunglasses" onClick={onClose}>Sunglasses</Link></li>
                                 <li><Link to="/accessories?category=belts-wallets" onClick={onClose}>Belts & Wallets</Link></li>
