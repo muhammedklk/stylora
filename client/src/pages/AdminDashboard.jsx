@@ -323,6 +323,16 @@ const AdminDashboard = () => {
         reader.readAsDataURL(file);
     };
 
+    const handleShopHeroFileUpload = (file) => {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setShopHeroImg(reader.result);
+            showToast('Shop Hero image file updated! Click Save to apply.', 'info');
+        };
+        reader.readAsDataURL(file);
+    };
+
     const categoryCounts = {
         ALL: adminProducts.length,
         CLOTHING: adminProducts.filter(p => ['clothing', 'shirts', 'pants', 'shorts', 'outerwear', 'activewear'].includes(p.category?.toLowerCase())).length,
@@ -1387,91 +1397,200 @@ const AdminDashboard = () => {
                 )}
 
                 {activeTab === 'settings' && (
-                    <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', maxWidth: '600px' }}>
-                        <h3 style={{ margin: '0 0 20px 0', fontSize: '16px', fontWeight: 700 }}>Store Content Settings</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         
-                        <div style={{ marginBottom: '24px' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={showNotAvailableBadge}
-                                    onChange={e => setShowNotAvailableBadge(e.target.checked)}
-                                    style={{ width: '18px', height: '18px', accentColor: '#000' }}
-                                />
-                                <div>
-                                    <span style={{ fontSize: '14px', fontWeight: 600, display: 'block' }}>Show "Not Available" (N/A) Badge</span>
-                                    <span style={{ fontSize: '12px', color: '#6b7280' }}>Displays a red N/A badge on empty category tabs in Shop page when products count is 0.</span>
-                                </div>
-                            </label>
+                        {/* Top Header Banner */}
+                        <div style={{ 
+                            backgroundColor: '#ffffff', 
+                            borderRadius: '12px', 
+                            border: '1px solid #e5e7eb', 
+                            padding: '24px 28px', 
+                            display: 'flex', 
+                            justify: 'space-between', 
+                            alignItems: 'center',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                        }}>
+                            <div>
+                                <span style={{ fontSize: '11px', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '0.1em' }}>[ Store Control Center ]</span>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '4px 0 0 0', color: '#111827' }}>
+                                    ⚙️ Store Content & Banner Settings
+                                </h2>
+                                <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                    Manage store preferences, shop hero background imagery, and category cover photos with instant live previews.
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleSaveSettings}
+                                style={{ 
+                                    backgroundColor: '#000000', 
+                                    color: '#ffffff', 
+                                    border: 'none', 
+                                    padding: '12px 24px', 
+                                    borderRadius: '6px', 
+                                    fontSize: '13px', 
+                                    fontWeight: 800, 
+                                    cursor: 'pointer', 
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                }}
+                            >
+                                <span>💾</span> Save All Settings
+                            </button>
                         </div>
 
-                        <div style={{ marginBottom: '24px' }}>
-                            <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>Shop Hero Image URL</label>
-                            <input
-                                type="text"
-                                value={shopHeroImg}
-                                onChange={e => setShopHeroImg(e.target.value)}
-                                placeholder="/assets/shop-hero.jpg"
-                                style={{ width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '13px' }}
-                            />
-                        </div>
+                        {/* Global Options Card */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                            <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#111827', margin: '0 0 16px 0', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+                                🎛️ Global Store Preferences
+                            </h3>
 
-                        <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '24px 0' }} />
-
-                        <h4 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 700, color: '#111' }}>
-                            Find Your Style - Category Card Images
-                        </h4>
-                        <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
-                            Set custom image URLs or paths for the Category Cards displayed on the Home Page "Find Your Style" section.
-                        </p>
-
-                        {[
-                            { key: 'shirts', label: 'Shirts Category Image', placeholder: '/assets/find-section-img-3.png' },
-                            { key: 'pants', label: 'Pants & Trousers Category Image', placeholder: '/assets/find-section-img-2.png' },
-                            { key: 'outerwear', label: 'Coats & Jackets (Outerwear) Image', placeholder: '/assets/find-section-img-1.png' },
-                            { key: 'shoes', label: 'Shoes & Sneakers Category Image', placeholder: '/assets/find-section-img-4.png' },
-                            { key: 'activewear', label: 'Activewear Category Image', placeholder: '/assets/find-section-img-1.png' },
-                            { key: 'watches', label: 'Watches Category Image', placeholder: '/assets/find-section-img-3.png' }
-                        ].map(cat => (
-                            <div key={cat.key} style={{ marginBottom: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '4px', color: '#374151' }}>
-                                        {cat.label}
-                                    </label>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+                                {/* Checkbox Card */}
+                                <div style={{ backgroundColor: '#fafafa', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
                                     <input
-                                        type="text"
-                                        value={categoryImages[cat.key] || ''}
-                                        onChange={e => handleCategoryImgChange(cat.key, e.target.value)}
-                                        placeholder={cat.placeholder}
-                                        style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
+                                        type="checkbox"
+                                        id="showNotAvailable"
+                                        checked={showNotAvailableBadge}
+                                        onChange={e => setShowNotAvailableBadge(e.target.checked)}
+                                        style={{ width: '20px', height: '20px', accentColor: '#000000', marginTop: '2px', cursor: 'pointer' }}
                                     />
+                                    <label htmlFor="showNotAvailable" style={{ cursor: 'pointer', flex: 1 }}>
+                                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', display: 'block', marginBottom: '2px' }}>
+                                            Show "Not Available" (N/A) Badge
+                                        </span>
+                                        <span style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5, display: 'block' }}>
+                                            Displays a red N/A badge on empty category tabs in the Shop page when products count is 0.
+                                        </span>
+                                    </label>
                                 </div>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '4px',
-                                    overflow: 'hidden',
-                                    border: '1px solid #e5e7eb',
-                                    backgroundColor: '#f3f4f6',
-                                    flexShrink: 0,
-                                    marginTop: '16px'
-                                }}>
-                                    <img
-                                        src={resolveImageUrl(categoryImages[cat.key] || cat.placeholder)}
-                                        alt={cat.label}
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
-                                    />
+
+                                {/* Shop Hero Background Card */}
+                                <div style={{ backgroundColor: '#fafafa', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <label style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>
+                                        🖼️ Shop Page Hero Background Image
+                                    </label>
+                                    <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+                                        <div style={{ width: '120px', height: '70px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #cbd5e1', backgroundColor: '#e2e8f0', flexShrink: 0 }}>
+                                            <img 
+                                                src={resolveImageUrl(shopHeroImg || '/assets/herobg.png')} 
+                                                alt="Shop Hero" 
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                onError={(e) => { e.target.onerror = null; e.target.src = '/assets/herobg.png'; }}
+                                            />
+                                        </div>
+                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => handleShopHeroFileUpload(e.target.files[0])}
+                                                style={{ fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '4px 8px', backgroundColor: '#fff' }}
+                                            />
+                                            <input
+                                                type="text"
+                                                value={shopHeroImg}
+                                                onChange={e => setShopHeroImg(e.target.value)}
+                                                placeholder="Or enter image URL e.g. /assets/herobg.png"
+                                                style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '11px', outline: 'none' }}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        ))}
+                        </div>
 
-                        <button
-                            onClick={handleSaveSettings}
-                            style={{ marginTop: '16px', padding: '12px 24px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', width: '100%' }}
-                        >
-                            Save All Settings & Category Images
-                        </button>
+                        {/* Find Your Style - Category Cards Grid */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+                                <div>
+                                    <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span>🖼️</span> Find Your Style - Category Cards (8 Categories)
+                                    </h3>
+                                    <p style={{ fontSize: '12px', color: '#6b7280', margin: '4px 0 0 0' }}>
+                                        Upload custom high-resolution cover photos or select custom image files for each Category Card on the Home Page.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+                                {[
+                                    { key: 'shirts', name: 'Shirts', tag: 'ESSENTIAL MENSWEAR', placeholder: '/assets/find-section-img-3.png' },
+                                    { key: 'pants', name: 'Pants & Trousers', tag: 'TAILORED BOTTOMS', placeholder: '/assets/find-section-img-2.png' },
+                                    { key: 'outerwear', name: 'Coats & Jackets', tag: 'OUTERWEAR', placeholder: '/assets/find-section-img-1.png' },
+                                    { key: 'shoes', name: 'Shoes & Sneakers', tag: 'FOOTWEAR', placeholder: '/assets/find-section-img-4.png' },
+                                    { key: 'activewear', name: 'Activewear', tag: 'GYM & SPORTS', placeholder: '/assets/find-section-img-1.png' },
+                                    { key: 'watches', name: 'Watches & Accessories', tag: 'TIMEPIECES', placeholder: '/assets/find-section-img-3.png' },
+                                    { key: 't-shirts', name: 'T-Shirts & Tops', tag: 'CASUAL ESSENTIALS', placeholder: '/assets/find-section-img-4.png' },
+                                    { key: 'accessories', name: 'Bags & Accessories', tag: 'EVERYDAY LUXURY', placeholder: '/assets/find-section-img-2.png' }
+                                ].map(cat => {
+                                    const currentImg = categoryImages[cat.key] || cat.placeholder;
+                                    const isCustom = categoryImages[cat.key] && categoryImages[cat.key] !== cat.placeholder;
+
+                                    return (
+                                        <div key={cat.key} style={{ backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column' }}>
+                                            {/* Live Thumbnail Box */}
+                                            <div style={{ height: '160px', width: '100%', position: 'relative', backgroundColor: '#f1f5f9' }}>
+                                                <img 
+                                                    src={resolveImageUrl(currentImg)} 
+                                                    alt={cat.name} 
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = cat.placeholder; }}
+                                                />
+                                                {isCustom && (
+                                                    <span style={{ position: 'absolute', top: '10px', right: '10px', backgroundColor: '#10b981', color: '#fff', fontSize: '9px', fontWeight: 800, padding: '3px 8px', borderRadius: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }}>
+                                                        ✓ CUSTOM FILE
+                                                    </span>
+                                                )}
+                                                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)', padding: '12px 14px', color: '#fff' }}>
+                                                    <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>{cat.tag}</span>
+                                                    <h4 style={{ fontSize: '14px', fontWeight 800, margin: '2px 0 0 0', color: '#fff' }}>{cat.name}</h4>
+                                                </div>
+                                            </div>
+
+                                            {/* Actions & File Upload Box */}
+                                            <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, justifyContent: 'space-between', backgroundColor: '#fafafa' }}>
+                                                <div>
+                                                    <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', marginBottom: '6px', display: 'block' }}>
+                                                        Upload Image File
+                                                    </label>
+                                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*"
+                                                            onChange={e => handleCategoryFileUpload(cat.key, e.target.files[0])}
+                                                            style={{ fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px', padding: '4px 6px', backgroundColor: '#fff', flex: 1 }}
+                                                        />
+                                                        {isCustom && (
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => handleCategoryImgChange(cat.key, '')}
+                                                                style={{ backgroundColor: '#fee2e2', color: '#dc2626', border: 'none', padding: '0 10px', fontSize: '10px', fontWeight: 700, borderRadius: '4px', cursor: 'pointer' }}
+                                                            >
+                                                                Reset
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Bottom Save Action */}
+                        <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '20px 28px', display: 'flex', justifyContent: 'flex-end', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                            <button
+                                type="button"
+                                onClick={handleSaveSettings}
+                                style={{ backgroundColor: '#000000', color: '#ffffff', border: 'none', padding: '14px 36px', borderRadius: '8px', fontSize: '14px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 14px rgba(0,0,0,0.2)' }}
+                            >
+                                💾 Save All Content Settings
+                            </button>
+                        </div>
+
                     </div>
                 )}
 
