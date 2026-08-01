@@ -941,11 +941,11 @@ const AdminDashboard = () => {
                                     <thead>
                                         <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
                                             <th style={{ padding: '12px 16px', fontWeight: 700 }}>Image</th>
-                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Product Title</th>
-                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Category</th>
-                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Price</th>
-                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Status</th>
-                                            <th style={{ padding: '12px 16px', fontWeight 700, textAlign: 'right' }}>Actions</th>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700 }}>Product Title</th>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700 }}>Category</th>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700 }}>Price</th>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700 }}>Status</th>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
