@@ -237,10 +237,13 @@ const ProductDetails = () => {
 
                         {/* Right Side: Info & Config */}
                         <div className="col-md-6 product-info-display">
-                            <span style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#d4af37', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>
-                                {product.brand || 'STYLORA'}
-                            </span>
-                            <span className="product-info-cat">{product.category.toUpperCase()}</span>
+                            <div className="d-flex align-items-center gap-2 mb-2">
+                                <span style={{ fontSize: '11px', letterSpacing: '0.12em', color: '#c59b27', fontWeight: 700, textTransform: 'uppercase' }}>
+                                    {product.brand || 'STYLORA'}
+                                </span>
+                                <span style={{ fontSize: '11px', color: '#aaaaaa' }}>•</span>
+                                <span className="product-info-cat" style={{ marginBottom: 0 }}>{product.category.toUpperCase()}</span>
+                            </div>
                             <h1 className="product-info-title">{product.title}</h1>
                             
                             <div className="d-flex align-items-center gap-3 mb-3">
