@@ -31,9 +31,17 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-img, .product-main-img-frame img, .product-image, .style-card-image {
+img, 
+.product-main-img-frame img, 
+.product-image img, 
+.product-item img, 
+.style-card-image,
+.minimal-card-img {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+    filter: contrast(1.04) saturate(1.06) brightness(1.01);
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 a {

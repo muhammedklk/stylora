@@ -1,9 +1,9 @@
-// High Quality Canvas Image Enhancer & Sharpening Filter
-export const enhanceImageClarity = (file, maxWidth = 1600, maxHeight = 1600, quality = 0.95) => {
+// High Quality Original Camera Quality Image Enhancer & Auto-Clarity Engine
+export const enhanceImageClarity = (file, maxWidth = 3840, maxHeight = 3840, quality = 0.98) => {
     return new Promise((resolve, reject) => {
         if (!file) return resolve('');
         
-        // If file is already a base64 string or URL, process directly
+        // If file is already a URL or base64 string
         if (typeof file === 'string') {
             if (file.startsWith('data:image')) {
                 processImageSrc(file, maxWidth, maxHeight, quality, resolve);
@@ -15,9 +15,10 @@ export const enhanceImageClarity = (file, maxWidth = 1600, maxHeight = 1600, qua
 
         const reader = new FileReader();
         reader.onload = (e) => {
+            // Preserve full original camera resolution
             processImageSrc(e.target.result, maxWidth, maxHeight, quality, resolve);
         };
-        reader.onerror = reject;
+        reader.onerror = () => resolve('');
         reader.readAsDataURL(file);
     });
 };
@@ -31,14 +32,7 @@ function processImageSrc(src, maxWidth, maxHeight, quality, resolve) {
             let width = img.width;
             let height = img.height;
 
-            // Target high resolution rendering (minimum 1200px if original is smaller)
-            const minSize = 1200;
-            if (width < minSize && height < minSize) {
-                const scale = minSize / Math.min(width, height);
-                width = Math.round(width * scale);
-                height = Math.round(height * scale);
-            }
-
+            // Preserve full camera resolution (up to 3840px 4K UHD)
             if (width > maxWidth || height > maxHeight) {
                 if (width > height) {
                     height = Math.round((height * maxWidth) / width);
@@ -56,38 +50,54 @@ function processImageSrc(src, maxWidth, maxHeight, quality, resolve) {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
 
-            // Draw upscaled image
+            // Pass 1: Render raw image
             ctx.drawImage(img, 0, 0, width, height);
 
-            // Apply Convolution Sharpen Matrix for ultra high clarity
+            // Pass 2: High Definition Auto Contrast Stretch & Adaptive Sharpening
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             const w = imageData.width;
             const h = imageData.height;
+
+            // Find min/max brightness for Auto Contrast Stretch
+            let minLum = 255;
+            let maxLum = 0;
+            for (let i = 0; i < data.length; i += 16) {
+                const lum = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                if (lum < minLum) minLum = lum;
+                if (lum > maxLum) maxLum = lum;
+            }
+
+            const range = Math.max(1, maxLum - minLum);
+
+            // Copy for 3x3 Sharpen Kernel
             const buff = new Uint8ClampedArray(data);
 
-            // Sharpen Kernel:
-            // [ 0, -0.2, 0 ]
-            // [ -0.2, 1.8, -0.2 ]
-            // [ 0, -0.2, 0 ]
             for (let y = 1; y < h - 1; y++) {
                 for (let x = 1; x < w - 1; x++) {
                     const idx = (y * w + x) * 4;
                     for (let c = 0; c < 3; c++) {
+                        const center = buff[idx + c];
+                        
+                        // Auto contrast stretch
+                        let stretched = ((center - minLum) * 255) / range;
+                        stretched = Math.min(255, Math.max(0, stretched));
+
+                        // 3x3 High frequency sharpen filter
                         const top = buff[((y - 1) * w + x) * 4 + c];
                         const bottom = buff[((y + 1) * w + x) * 4 + c];
                         const left = buff[(y * w + (x - 1)) * 4 + c];
                         const right = buff[(y * w + (x + 1)) * 4 + c];
-                        const center = buff[idx + c];
 
-                        let val = center * 1.8 - (top + bottom + left + right) * 0.2;
-                        data[idx + c] = Math.min(255, Math.max(0, val));
+                        let sharp = stretched * 2.2 - (top + bottom + left + right) * 0.3;
+                        data[idx + c] = Math.min(255, Math.max(0, sharp));
                     }
                 }
             }
 
             ctx.putImageData(imageData, 0, 0);
 
+            // Export at 98% Ultra High Clarity Quality
             const dataUrl = canvas.toDataURL('image/jpeg', quality);
             resolve(dataUrl);
         } catch (canvasErr) {
