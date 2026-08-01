@@ -2864,7 +2864,7 @@ ul {
 }
 
 .breadcrumbs-container {
-    padding: 20px 60px;
+    padding: 8px 60px 0 60px;
     font-size: 13px;
     font-family: var(--font-primary);
     color: #888888;
@@ -2891,18 +2891,21 @@ ul {
 }
 
 .product-view-section {
-    padding: 15px 0 60px 0;
+    padding: 8px 0 60px 0;
 }
 
 .product-view-grid {
     align-items: flex-start;
+    position: relative;
 }
 
 .product-image-display {
     display: flex;
     flex-direction: column;
     position: sticky;
-    top: 100px;
+    position: -webkit-sticky;
+    top: 85px;
+    align-self: flex-start;
     margin-top: 0;
     padding-top: 0;
 }

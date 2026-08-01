@@ -147,7 +147,7 @@ const ProductDetails = () => {
     }
 
     return (
-        <main className="product-detail-main" style={{ paddingTop: '105px' }}>
+        <main className="product-detail-main" style={{ paddingTop: '85px' }}>
             {/* Breadcrumbs */}
             <div className="container breadcrumbs-container">
                 <span className="breadcrumb-item"><Link to="/">Home</Link></span>
