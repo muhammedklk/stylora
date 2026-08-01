@@ -22,6 +22,7 @@ const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState('M');
     const [selectedColor, setSelectedColor] = useState('Black');
     const [mediaType, setMediaType] = useState('image'); // 'image' or 'video'
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     
     // Review form inputs
     const [ratingInput, setRatingInput] = useState(5);
@@ -53,6 +54,7 @@ const ProductDetails = () => {
                 setSelectedColor(prod.colors[0].name);
             }
             setMediaType('image'); // reset media tab on product change
+            setSelectedImageIndex(0);
 
             // Fetch related and bestsellers
             const allRes = await axios.get(`${API_URL}/products`);
@@ -200,7 +202,7 @@ const ProductDetails = () => {
                             <div className="product-main-img-frame" style={{ position: 'relative', overflow: 'hidden' }}>
                                 {mediaType === 'image' ? (
                                     <img 
-                                        src={resolveImageUrl(product.image)} 
+                                        src={resolveImageUrl((product.gallery && product.gallery[selectedImageIndex - 1] && selectedImageIndex > 0) ? product.gallery[selectedImageIndex - 1] : product.image)} 
                                         alt={product.title} 
                                         id="product-main-img" 
                                     />
@@ -227,6 +229,42 @@ const ProductDetails = () => {
                                     )
                                 )}
                             </div>
+
+                            {/* Gallery Thumbnail Bar for Secondary Images */}
+                            {product && (product.image || (product.gallery && product.gallery.length > 0)) && (
+                                (() => {
+                                    const allImgs = [product.image, ...(product.gallery || [])].filter(Boolean);
+                                    if (allImgs.length <= 1) return null;
+                                    return (
+                                        <div style={{ display: 'flex', gap: '10px', marginTop: '14px', overflowX: 'auto', paddingBottom: '6px' }}>
+                                            {allImgs.map((img, idx) => (
+                                                <div 
+                                                    key={idx} 
+                                                    onClick={() => { setSelectedImageIndex(idx); setMediaType('image'); }}
+                                                    style={{ 
+                                                        width: '68px', 
+                                                        height: '68px', 
+                                                        borderRadius: '6px', 
+                                                        overflow: 'hidden', 
+                                                        cursor: 'pointer',
+                                                        border: selectedImageIndex === idx && mediaType === 'image' ? '2px solid #000000' : '1px solid #e2e8f0',
+                                                        opacity: selectedImageIndex === idx && mediaType === 'image' ? 1 : 0.65,
+                                                        transition: 'all 0.2s ease',
+                                                        flexShrink: 0,
+                                                        boxShadow: selectedImageIndex === idx && mediaType === 'image' ? '0 2px 8px rgba(0,0,0,0.15)' : 'none'
+                                                    }}
+                                                >
+                                                    <img 
+                                                        src={resolveImageUrl(img)} 
+                                                        alt={`Thumb ${idx + 1}`} 
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    );
+                                })()
+                            )}
                             {product.videoUrl && (
                                 <div className="d-flex gap-2 justify-content-center mt-3">
                                     <button 

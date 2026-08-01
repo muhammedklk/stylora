@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL, resolveImageUrl } from '../config';
-import { fileToDataUrl } from '../utils/imageUtils';
+import { fileToDataUrl, enhanceImageClarity } from '../utils/imageUtils';
 import { useToast } from '../context/ToastContext';
 
 const getColorNameFromHex = (hex) => {
@@ -158,6 +158,27 @@ const AdminAddProduct = () => {
     const [imageType, setImageType] = useState('url'); // 'url' or 'file'
     const [imageUrl, setImageUrl] = useState('');
     const [imageFile, setImageFile] = useState(null);
+    
+    // Multiple Gallery Images for Details Page
+    const [galleryImages, setGalleryImages] = useState([]);
+
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        for (const file of files) {
+            try {
+                const enhancedUrl = await enhanceImageClarity(file);
+                setGalleryImages(prev => [...prev, enhancedUrl]);
+            } catch (err) {
+                console.error('Gallery file upload error:', err);
+            }
+        }
+        showToast(`${files.length} gallery image(s) added & enhanced! ✨`, 'success');
+    };
+
+    const handleRemoveGalleryImage = (index) => {
+        setGalleryImages(prev => prev.filter((_, i) => i !== index));
+    };
     
     // Dynamic sizes and colors
     const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL']);
@@ -327,6 +348,7 @@ const AdminAddProduct = () => {
             inventoryCount: calculatedStock,
             inStock: !isNotAvailable && calculatedStock > 0,
             image: resolvedImageDataUrl,
+            gallery: galleryImages,
             tags: tagList,
             sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
             colors: colors.length > 0 ? colors : [{ name: 'Black', hex: '#1a1a1a' }]
@@ -891,6 +913,43 @@ const AdminAddProduct = () => {
                                             <polyline points="21 15 16 10 5 21"/>
                                         </svg>
                                         <span style={{ fontSize: '11px', fontWeight: 600 }}>No Image Selected</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Additional Gallery Images Section (Details Page Only) */}
+                            <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                    <label style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: '#4b5563', margin: 0 }}>
+                                        Additional Gallery Images (Details Page Only)
+                                    </label>
+                                    <span style={{ fontSize: '9px', color: '#64748b', fontWeight: 600 }}>{galleryImages.length} Image(s)</span>
+                                </div>
+                                
+                                <input 
+                                    type="file" 
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleGalleryUpload}
+                                    style={{ width: '100%', fontSize: '10px', border: '1px solid #cbd5e1', padding: '5px', borderRadius: '4px', backgroundColor: '#fff' }}
+                                />
+
+                                {/* Gallery Thumbnails Grid */}
+                                {galleryImages.length > 0 && (
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
+                                        {galleryImages.map((gImg, gIdx) => (
+                                            <div key={gIdx} style={{ position: 'relative', width: '50px', height: '50px', borderRadius: '4px', border: '1px solid #cbd5e1', overflow: 'hidden' }}>
+                                                <img src={resolveImageUrl(gImg)} alt={`Gallery ${gIdx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveGalleryImage(gIdx)}
+                                                    style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: 'rgba(220,38,38,0.9)', color: '#fff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0 }}
+                                                    title="Remove image"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </div>

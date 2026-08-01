@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL, resolveImageUrl } from '../config';
+import { fileToDataUrl, enhanceImageClarity } from '../utils/imageUtils';
 import { useToast } from '../context/ToastContext';
 
 const getColorNameFromHex = (hex) => {
@@ -159,6 +160,27 @@ const AdminEditProduct = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [imageFile, setImageFile] = useState(null);
     
+    // Gallery Images state
+    const [galleryImages, setGalleryImages] = useState([]);
+
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        for (const file of files) {
+            try {
+                const enhancedUrl = await enhanceImageClarity(file);
+                setGalleryImages(prev => [...prev, enhancedUrl]);
+            } catch (err) {
+                console.error('Gallery file upload error:', err);
+            }
+        }
+        showToast(`${files.length} gallery image(s) added & enhanced! ✨`, 'success');
+    };
+
+    const handleRemoveGalleryImage = (index) => {
+        setGalleryImages(prev => prev.filter((_, i) => i !== index));
+    };
+    
     // Dynamic sizes and colors
     const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL']);
     const [colors, setColors] = useState([
@@ -253,6 +275,9 @@ const AdminEditProduct = () => {
             }
 
             setImageUrl(prod.image || '');
+            if (Array.isArray(prod.gallery)) {
+                setGalleryImages(prod.gallery);
+            }
             
             if (prod.sizes && prod.sizes.length > 0) {
                 setSizes(prod.sizes);
@@ -342,6 +367,7 @@ const AdminEditProduct = () => {
                     sizes,
                     colors,
                     image: finalImgUrl,
+                    gallery: galleryImages,
                     videoUrl,
                     tags: cleanTags
                 };
@@ -908,11 +934,49 @@ const AdminEditProduct = () => {
                                                     />
                                                     {imageFile && (
                                                         <span style={{ fontSize: '11px', color: '#22c55e', display: 'block', marginTop: '6px' }}>
-                                                            ✓ {imageFile.name}
+                                                            ✓ New file ready to submit!
                                                         </span>
                                                     )}
                                                 </div>
                                             )}
+
+                                            {/* Additional Gallery Images Section */}
+                                            <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #eee' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                    <label style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#444', margin: 0 }}>
+                                                        Additional Gallery Images (Details Page Only)
+                                                    </label>
+                                                    <span style={{ fontSize: '10px', color: '#666', fontWeight: 600 }}>{galleryImages.length} Image(s)</span>
+                                                </div>
+                                                
+                                                <input 
+                                                    type="file" 
+                                                    multiple
+                                                    accept="image/*"
+                                                    className="account-input"
+                                                    onChange={handleGalleryUpload}
+                                                    style={{ padding: '8px', fontSize: '11px' }}
+                                                />
+
+                                                {/* Gallery Thumbnails Grid */}
+                                                {galleryImages.length > 0 && (
+                                                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '12px' }}>
+                                                        {galleryImages.map((gImg, gIdx) => (
+                                                            <div key={gIdx} style={{ position: 'relative', width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #cbd5e1', overflow: 'hidden' }}>
+                                                                <img src={resolveImageUrl(gImg)} alt={`Gallery ${gIdx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveGalleryImage(gIdx)}
+                                                                    style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: 'rgba(220,38,38,0.9)', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0 }}
+                                                                    title="Remove image"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
