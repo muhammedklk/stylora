@@ -90,7 +90,9 @@ const Home = () => {
             const bests = data.filter(p => p.tags && p.tags.includes('Bestseller'));
             setBestsellers(bests);
         } catch (err) {
-            console.warn('Error fetching products from API:', err.message);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.warn('Error fetching products from API:', err.message);
+            }
         }
     };
 

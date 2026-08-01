@@ -24,7 +24,9 @@ export const WishlistProvider = ({ children }) => {
             const res = await axios.get(`${API_URL}/wishlist`);
             setWishlist(res.data);
         } catch (err) {
-            console.error('Error fetching wishlist', err);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.error('Error fetching wishlist', err);
+            }
         }
     };
 

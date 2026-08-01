@@ -29,7 +29,9 @@ export const CartProvider = ({ children }) => {
             const res = await axios.get(`${API_URL}/cart`);
             setCart(res.data);
         } catch (err) {
-            console.error('Error fetching cart', err);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.error('Error fetching cart', err);
+            }
         } finally {
             setLoading(false);
         }

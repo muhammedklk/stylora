@@ -66,7 +66,9 @@ const ProductDetails = () => {
             const bests = allProducts.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
             setBestsellers(bests);
         } catch (err) {
-            console.warn('Error fetching product details from API, searching local custom products:', err.message);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.warn('Error fetching product details from API, searching local custom products:', err.message);
+            }
             const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
             const fallbackProd = customProds.find(p => p._id === id || String(p._id) === String(id));
             if (fallbackProd) {

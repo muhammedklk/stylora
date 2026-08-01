@@ -49,7 +49,9 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             localStorage.setItem('user', JSON.stringify(res.data));
         } catch (err) {
-            console.error('Error fetching profile', err);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.error('Error fetching profile', err);
+            }
             // Only logout if token is explicitly invalid/expired (401/403)
             if (err.response && (err.response.status === 401 || err.response.status === 403)) {
                 logout();
@@ -64,7 +66,9 @@ export const AuthProvider = ({ children }) => {
             const res = await axios.get(`${API_URL}/addresses`);
             setAddresses(res.data);
         } catch (err) {
-            console.error('Error fetching addresses', err);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.error('Error fetching addresses', err);
+            }
         }
     };
 

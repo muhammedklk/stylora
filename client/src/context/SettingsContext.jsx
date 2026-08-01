@@ -60,7 +60,9 @@ export const SettingsProvider = ({ children }) => {
             const merged = { ...sanitizeSettings(res.data), ...localSaved };
             setSettings(merged);
         } catch (err) {
-            console.error("Error fetching settings", err);
+            if (err.code !== 'ERR_NETWORK' && err.message !== 'Network Error') {
+                console.error("Error fetching settings", err);
+            }
             const localSaved = JSON.parse(localStorage.getItem('stylora_settings') || '{}');
             if (Object.keys(localSaved).length > 0) {
                 setSettings(prev => ({ ...prev, ...localSaved }));
