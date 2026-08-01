@@ -246,15 +246,19 @@ const ProductDetails = () => {
                             </div>
                             <h1 className="product-info-title">{product.title}</h1>
                             
-                            <div className="d-flex align-items-center gap-3 mb-3">
-                                <span className="product-info-price" style={{ margin: 0 }}>₹{product.price}</span>
+                            <div className="d-flex align-items-center gap-3 mb-3" style={{ flexWrap: 'wrap' }}>
+                                <span className="product-info-price" style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: '#000' }}>
+                                    ₹{product.price}
+                                </span>
                                 {product.originalPrice && product.originalPrice > product.price && (
-                                    <>
-                                        <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '18px', fontWeight: 500 }}>₹{product.originalPrice}</span>
-                                        <span style={{ color: '#d4af37', fontSize: '14px', fontWeight: 700, letterSpacing: '0.02em', border: '1px solid #d4af37', padding: '2px 8px', borderRadius: '2px' }}>
-                                            {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                                        </span>
-                                    </>
+                                    <span style={{ textDecoration: 'line-through', color: '#888888', fontSize: '18px', fontWeight: 500, marginLeft: '4px' }}>
+                                        ₹{product.originalPrice}
+                                    </span>
+                                )}
+                                {product.originalPrice && product.originalPrice > product.price && (
+                                    <span style={{ color: '#c59b27', fontSize: '12px', fontWeight: 700, letterSpacing: '0.04em', border: '1px solid #c59b27', padding: '3px 8px', borderRadius: '2px', marginLeft: '6px' }}>
+                                        {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+                                    </span>
                                 )}
                             </div>
                             
