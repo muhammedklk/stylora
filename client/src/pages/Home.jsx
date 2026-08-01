@@ -220,7 +220,7 @@ const Home = () => {
             {/* Hero Section */}
             <section className="hero" style={getHeroBg(settings?.heroImage)}>
                 <div className="hero-overlay"></div>
-                <div className="hero-content">
+                <div className="container hero-content">
                     <div className="hero-left">
                         <div className="tagline">{settings.heroTag || '[ Featured Collections ]'}</div>
                         <h1 className="hero-title" style={{ whiteSpace: 'pre-line' }}>{settings.heroTitle || 'Timeless Essentials\nfor the Season'}</h1>
