@@ -53,17 +53,34 @@ const Account = () => {
 
     const fetchUserOrders = async () => {
         setOrdersLoading(true);
+        let localOrders = [];
+        try {
+            localOrders = JSON.parse(localStorage.getItem('stylora_orders') || '[]');
+        } catch (e) {}
+
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL}/orders`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setOrders(res.data);
+            if (token) {
+                const res = await axios.get(`${API_URL}/orders`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (Array.isArray(res.data)) {
+                    const combined = [...res.data];
+                    localOrders.forEach(lo => {
+                        if (!combined.some(o => String(o._id) === String(lo._id))) {
+                            combined.push(lo);
+                        }
+                    });
+                    setOrders(combined);
+                    setOrdersLoading(false);
+                    return;
+                }
+            }
         } catch (err) {
-            console.error('Error fetching orders', err);
-        } finally {
-            setOrdersLoading(false);
+            console.warn('API user orders fetch note:', err.message);
         }
+        setOrders(localOrders);
+        setOrdersLoading(false);
     };
 
     const handleProfileUpdate = async (e) => {

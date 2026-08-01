@@ -121,8 +121,16 @@ const AdminDashboard = () => {
 
             let fetchedOrders = [];
             if (orderRes.status === 'fulfilled' && Array.isArray(orderRes.value.data)) {
-                fetchedOrders = orderRes.value.data;
+                fetchedOrders = [...orderRes.value.data];
             }
+            try {
+                const localOrders = JSON.parse(localStorage.getItem('stylora_orders') || '[]');
+                localOrders.forEach(lo => {
+                    if (!fetchedOrders.some(o => String(o._id) === String(lo._id))) {
+                        fetchedOrders.push(lo);
+                    }
+                });
+            } catch (e) {}
             setOrders(fetchedOrders);
 
             let fetchedUsers = [];
