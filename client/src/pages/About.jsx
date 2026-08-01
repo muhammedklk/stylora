@@ -85,7 +85,7 @@ const About = () => {
 
     return (
         <div className="about-page-wrapper light-theme" style={{ backgroundColor: '#faf9f6', color: '#111' }}>
-            {/* 1. HERO BANNER - Matched to Contact Page Alignment */}
+            {/* 1. HERO BANNER - Exact Contact Page Alignment */}
             <section className="cpage-hero" style={{ backgroundImage: getHeroBg(settings?.aboutHeroImage) }}>
                 <div className="cpage-hero-overlay"></div>
                 <div className="cpage-hero-inner">
@@ -190,16 +190,15 @@ const About = () => {
                         {pillars.map((pillar, idx) => (
                             <div 
                                 key={pillar.num} 
+                                className="pillar-card-item"
                                 onMouseEnter={() => setActivePillar(idx)}
                                 style={{
                                     background: activePillar === idx ? '#111111' : '#ffffff',
                                     color: activePillar === idx ? '#ffffff' : '#111111',
                                     padding: '30px 24px',
                                     border: '1px solid #eaeaea',
-                                    transition: 'all 0.3s ease',
                                     cursor: 'pointer',
-                                    position: 'relative',
-                                    boxShadow: activePillar === idx ? '0 10px 25px rgba(0,0,0,0.1)' : 'none'
+                                    position: 'relative'
                                 }}
                             >
                                 <div style={{
@@ -207,12 +206,13 @@ const About = () => {
                                     fontWeight: 700,
                                     letterSpacing: '0.15em',
                                     color: activePillar === idx ? '#c59b27' : '#999999',
-                                    marginBottom: '14px'
+                                    marginBottom: '14px',
+                                    transition: 'color 0.4s ease'
                                 }}>
                                     {pillar.num} / {pillar.subtitle.toUpperCase()}
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px' }}>{pillar.title}</h3>
-                                <p style={{ fontSize: '13px', lineHeight: '1.6', opacity: activePillar === idx ? 0.9 : 0.75, marginBottom: '18px' }}>
+                                <p style={{ fontSize: '13px', lineHeight: '1.6', opacity: activePillar === idx ? 0.9 : 0.75, marginBottom: '18px', transition: 'opacity 0.4s ease' }}>
                                     {pillar.desc}
                                 </p>
                                 <span style={{
@@ -220,7 +220,8 @@ const About = () => {
                                     fontWeight: 700,
                                     letterSpacing: '0.1em',
                                     textTransform: 'uppercase',
-                                    color: activePillar === idx ? '#c59b27' : '#555555'
+                                    color: activePillar === idx ? '#c59b27' : '#555555',
+                                    transition: 'color 0.4s ease'
                                 }}>
                                     {pillar.stat}
                                 </span>
@@ -283,7 +284,7 @@ const About = () => {
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
                         {milestones.map((ms, idx) => (
-                            <div key={idx} style={{
+                            <div key={idx} className="milestone-card-item" style={{
                                 background: '#ffffff',
                                 border: '1px solid #eaeaea',
                                 padding: '28px',
@@ -299,7 +300,7 @@ const About = () => {
                     </div>
                 </section>
 
-                {/* 7. [ ARCHITECTURAL UTILITY ] - Perfectly Aligned Banner */}
+                {/* 7. [ ARCHITECTURAL UTILITY ] */}
                 <section style={{
                     background: '#111111',
                     color: '#ffffff',
@@ -328,6 +329,7 @@ const About = () => {
 
                         <div>
                             <button 
+                                className="about-cta-btn"
                                 onClick={() => navigate('/shop')}
                                 style={{
                                     backgroundColor: '#ffffff',
@@ -339,7 +341,6 @@ const About = () => {
                                     letterSpacing: '0.12em',
                                     textTransform: 'uppercase',
                                     cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
                                     whiteSpace: 'nowrap'
                                 }}
                             >
