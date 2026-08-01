@@ -1504,7 +1504,7 @@ ul {
 
 .light-theme .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
 }
 
@@ -1665,6 +1665,19 @@ ul {
 .light-theme .arrow-span {
     display: inline-block;
     transition: transform 0.3s ease;
+}
+
+.material-card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+.material-card:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+}
+
+.material-card:hover img {
+    transform: scale(1.06) !important;
 }
 
 /* Philosophy Pillars */
@@ -4381,6 +4394,11 @@ ul {
     }
 
     /* About Page */
+    .light-theme .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
     .about-hero-title {
         font-size: 42px;
     }
