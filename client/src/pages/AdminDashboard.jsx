@@ -1545,7 +1545,7 @@ const AdminDashboard = () => {
                                                 )}
                                                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)', padding: '12px 14px', color: '#fff' }}>
                                                     <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>{cat.tag}</span>
-                                                    <h4 style={{ fontSize: '14px', fontWeight 800, margin: '2px 0 0 0', color: '#fff' }}>{cat.name}</h4>
+                                                    <h4 style={{ fontSize: '14px', fontWeight: 800, margin: '2px 0 0 0', color: '#fff' }}>{cat.name}</h4>
                                                 </div>
                                             </div>
 
