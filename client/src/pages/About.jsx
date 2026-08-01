@@ -18,28 +18,28 @@ const About = () => {
             num: "01",
             title: "Minimalist Aesthetics",
             subtitle: "Purity of form",
-            desc: "Clean silhouettes, neutral earth tones, and uncompromised structural cuts. We create versatile staples designed to seamlessly integrate into any modern wardrobe without loud branding.",
+            desc: "Clean silhouettes, neutral earth tones, and uncompromised structural cuts.",
             stat: "100% Timeless"
         },
         {
             num: "02",
             title: "Master Craftsmanship",
             subtitle: "Precision engineering",
-            desc: "Every stitch, seam, and pocket placement undergoes rigorous quality audits. We collaborate with generational artisans to craft garments that hold their form season after season.",
+            desc: "Every stitch and pocket placement undergoes multi-phase quality audits.",
             stat: "40+ Workshops"
         },
         {
             num: "03",
             title: "Architectural Utility",
             subtitle: "Apparel in motion",
-            desc: "Fashion should never restrict motion. Our tailored trousers, hoodies, and outerwear feature elasticated waistbands, hidden zipper compartments, and ergonomic stretch weaves.",
+            desc: "Tailored trousers & hoodies featuring hidden storage and stretch weaves.",
             stat: "360° Comfort"
         },
         {
             num: "04",
             title: "Ethical Transparency",
             subtitle: "Sustainable future",
-            desc: "From certified organic cotton to zero-waste packaging, we maintain 100% radical transparency across our global supply chain, eliminating middleman markups.",
+            desc: "Organic cotton & zero-plastic packaging with radical supply chain transparency.",
             stat: "Zero Waste"
         }
     ];
@@ -65,9 +65,27 @@ const About = () => {
         }
     ];
 
+    const milestones = [
+        {
+            year: "2024",
+            title: "Conception & Spark",
+            desc: "STYLORA was founded to eliminate luxury markups while preserving architectural purity."
+        },
+        {
+            year: "2025",
+            title: "Sustainable Pipeline",
+            desc: "Transitioned entire production line to certified organic cotton and zero-plastic packaging."
+        },
+        {
+            year: "2026",
+            title: "Global Flagships",
+            desc: "Expanded into digital storefronts and physical showrooms serving customers in 40+ countries."
+        }
+    ];
+
     return (
         <div className="about-page-wrapper light-theme" style={{ backgroundColor: '#faf9f6', color: '#111' }}>
-            {/* 1. HERO BANNER */}
+            {/* 1. HERO BANNER - Matched to Contact Page Height & Dark Style */}
             <section className="cpage-hero" style={{ backgroundImage: getHeroBg(settings?.aboutHeroImage) }}>
                 <div className="cpage-hero-overlay"></div>
                 <div className="cpage-hero-inner">
@@ -79,134 +97,131 @@ const About = () => {
                 </div>
             </section>
 
-            {/* 2. ELEVATED STATS GRID */}
-            <section className="about-stats" style={{ background: '#ffffff', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+            {/* 2. COMPACT STATS STRIP */}
+            <section style={{ background: '#ffffff', borderBottom: '1px solid rgba(0,0,0,0.06)', padding: '30px 0' }}>
                 <div className="container">
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <span className="stat-number">100%</span>
-                            <span className="stat-label">Certified Organic & Recycled Materials</span>
+                    <div className="stats-grid" style={{ gap: '20px' }}>
+                        <div className="stat-card" style={{ padding: '20px 15px' }}>
+                            <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>100%</span>
+                            <span className="stat-label" style={{ fontSize: '11px' }}>Organic & Recycled</span>
                         </div>
-                        <div className="stat-card">
-                            <span className="stat-number">40+</span>
-                            <span className="stat-label">Artisanal Workshop Partners Worldwide</span>
+                        <div className="stat-card" style={{ padding: '20px 15px' }}>
+                            <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>40+</span>
+                            <span className="stat-label" style={{ fontSize: '11px' }}>Artisan Workshops</span>
                         </div>
-                        <div className="stat-card">
-                            <span className="stat-number">15K+</span>
-                            <span className="stat-label">Global Community of Fashion Enthusiasts</span>
+                        <div className="stat-card" style={{ padding: '20px 15px' }}>
+                            <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>15K+</span>
+                            <span className="stat-label" style={{ fontSize: '11px' }}>Global Customers</span>
                         </div>
-                        <div className="stat-card">
-                            <span className="stat-number">0%</span>
-                            <span className="stat-label">Compromise on Fit & Tailoring Quality</span>
+                        <div className="stat-card" style={{ padding: '20px 15px' }}>
+                            <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>0%</span>
+                            <span className="stat-label" style={{ fontSize: '11px' }}>Quality Compromise</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 3. MANIFESTO & BRAND VISION */}
-            <section className="about-split" style={{ padding: '120px 0' }}>
+            {/* 3. REDESIGNED [ THE VISION ] - Compact Side-by-Side Card Layout */}
+            <section style={{ padding: '50px 0', background: '#faf9f6' }}>
                 <div className="container">
-                    <div className="about-split-grid">
-                        <div className="about-split-text-col">
-                            <span className="section-tag">[ THE VISION ]</span>
-                            <h2 className="about-split-title">
+                    <div style={{
+                        background: '#ffffff',
+                        border: '1px solid #eaeaea',
+                        borderRadius: '0',
+                        padding: '40px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gap: '35px',
+                        alignItems: 'center',
+                        boxShadow: '0 8px 30px rgba(0,0,0,0.02)'
+                    }}>
+                        <div>
+                            <span className="section-tag" style={{ marginBottom: '12px' }}>[ THE VISION ]</span>
+                            <h2 style={{ fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', marginBottom: '16px', color: '#111' }}>
                                 {settings?.aboutTitle || 'Free-spirited fashion for the modern individual.'}
                             </h2>
-                            <p className="about-split-desc">
-                                {settings?.aboutContent || 'We believe that dressing well should feel natural and effortless. STYLORA was born from a desire to eliminate the traditional markups of luxury fashion while maintaining absolute architectural purity in every garment.'}
+                            <p style={{ fontSize: '14px', lineHeight: '1.65', color: '#555', marginBottom: '16px' }}>
+                                {settings?.aboutContent || 'STYLORA was born from a desire to eliminate the traditional markups of luxury fashion while maintaining absolute architectural purity in every garment.'}
                             </p>
-                            <p className="about-split-desc">
-                                {settings?.aboutSubContent || 'Our garments are engineered to move with you, bringing together minimal aesthetics and maximum everyday utility. We deliver luxury quality directly from artisanal looms to your personal wardrobe.'}
-                            </p>
-                            
-                            <blockquote className="story-quote" style={{
-                                marginTop: '30px',
-                                paddingLeft: '24px',
+                            <div style={{
+                                paddingLeft: '16px',
                                 borderLeft: '3px solid #c59b27',
                                 fontStyle: 'italic',
-                                fontSize: '16px',
+                                fontSize: '14px',
                                 color: '#333',
-                                lineHeight: '1.6'
+                                lineHeight: '1.5'
                             }}>
                                 "High fashion shouldn't feel cold or exclusive. It should feel empowering, relatable, and built for real life."
-                            </blockquote>
+                            </div>
                         </div>
-                        <div className="about-split-img-col">
-                            <div className="about-img-frame">
-                                <img 
-                                    src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&q=80" 
-                                    alt="Stylora Editorial Vision" 
-                                    className="about-img" 
-                                />
-                                <div className="about-img-overlay-glow"></div>
-                                <div className="img-badge-overlay" style={{
-                                    position: 'absolute',
-                                    bottom: '20px',
-                                    right: '20px',
-                                    background: 'rgba(0,0,0,0.85)',
-                                    color: '#fff',
-                                    padding: '8px 16px',
-                                    fontSize: '11px',
-                                    letterSpacing: '0.1em',
-                                    textTransform: 'uppercase',
-                                    backdropFilter: 'blur(8px)'
-                                }}>
-                                    AUTUMN / WINTER 2026
-                                </div>
+
+                        <div style={{ position: 'relative', height: '240px', overflow: 'hidden', border: '1px solid #eaeaea' }}>
+                            <img 
+                                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" 
+                                alt="Stylora Editorial Vision" 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '12px',
+                                right: '12px',
+                                background: 'rgba(0,0,0,0.85)',
+                                color: '#fff',
+                                padding: '6px 12px',
+                                fontSize: '10px',
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase'
+                            }}>
+                                AW 2026 EDITION
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 4. INTERACTIVE PHILOSOPHY PILLARS */}
-            <section className="about-pillars" style={{ background: '#ffffff', padding: '120px 0', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+            {/* 4. BRAND PHILOSOPHY PILLARS */}
+            <section style={{ background: '#ffffff', padding: '50px 0', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                 <div className="container">
-                    <div className="about-pillars-header" style={{ textAlign: 'center', marginBottom: '70px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '35px' }}>
                         <span className="section-tag">[ BRAND PHILOSOPHY ]</span>
-                        <h2 className="about-pillars-title" style={{ fontSize: '38px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+                        <h2 style={{ fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', marginTop: '6px', margin: 0 }}>
                             Our Four Core Pillars
                         </h2>
                     </div>
 
-                    <div className="about-pillars-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '30px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
                         {pillars.map((pillar, idx) => (
                             <div 
                                 key={pillar.num} 
-                                className={`pillar-card ${activePillar === idx ? 'active-pillar' : ''}`}
                                 onMouseEnter={() => setActivePillar(idx)}
                                 style={{
-                                    background: activePillar === idx ? '#111111' : '#fcfbf9',
+                                    background: activePillar === idx ? '#111111' : '#faf9f6',
                                     color: activePillar === idx ? '#ffffff' : '#111111',
-                                    padding: '45px 35px',
+                                    padding: '28px 22px',
                                     border: '1px solid rgba(0,0,0,0.08)',
-                                    transition: 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                                    transition: 'all 0.3s ease',
                                     cursor: 'pointer',
-                                    position: 'relative',
-                                    boxShadow: activePillar === idx ? '0 20px 40px rgba(0,0,0,0.15)' : 'none',
-                                    transform: activePillar === idx ? 'translateY(-6px)' : 'none'
+                                    position: 'relative'
                                 }}
                             >
                                 <div style={{
-                                    fontSize: '12px',
+                                    fontSize: '11px',
                                     fontWeight: 700,
                                     letterSpacing: '0.15em',
                                     color: activePillar === idx ? '#c59b27' : '#999999',
-                                    marginBottom: '20px'
+                                    marginBottom: '12px'
                                 }}>
                                     {pillar.num} / {pillar.subtitle.toUpperCase()}
                                 </div>
-                                <h3 style={{ fontSize: '22px', fontWeight: 600, marginBottom: '16px' }}>{pillar.title}</h3>
-                                <p style={{ fontSize: '14px', lineHeight: '1.7', opacity: activePillar === idx ? 0.9 : 0.75, marginBottom: '25px' }}>
+                                <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '10px' }}>{pillar.title}</h3>
+                                <p style={{ fontSize: '13px', lineHeight: '1.55', opacity: activePillar === idx ? 0.9 : 0.75, marginBottom: '16px' }}>
                                     {pillar.desc}
                                 </p>
                                 <span style={{
-                                    fontSize: '11px',
+                                    fontSize: '10px',
                                     fontWeight: 700,
                                     letterSpacing: '0.1em',
                                     textTransform: 'uppercase',
-                                    borderBottom: activePillar === idx ? '1px solid #c59b27' : '1px solid rgba(0,0,0,0.2)',
-                                    paddingBottom: '4px',
                                     color: activePillar === idx ? '#c59b27' : '#555555'
                                 }}>
                                     {pillar.stat}
@@ -217,48 +232,50 @@ const About = () => {
                 </div>
             </section>
 
-            {/* 5. CRAFTSMANSHIP & MATERIALS SPOTLIGHT */}
-            <section style={{ padding: '120px 0', background: '#faf9f6' }}>
+            {/* 5. REDESIGNED [ TEXTILE EXCELLENCE ] - Sleek Compact Horizontal Cards Strip */}
+            <section style={{ padding: '50px 0', background: '#faf9f6' }}>
                 <div className="container">
-                    <div style={{ textAlign: 'center', marginBottom: '70px' }}>
-                        <span className="section-tag">[ TEXTILE EXCELLENCE ]</span>
-                        <h2 style={{ fontSize: '38px', fontWeight: 600, letterSpacing: '-0.02em', marginTop: '8px' }}>
-                            Signature Materials
-                        </h2>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                        <div>
+                            <span className="section-tag" style={{ margin: 0 }}>[ TEXTILE EXCELLENCE ]</span>
+                            <h2 style={{ fontSize: '26px', fontWeight: 600, letterSpacing: '-0.02em', marginTop: '4px', margin: 0 }}>
+                                Signature Materials
+                            </h2>
+                        </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
                         {materials.map((item, index) => (
                             <div key={index} className="material-card" style={{
                                 background: '#ffffff',
                                 border: '1px solid #eaeaea',
                                 overflow: 'hidden',
-                                transition: 'transform 0.4s ease, box-shadow 0.4s ease'
+                                display: 'flex',
+                                flexDirection: 'column'
                             }}>
-                                <div style={{ height: '240px', overflow: 'hidden', position: 'relative' }}>
+                                <div style={{ height: '160px', overflow: 'hidden', position: 'relative' }}>
                                     <img 
                                         src={item.img} 
                                         alt={item.name} 
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
                                     <span style={{
                                         position: 'absolute',
-                                        top: '15px',
-                                        left: '15px',
+                                        top: '10px',
+                                        left: '10px',
                                         background: 'rgba(0,0,0,0.8)',
                                         color: '#fff',
-                                        fontSize: '10px',
+                                        fontSize: '9px',
                                         fontWeight: 700,
                                         letterSpacing: '0.12em',
-                                        padding: '4px 10px',
-                                        borderRadius: '2px'
+                                        padding: '3px 8px'
                                     }}>
                                         {item.tag}
                                     </span>
                                 </div>
-                                <div style={{ padding: '30px' }}>
-                                    <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px' }}>{item.name}</h3>
-                                    <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6', margin: 0 }}>{item.detail}</p>
+                                <div style={{ padding: '20px' }}>
+                                    <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>{item.name}</h3>
+                                    <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.5', margin: 0 }}>{item.detail}</p>
                                 </div>
                             </div>
                         ))}
@@ -266,88 +283,74 @@ const About = () => {
                 </div>
             </section>
 
-            {/* 6. BRAND EVOLUTION TIMELINE */}
-            <section className="about-timeline" style={{ background: '#ffffff', padding: '120px 0', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+            {/* 6. REDESIGNED [ EVOLUTION ] - Compact 3-Column Milestone Horizontal Cards */}
+            <section style={{ background: '#ffffff', padding: '50px 0', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                 <div className="container">
-                    <div className="timeline-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '35px' }}>
                         <span className="section-tag">[ EVOLUTION ]</span>
-                        <h2 className="timeline-title" style={{ fontSize: '38px', fontWeight: 600, letterSpacing: '-0.02em' }}>
+                        <h2 style={{ fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', marginTop: '6px', margin: 0 }}>
                             The STYLORA Journey
                         </h2>
                     </div>
 
-                    <div className="timeline-container">
-                        <div className="timeline-line"></div>
-                        
-                        <div className="timeline-item left">
-                            <div className="timeline-dot"></div>
-                            <div className="timeline-content" style={{ background: '#faf9f6', padding: '30px', border: '1px solid #eaeaea' }}>
-                                <span className="timeline-year" style={{ color: '#c59b27', fontWeight: 700 }}>2024</span>
-                                <h4 className="timeline-item-title" style={{ fontSize: '18px', margin: '8px 0' }}>Conception & Spark</h4>
-                                <p className="timeline-item-desc" style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                                    STYLORA was founded with a singular mission: to challenge traditional luxury markups and make architectural menswear accessible.
-                                </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
+                        {milestones.map((ms, idx) => (
+                            <div key={idx} style={{
+                                background: '#faf9f6',
+                                border: '1px solid #eaeaea',
+                                padding: '25px',
+                                borderTop: '3px solid #c59b27'
+                            }}>
+                                <div style={{ color: '#c59b27', fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>
+                                    {ms.year}
+                                </div>
+                                <h4 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px', color: '#111' }}>{ms.title}</h4>
+                                <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.55', margin: 0 }}>{ms.desc}</p>
                             </div>
-                        </div>
-                        
-                        <div className="timeline-item right">
-                            <div className="timeline-dot"></div>
-                            <div className="timeline-content" style={{ background: '#faf9f6', padding: '30px', border: '1px solid #eaeaea' }}>
-                                <span className="timeline-year" style={{ color: '#c59b27', fontWeight: 700 }}>2025</span>
-                                <h4 className="timeline-item-title" style={{ fontSize: '18px', margin: '8px 0' }}>Sustainable Pipeline</h4>
-                                <p className="timeline-item-desc" style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                                    Transitioned our entire production line to certified organic cotton and recycled fibers, achieving zero-plastic packaging.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div className="timeline-item left">
-                            <div className="timeline-dot"></div>
-                            <div className="timeline-content" style={{ background: '#faf9f6', padding: '30px', border: '1px solid #eaeaea' }}>
-                                <span className="timeline-year" style={{ color: '#c59b27', fontWeight: 700 }}>2026</span>
-                                <h4 className="timeline-item-title" style={{ fontSize: '18px', margin: '8px 0' }}>Global Flagship Launch</h4>
-                                <p className="timeline-item-desc" style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>
-                                    Expanded into global digital storefronts and physical experiential showrooms, serving discerning customers across 40+ countries.
-                                </p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* 7. ARCHITECTURAL UTILITY & CALL TO ACTION */}
-            <section className="about-split split-inverted" style={{ padding: '120px 0', background: '#111111', color: '#ffffff' }}>
+            {/* 7. REDESIGNED [ ARCHITECTURAL UTILITY ] - Sleek Compact Banner */}
+            <section style={{ padding: '40px 0', background: '#111111', color: '#ffffff' }}>
                 <div className="container">
-                    <div className="about-split-grid">
-                        <div className="about-split-img-col">
-                            <div className="about-img-frame" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-                                <img 
-                                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1000&q=80" 
-                                    alt="Stylora Showroom" 
-                                    className="about-img" 
-                                />
-                            </div>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justify: 'space-between',
+                        alignItems: 'center',
+                        gap: '24px'
+                    }}>
+                        <div style={{ maxWidth: '650px' }}>
+                            <span style={{ color: '#c59b27', fontSize: '11px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                                [ ARCHITECTURAL UTILITY ]
+                            </span>
+                            <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#ffffff', margin: '0 0 8px 0', letterSpacing: '-0.01em' }}>
+                                Crafted for life in motion.
+                            </h2>
+                            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.75)', margin: 0, lineHeight: '1.5' }}>
+                                From essential heavyweight hoodies to structured smart trousers, every piece undergoes multi-phase stress testing for fit, comfort, and longevity.
+                            </p>
                         </div>
-                        <div className="about-split-text-col">
-                            <span className="section-tag" style={{ color: '#c59b27' }}>[ ARCHITECTURAL UTILITY ]</span>
-                            <h2 className="about-split-title" style={{ color: '#ffffff' }}>Crafted for life in motion.</h2>
-                            <p className="about-split-desc" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                                From essential heavyweight hoodies to structured smart trousers, every piece in our collection undergoes multi-phase stress testing for fit, comfort, and longevity.
-                            </p>
-                            <p className="about-split-desc" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                                Experience the intersection of minimalist aesthetics and everyday functionality.
-                            </p>
+
+                        <div>
                             <button 
-                                className="shop-story-btn" 
                                 onClick={() => navigate('/shop')}
                                 style={{
                                     backgroundColor: '#ffffff',
                                     color: '#111111',
                                     border: '1px solid #ffffff',
-                                    marginTop: '30px'
+                                    padding: '14px 32px',
+                                    fontSize: '12px',
+                                    fontWeight: 700,
+                                    letterSpacing: '0.1em',
+                                    textTransform: 'uppercase',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease'
                                 }}
                             >
-                                EXPLORE THE COLLECTION <span className="arrow-span">→</span>
+                                EXPLORE COLLECTION →
                             </button>
                         </div>
                     </div>
