@@ -96,14 +96,27 @@ const ProductDetails = () => {
         }
     };
 
+    const isOutOfStock = product?.isNotAvailable === true || 
+                         product?.inStock === false || 
+                         (product?.inventoryCount !== undefined && Number(product.inventoryCount) <= 0) || 
+                         (product?.stock !== undefined && Number(product.stock) <= 0);
+
     const handleAddToCart = () => {
         if (!product) return;
+        if (isOutOfStock) {
+            showToast('This product is currently out of stock.', 'error');
+            return;
+        }
         addToCart(product._id, 1, selectedSize, selectedColor);
         showToast(`${product.title} added to cart!`, 'success');
     };
 
     const handleBuyNow = () => {
         if (!product) return;
+        if (isOutOfStock) {
+            showToast('This product is currently out of stock.', 'error');
+            return;
+        }
         addToCart(product._id, 1, selectedSize, selectedColor);
         navigate('/cart');
     };
@@ -164,7 +177,26 @@ const ProductDetails = () => {
                 <div className="container">
                     <div className="row product-view-grid">
                         {/* Left Side: Image / Video Display */}
-                        <div className="col-md-6 product-image-display">
+                        <div className="col-md-6 product-image-display" style={{ opacity: isOutOfStock ? 0.65 : 1, transition: 'opacity 0.3s ease', position: 'relative' }}>
+                            {isOutOfStock && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '16px',
+                                    right: '16px',
+                                    backgroundColor: '#dc2626',
+                                    color: '#ffffff',
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    padding: '6px 14px',
+                                    borderRadius: '2px',
+                                    letterSpacing: '0.08em',
+                                    zIndex: 10,
+                                    textTransform: 'uppercase',
+                                    boxShadow: '0 2px 10px rgba(220, 38, 38, 0.4)'
+                                }}>
+                                    OUT OF STOCK
+                                </div>
+                            )}
                             <div className="product-main-img-frame" style={{ position: 'relative', overflow: 'hidden' }}>
                                 {mediaType === 'image' ? (
                                     <img 
@@ -262,6 +294,21 @@ const ProductDetails = () => {
                                         {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                                     </span>
                                 )}
+                                {isOutOfStock && (
+                                    <span style={{
+                                        backgroundColor: '#dc2626',
+                                        color: '#ffffff',
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        padding: '4px 10px',
+                                        borderRadius: '2px',
+                                        letterSpacing: '0.08em',
+                                        textTransform: 'uppercase',
+                                        marginLeft: '6px'
+                                    }}>
+                                        OUT OF STOCK
+                                    </span>
+                                )}
                             </div>
                             
                             <p className="product-info-desc">{product.description}</p>
@@ -305,8 +352,20 @@ const ProductDetails = () => {
 
                             {/* CTA Actions */}
                             <div className="product-actions">
-                                <button className="add-to-cart-btn" onClick={handleAddToCart}>ADD TO CART</button>
-                                <button className="buy-now-btn" onClick={handleBuyNow}>BUY NOW</button>
+                                {isOutOfStock ? (
+                                    <button 
+                                        className="add-to-cart-btn" 
+                                        disabled 
+                                        style={{ backgroundColor: '#dc2626', color: '#ffffff', cursor: 'not-allowed', width: '100%', opacity: 0.8 }}
+                                    >
+                                        OUT OF STOCK
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button className="add-to-cart-btn" onClick={handleAddToCart}>ADD TO CART</button>
+                                        <button className="buy-now-btn" onClick={handleBuyNow}>BUY NOW</button>
+                                    </>
+                                )}
                             </div>
 
                             {/* Accordion Blocks */}

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-
 import { resolveImageUrl } from '../config';
 
 const ProductCard = ({ product, isFeatured = false }) => {
@@ -10,6 +9,11 @@ const ProductCard = ({ product, isFeatured = false }) => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { showToast } = useToast();
+
+    const isOutOfStock = product.isNotAvailable === true || 
+                         product.inStock === false || 
+                         (product.inventoryCount !== undefined && Number(product.inventoryCount) <= 0) || 
+                         (product.stock !== undefined && Number(product.stock) <= 0);
 
     const availableSizes = (product.sizes && product.sizes.length > 0) ? product.sizes : ['S', 'M', 'L', 'XL'];
     const availableColors = (product.colors && product.colors.length > 0) ? product.colors : [
@@ -23,6 +27,10 @@ const ProductCard = ({ product, isFeatured = false }) => {
 
     const handleQuickAdd = (e) => {
         e.stopPropagation();
+        if (isOutOfStock) {
+            showToast('This product is currently out of stock', 'error');
+            return;
+        }
         addToCart(product._id, 1, selectedSize, selectedColor);
         showToast(`${product.title} added to cart!`, 'success');
     };
@@ -33,7 +41,7 @@ const ProductCard = ({ product, isFeatured = false }) => {
     const isBestsellerProduct = product.tags && product.tags.includes('Bestseller');
 
     return (
-        <div className="product-item">
+        <div className="product-item" style={{ opacity: isOutOfStock ? 0.6 : 1, transition: 'opacity 0.3s ease' }}>
             <div className={`product-card ${isFeatured ? 'featured-card' : ''}`}>
                 {hasDiscount && (
                     <div style={{
@@ -52,7 +60,26 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         -{discountPercentage}%
                     </div>
                 )}
-                {isBestsellerProduct && (
+
+                {isOutOfStock ? (
+                    <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        backgroundColor: '#dc2626',
+                        color: '#ffffff',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        padding: '5px 10px',
+                        borderRadius: '2px',
+                        letterSpacing: '0.06em',
+                        zIndex: 4,
+                        textTransform: 'uppercase',
+                        boxShadow: '0 2px 8px rgba(220, 38, 38, 0.35)'
+                    }}>
+                        OUT OF STOCK
+                    </div>
+                ) : isBestsellerProduct && (
                     <div style={{
                         position: 'absolute',
                         top: '12px',
@@ -70,6 +97,7 @@ const ProductCard = ({ product, isFeatured = false }) => {
                         Best Seller
                     </div>
                 )}
+
                 <div className="card-inner">
                     {/* Front Face */}
                     <div className="card-front">
@@ -94,7 +122,7 @@ const ProductCard = ({ product, isFeatured = false }) => {
                                 onClick={(e) => { e.stopPropagation(); navigate(`/product/${product._id}`); }}
                                 style={{ cursor: 'pointer' }}
                             >
-                                <span className="overlay-text">Select Options</span>
+                                <span className="overlay-text">{isOutOfStock ? 'View Details' : 'Select Options'}</span>
                                 <img src="/assets/right-arrow.svg" alt="Arrow" className="arrow-icon" />
                             </div>
                         )}
@@ -139,7 +167,13 @@ const ProductCard = ({ product, isFeatured = false }) => {
                                 </div>
                             </div>
                             
-                            <button className="quick-add-btn" onClick={handleQuickAdd}>Quick Add</button>
+                            <button 
+                                className="quick-add-btn" 
+                                onClick={handleQuickAdd}
+                                style={{ backgroundColor: isOutOfStock ? '#dc2626' : undefined, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}
+                            >
+                                {isOutOfStock ? 'OUT OF STOCK' : 'Quick Add'}
+                            </button>
                         </div>
                     </div>
                 </div>

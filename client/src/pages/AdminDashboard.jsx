@@ -218,6 +218,54 @@ const AdminDashboard = () => {
         }
     };
 
+    const checkIsOutOfStock = (product) => {
+        if (!product) return false;
+        if (product.isNotAvailable === true) return true;
+        if (product.inStock === false) return true;
+        if (product.inventoryCount !== undefined && Number(product.inventoryCount) <= 0) return true;
+        if (product.stock !== undefined && Number(product.stock) <= 0) return true;
+        return false;
+    };
+
+    const handleRestockProduct = async (id) => {
+        try {
+            const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
+            const updatedCustom = customProds.map(p => {
+                if (String(p._id) === String(id)) {
+                    return { ...p, isNotAvailable: false, inStock: true, inventoryCount: 10, stock: 10 };
+                }
+                return p;
+            });
+            localStorage.setItem('stylora_custom_products', JSON.stringify(updatedCustom));
+
+            const updatedAdminList = adminProducts.map(p => {
+                if (String(p._id) === String(id)) {
+                    return { ...p, isNotAvailable: false, inStock: true, inventoryCount: 10, stock: 10 };
+                }
+                return p;
+            });
+            setAdminProducts(updatedAdminList);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedAdminList, timestamp: Date.now() }));
+            window.dispatchEvent(new Event('stylora_products_updated'));
+
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+                if (id && String(id).length === 24) {
+                    await axios.put(`${API_URL}/products/${id}`, {
+                        isNotAvailable: false,
+                        inStock: true,
+                        inventoryCount: 10,
+                        stock: 10
+                    }, { headers: { Authorization: `Bearer ${token}` } });
+                }
+            } catch (e) {}
+
+            showToast('Product restocked successfully (+10 in stock)! 🟢', 'success');
+        } catch (err) {
+            showToast('Failed to restock product', 'error');
+        }
+    };
+
     const handleSaveSettings = async () => {
         try {
             const updated = {
@@ -395,10 +443,11 @@ const AdminDashboard = () => {
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #e5e7eb', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', gap: '24px', borderBottom: '1px solid #e5e7eb', marginBottom: '24px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
                     {[
                         { id: 'overview', label: 'Overview' },
                         { id: 'products', label: `Products (${adminProducts.length})` },
+                        { id: 'outofstock', label: `🔴 Out of Stock (${adminProducts.filter(checkIsOutOfStock).length})` },
                         { id: 'bestsellers', label: `⭐ Bestsellers (${adminProducts.filter(p => p.tags && p.tags.includes('Bestseller')).length})` },
                         { id: 'category-cards', label: '🖼️ Category Banners' },
                         { id: 'orders', label: `Orders (${orders.length})` },
@@ -858,6 +907,83 @@ const AdminDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'outofstock' && (
+                    <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <div>
+                                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 4px 0', color: '#dc2626' }}>
+                                    🔴 Out of Stock Products ({adminProducts.filter(checkIsOutOfStock).length})
+                                </h2>
+                                <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+                                    Items marked as Not Available or having 0 inventory stock. Restock items to restore active status on the live store.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => navigate('/admin/products/add')}
+                                style={{ padding: '10px 20px', backgroundColor: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
+                            >
+                                + Add Product
+                            </button>
+                        </div>
+
+                        {adminProducts.filter(checkIsOutOfStock).length === 0 ? (
+                            <div style={{ padding: '40px', textAlign: 'center', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px dashed #e5e7eb' }}>
+                                <span style={{ fontSize: '28px', display: 'block', marginBottom: '8px' }}>🎉</span>
+                                <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 4px 0' }}>All Products Are In Stock!</h4>
+                                <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>There are currently no out-of-stock items in your catalog.</p>
+                            </div>
+                        ) : (
+                            <div style={{ overflowX: 'auto' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
+                                    <thead>
+                                        <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+                                            <th style={{ padding: '12px 16px', fontWeight: 700 }}>Image</th>
+                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Product Title</th>
+                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Category</th>
+                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Price</th>
+                                            <th style={{ padding: '12px 16px', fontWeight 700 }}>Status</th>
+                                            <th style={{ padding: '12px 16px', fontWeight 700, textAlign: 'right' }}>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {adminProducts.filter(checkIsOutOfStock).map(p => (
+                                            <tr key={p._id} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                                                <td style={{ padding: '12px 16px' }}>
+                                                    <img src={resolveImageUrl(p.image)} alt={p.title} style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e5e7eb' }} />
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontWeight: 700, color: '#111827' }}>{p.title}</td>
+                                                <td style={{ padding: '12px 16px', textTransform: 'uppercase', fontSize: '11px', color: '#6b7280', fontWeight: 600 }}>{p.category}</td>
+                                                <td style={{ padding: '12px 16px', fontWeight: 800 }}>₹{p.price}</td>
+                                                <td style={{ padding: '12px 16px' }}>
+                                                    <span style={{ backgroundColor: '#fee2e2', color: '#991b1b', fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px' }}>
+                                                        🔴 Out of Stock (0)
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                        <button
+                                                            onClick={() => handleRestockProduct(p._id)}
+                                                            style={{ backgroundColor: '#10b981', color: '#ffffff', border: 'none', padding: '6px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                                                        >
+                                                            ⚡ Restock (+10)
+                                                        </button>
+                                                        <button
+                                                            onClick={() => navigate(`/admin/products/edit/${p._id}`)}
+                                                            style={{ backgroundColor: '#f3f4f6', color: '#111827', border: '1px solid #d1d5db', padding: '6px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 )}
 

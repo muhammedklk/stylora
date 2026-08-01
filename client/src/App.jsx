@@ -49,7 +49,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div style={{ padding: '80px 20px', textAlign: 'center', backgroundColor: '#ffffff', color: '#111', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', color: '#000' }}>STYLORA Store</h2>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', color: '#000' }}>STYLEORA Store</h2>
           <p style={{ fontSize: '14px', color: '#666666', marginBottom: '24px', maxWidth: '400px', lineHeight: '1.6' }}>Updating application state and clearing cached assets. Please click below to refresh the site.</p>
           <button 
             onClick={() => { localStorage.clear(); window.location.href = '/'; }}
