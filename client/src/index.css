@@ -843,6 +843,17 @@ ul {
     display: flex;
     gap: 8px;
     align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-width: 100%;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .filter-tab {
@@ -856,17 +867,12 @@ ul {
     cursor: pointer;
     transition: var(--transition-fast);
     border-radius: 0;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .filter-tab:hover, .filter-tab.active {
     border-color: var(--color-black);
-}
-
-.filter-tabs {
-    position: relative;
-    display: flex;
-    gap: 10px;
-    align-items: center;
 }
 
 .filter-more-btn {
@@ -2702,9 +2708,19 @@ ul {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
     gap: 12px;
     margin-bottom: 60px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-width: 100%;
+}
+
+.shop-filter-bar::-webkit-scrollbar {
+    display: none;
 }
 
 .shop-filter-tab {
@@ -2717,6 +2733,8 @@ ul {
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition-fast);
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .shop-filter-tab:hover {
@@ -4295,12 +4313,21 @@ ul {
     
     .filter-bar {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 15px;
     }
     
     .filter-tabs {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
     }
 
     /* Marquee & Brand Statement */

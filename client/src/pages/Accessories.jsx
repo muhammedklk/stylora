@@ -10,12 +10,20 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
 
+const isAccessoryProduct = (p) => {
+    if (!p) return false;
+    const accessoryCats = ['watches', 'shoes', 'footwear', 'sneakers', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
+    const catLower = p.category ? p.category.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+    if (accessoryCats.some(ac => ac.replace(/[^a-z0-9]/g, '') === catLower)) return true;
+    if (p.tags && p.tags.some(t => t.toLowerCase() === 'accessories')) return true;
+    return false;
+};
+
 const getInitialAccessories = () => {
-    const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
     const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
     const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
     const clean = customProds.filter(p => !deletedIds.includes(String(p._id)));
-    return clean.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category?.toLowerCase()));
+    return clean.filter(isAccessoryProduct);
 };
 
 const Accessories = () => {
@@ -47,7 +55,6 @@ const Accessories = () => {
     }, [location.search, products]);
 
     const fetchProducts = async () => {
-        const accessoryCats = ['watches', 'bags', 'sunglasses', 'belts-wallets', 'hats-caps', 'jewelry', 'socks'];
         try {
             const res = await axios.get(`${API_URL}/products`);
             const rawData = Array.isArray(res.data) ? res.data : [];
@@ -56,7 +63,7 @@ const Accessories = () => {
             const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
             const clean = merged.filter(p => !deletedIds.includes(String(p._id)));
 
-            const accessoriesOnly = clean.filter(p => (p.tags && p.tags.includes('Accessories')) || accessoryCats.includes(p.category?.toLowerCase()));
+            const accessoriesOnly = clean.filter(isAccessoryProduct);
             
             setProducts(accessoriesOnly);
             applyFilterAndSearch(accessoriesOnly, initialCategory, searchQuery);
@@ -70,7 +77,12 @@ const Accessories = () => {
 
         // Apply category filter
         if (category && category !== 'all') {
-            result = result.filter(p => p.category === category);
+            const target = category.toLowerCase().replace(/[^a-z0-9]/g, '');
+            result = result.filter(p => {
+                const catMatch = p.category && p.category.toLowerCase().replace(/[^a-z0-9]/g, '').includes(target);
+                const tagMatch = p.tags && p.tags.some(t => t.toLowerCase().replace(/[^a-z0-9]/g, '').includes(target));
+                return catMatch || tagMatch;
+            });
         }
 
         // Apply search query
@@ -105,6 +117,7 @@ const Accessories = () => {
                         {[
                             { name: 'All', cat: 'all' },
                             { name: 'Watches', cat: 'watches' },
+                            { name: 'Shoes & Footwear', cat: 'shoes' },
                             { name: 'Bags', cat: 'bags' },
                             { name: 'Sunglasses', cat: 'sunglasses' },
                             { name: 'Belts & Wallets', cat: 'belts-wallets' },

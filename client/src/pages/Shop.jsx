@@ -35,6 +35,15 @@ const isMockProduct = (p) => {
     return !isNaN(num) && num >= 1 && num <= 20;
 };
 
+const isClothingProduct = (p) => {
+    if (!p) return false;
+    const nonApparelCats = ['watches', 'shoes', 'footwear', 'sneakers', 'bags', 'sunglasses', 'belts-wallets', 'belts', 'wallets', 'hats-caps', 'caps', 'hats', 'jewelry', 'socks', 'accessories'];
+    const catLower = p.category ? p.category.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+    if (nonApparelCats.some(nac => nac.replace(/[^a-z0-9]/g, '') === catLower)) return false;
+    if (p.tags && p.tags.some(t => t.toLowerCase() === 'accessories')) return false;
+    return true;
+};
+
 const getInitialProducts = () => {
     try {
         const cached = localStorage.getItem(CACHE_KEY);
@@ -42,13 +51,13 @@ const getInitialProducts = () => {
             const { data } = JSON.parse(cached);
             if (Array.isArray(data)) {
                 const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-                return data.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
+                return data.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p) && isClothingProduct(p));
             }
         }
     } catch (e) {}
     const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
     const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-    return customProds.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
+    return customProds.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p) && isClothingProduct(p));
 };
 
 const Shop = () => {
@@ -122,7 +131,7 @@ const Shop = () => {
                 try {
                     const { data } = JSON.parse(cached);
                     if (Array.isArray(data)) {
-                        setProducts(data);
+                        setProducts(data.filter(isClothingProduct));
                     }
                 } catch(e) {}
             }
@@ -155,7 +164,7 @@ const Shop = () => {
             const customProds = JSON.parse(localStorage.getItem('stylora_custom_products') || '[]');
             const merged = [...customProds, ...rawData];
             const deletedIds = JSON.parse(localStorage.getItem('stylora_deleted_ids') || '[]');
-            const data = merged.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p));
+            const data = merged.filter(p => !deletedIds.includes(String(p._id)) && !isMockProduct(p) && isClothingProduct(p));
 
             // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
@@ -293,7 +302,6 @@ const Shop = () => {
         { name: 'T-Shirts', cat: 't-shirts' },
         { name: 'Shirts', cat: 'shirts' },
         { name: 'Pants', cat: 'pants' },
-        { name: 'Shoes', cat: 'shoes' },
         { name: 'Activewear', cat: 'activewear' },
         { name: 'Outerwear', cat: 'outerwear' },
         { name: 'Shorts', cat: 'shorts' }

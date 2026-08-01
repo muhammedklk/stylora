@@ -65,7 +65,6 @@ const SidebarDrawer = ({ isOpen, onClose }) => {
                             >
                                 <li><Link to="/shop?category=new-arrivals" onClick={onClose}>New Arrivals</Link></li>
                                 <li><Link to="/shop?category=clothing" onClick={onClose}>Clothing</Link></li>
-                                <li><Link to="/shop?category=shoes" onClick={onClose}>Shoes</Link></li>
                                 <li><Link to="/shop?category=activewear" onClick={onClose}>Activewear</Link></li>
                                 <li><Link to="/shop?category=outerwear" onClick={onClose}>Outerwear</Link></li>
                                 <li><Link to="/shop?category=shirts" onClick={onClose}>Shirts</Link></li>
@@ -86,6 +85,7 @@ const SidebarDrawer = ({ isOpen, onClose }) => {
                                 }}
                             >
                                 <li><Link to="/accessories?category=watches" onClick={onClose}>Watches</Link></li>
+                                <li><Link to="/accessories?category=shoes" onClick={onClose}>Shoes & Footwear</Link></li>
                                 <li><Link to="/accessories?category=bags" onClick={onClose}>Bags</Link></li>
                                 <li><Link to="/accessories?category=sunglasses" onClick={onClose}>Sunglasses</Link></li>
                                 <li><Link to="/accessories?category=belts-wallets" onClick={onClose}>Belts & Wallets</Link></li>

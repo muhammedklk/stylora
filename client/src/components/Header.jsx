@@ -56,7 +56,6 @@ const Header = ({ toggleSidebar }) => {
                             <li><Link to="/shop?category=t-shirts">T-Shirts</Link></li>
                             <li><Link to="/shop?category=shirts">Shirts</Link></li>
                             <li><Link to="/shop?category=pants">Pants & Jeans</Link></li>
-                            <li><Link to="/shop?category=shoes">Shoes</Link></li>
                             <li><Link to="/shop?category=activewear">Activewear</Link></li>
                             <li><Link to="/shop?category=outerwear">Outerwear</Link></li>
                         </ul>
@@ -64,7 +63,8 @@ const Header = ({ toggleSidebar }) => {
                     <li className="has-dropdown">
                         <Link to="/accessories">Accessories <span className="arrow-icon"></span></Link>
                         <ul className="dropdown" style={{ minWidth: '180px' }}>
-                            <li><Link to="/shop?category=watches">Watches</Link></li>
+                            <li><Link to="/accessories?category=watches">Watches</Link></li>
+                            <li><Link to="/accessories?category=shoes">Shoes & Footwear</Link></li>
                             <li><Link to="/accessories?category=bags">Bags & Backpacks</Link></li>
                             <li><Link to="/accessories?category=sunglasses">Sunglasses</Link></li>
                             <li><Link to="/accessories?category=belts-wallets">Belts & Wallets</Link></li>
