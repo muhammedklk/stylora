@@ -5,7 +5,14 @@ import { API_URL } from '../config';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        try {
+            const saved = localStorage.getItem('user');
+            return saved ? JSON.parse(saved) : null;
+        } catch (e) {
+            return null;
+        }
+    });
     const [token, setToken] = useState(localStorage.getItem('token') || '');
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         } else {
             delete axios.defaults.headers.common['Authorization'];
             setUser(null);
+            localStorage.removeItem('user');
             setLoading(false);
         }
     }, [token]);
@@ -39,6 +47,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const res = await axios.get(`${API_URL}/auth/profile`);
             setUser(res.data);
+            localStorage.setItem('user', JSON.stringify(res.data));
         } catch (err) {
             console.error('Error fetching profile', err);
             // Only logout if token is explicitly invalid/expired (401/403)
@@ -61,22 +70,27 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+        const userData = res.data.user || res.data;
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(userData));
         setToken(res.data.token);
-        setUser(res.data.user);
+        setUser(userData);
         return res.data;
     };
 
     const register = async (name, email, password) => {
         const res = await axios.post(`${API_URL}/auth/register`, { name, email, password });
+        const userData = res.data.user || res.data;
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(userData));
         setToken(res.data.token);
-        setUser(res.data.user);
+        setUser(userData);
         return res.data;
     };
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setToken('');
         setUser(null);
         setAddresses([]);

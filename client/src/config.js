@@ -3,16 +3,19 @@ const getApiUrl = () => {
         return import.meta.env.VITE_API_URL;
     }
     const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return 'http://localhost:5000/api';
-    }
+    const protocol = window.location.protocol || 'http:';
+    
     if (hostname.includes('vercel.app')) {
         return '/api';
     }
     if (hostname.includes('.onrender.com')) {
         return 'https://stylora-xzws.onrender.com/api';
     }
-    return '/api';
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:5000/api';
+    }
+    // Dynamic IP resolution for mobile devices on local network (e.g. 192.168.x.x, 10.x.x.x)
+    return `${protocol}//${hostname}:5000/api`;
 };
 
 export const API_URL = getApiUrl();

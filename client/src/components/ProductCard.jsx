@@ -84,7 +84,7 @@ const ProductCard = ({ product, isFeatured = false }) => {
                                 className="product-image" 
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/assets/find-section-img-1.png';
+                                    e.target.src = resolveImageUrl('assets/find-section-img-1.png');
                                 }}
                             />
                         </div>

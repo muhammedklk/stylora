@@ -8,6 +8,7 @@ import { API_URL } from '../config';
 const Account = () => {
     const { 
         user, 
+        loading,
         logout, 
         addresses, 
         addAddress, 
@@ -43,12 +44,12 @@ const Account = () => {
     const [ordersLoading, setOrdersLoading] = useState(true);
 
     useEffect(() => {
-        if (!user) {
+        if (!loading && !user) {
             navigate('/login');
-        } else {
+        } else if (user) {
             fetchUserOrders();
         }
-    }, [user]);
+    }, [user, loading]);
 
     const fetchUserOrders = async () => {
         setOrdersLoading(true);

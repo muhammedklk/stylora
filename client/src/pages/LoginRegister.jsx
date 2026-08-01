@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const LoginRegister = () => {
     const { login, register, user } = useAuth();
+    const { showToast } = useToast();
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(true);
@@ -11,6 +13,7 @@ const LoginRegister = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
+    const [submitting, setSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -22,17 +25,22 @@ const LoginRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg('');
+        setSubmitting(true);
         try {
             if (isLogin) {
                 await login(email, password);
-                alert('Login successful!');
+                showToast('Login successful!', 'success');
             } else {
                 await register(name, email, password);
-                alert('Registration successful!');
+                showToast('Registration successful! Welcome to STYLORA.', 'success');
             }
             navigate('/account');
         } catch (err) {
-            setErrorMsg(err.response?.data?.message || 'Authentication failed. Please check credentials.');
+            const msg = err.response?.data?.message || err.message || 'Authentication failed. Please check credentials.';
+            setErrorMsg(msg);
+            showToast(msg, 'error');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -153,8 +161,10 @@ const LoginRegister = () => {
                                 <button 
                                     type="submit" 
                                     className="checkout-btn mt-2"
+                                    disabled={submitting}
+                                    style={{ opacity: submitting ? 0.7 : 1, cursor: submitting ? 'not-allowed' : 'pointer' }}
                                 >
-                                    {isLogin ? 'LOGIN' : 'REGISTER'}
+                                    {submitting ? (isLogin ? 'LOGGING IN...' : 'REGISTERING...') : (isLogin ? 'LOGIN' : 'REGISTER')}
                                 </button>
                             </form>
                         </div>
