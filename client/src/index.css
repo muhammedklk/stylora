@@ -947,8 +947,8 @@ ul {
 /* Product Showcase Grid */
 .find-style-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px;
 }
 
 .style-item {
@@ -4386,7 +4386,7 @@ ul {
 
     /* Find Your Style */
     .find-style-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 20px;
     }
     
