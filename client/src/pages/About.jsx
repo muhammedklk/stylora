@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
-import { resolveImageUrl } from '../config';
+import { API_URL, resolveImageUrl } from '../config';
 
 const About = () => {
     const navigate = useNavigate();
@@ -49,19 +49,19 @@ const About = () => {
             name: "Heavyweight Organic Cotton",
             detail: "380 GSM combed cotton spun for structural drape and pill-free durability.",
             tag: "SUSTAINABLE FABRIC",
-            img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80"
+            img: resolveImageUrl("https://images.unsplash.com/photo-1523381210434-271e8be1f52b")
         },
         {
             name: "Spun Breathable Linen",
             detail: "Premium long-staple flax woven for lightweight airflow during warm summer days.",
             tag: "NATURAL WEAVE",
-            img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80"
+            img: resolveImageUrl("https://images.unsplash.com/photo-1596755094514-f87e34085b2c")
         },
         {
             name: "Tailored Wool Blend",
             detail: "Insulated wool composite offering refined outerwear warmth with cinematic drape.",
             tag: "LUXURY TEXTILE",
-            img: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80"
+            img: resolveImageUrl("https://images.unsplash.com/photo-1539533018447-63fcce2678e3")
         }
     ];
 
@@ -158,7 +158,7 @@ const About = () => {
 
                         <div style={{ position: 'relative', height: '260px', overflow: 'hidden', border: '1px solid #eaeaea' }}>
                             <img 
-                                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" 
+                                src={resolveImageUrl("https://images.unsplash.com/photo-1490481651871-ab68de25d43d")} 
                                 alt="Stylora Editorial Vision" 
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
