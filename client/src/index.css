@@ -2029,6 +2029,8 @@ ul {
     position: relative;
     z-index: 2;
     max-width: 700px;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .cpage-hero-eyebrow {
@@ -2039,8 +2041,6 @@ ul {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.65);
     margin-bottom: 16px;
-    border-left: 2px solid rgba(255,255,255,0.4);
-    padding-left: 12px;
 }
 
 .cpage-hero-title {
@@ -2057,6 +2057,7 @@ ul {
     line-height: 1.65;
     color: rgba(255, 255, 255, 0.75);
     max-width: 520px;
+    margin: 0 auto;
 }
 
 /* ── Body ───────────────────────────────────────── */
