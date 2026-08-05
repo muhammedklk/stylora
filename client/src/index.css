@@ -6029,46 +6029,99 @@ ul {
 
 
 /* ==========================================================================
-   Shop Filter Bar — Mobile Horizontal Swipe
-   Desktop: flex-wrap (normal), Mobile: single-row swipe strip
+   Shop Filter Bar — Filters Button + Mouse Drag + Mobile Swipe
    ========================================================================== */
 
-/* Desktop default — wrap allowed */
+/* ── Filters Button (desktop full, mobile icon-only) ── */
+.shop-filters-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: #0f0f0f;
+    color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transition: background 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.shop-filters-btn:hover {
+    background-color: #222222;
+    transform: translateY(-1px);
+}
+
+.shop-filters-badge {
+    background-color: #d4af37;
+    color: #000000;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* ── Filter Bar — Desktop (wrap) + mouse drag cursor ── */
 .shop-filter-bar {
     flex-wrap: wrap;
     overflow: visible;
+    cursor: grab;
 }
 
-/* Mobile — single-row horizontal scroll */
+.shop-filter-bar:active {
+    cursor: grabbing;
+}
+
+/* ── Hide scrollbar globally on filter bar ── */
+.shop-filter-bar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.shop-filter-bar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── Mobile ≤ 768px — Swipe strip + icon-only filter button ── */
 @media (max-width: 768px) {
+
+    /* Category bar → single-row horizontal swipe */
     .shop-filter-bar {
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
         overflow-y: visible !important;
         -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 4px;
+        padding-bottom: 2px;
     }
 
-    /* Hide scrollbar — Chrome/Safari */
-    .shop-filter-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Hide scrollbar — Firefox */
-    .shop-filter-bar {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    /* Each filter chip — don't shrink */
+    /* Don't shrink chips */
     .shop-filter-bar .cat-dropdown-wrapper {
         flex-shrink: 0 !important;
-        scroll-snap-align: start;
     }
 
-    /* Filter tab button — keep compact on mobile */
+    /* Keep button text white-space */
     .shop-filter-bar .shop-filter-tab {
         white-space: nowrap;
+    }
+
+    /* Filter button — icon only on mobile */
+    .shop-filters-btn {
+        padding: 11px 13px;
+        gap: 0;
+    }
+
+    .shop-filters-btn-text {
+        display: none;
     }
 }

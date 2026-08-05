@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
@@ -96,6 +96,36 @@ const Shop = () => {
     const [selectedSizes, setSelectedSizes] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
     const [inStockOnly, setInStockOnly] = useState(false);
+
+    // Mouse-drag scroll for filter bar
+    const filterBarRef = useRef(null);
+    const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
+
+    const onFilterBarMouseDown = useCallback((e) => {
+        const el = filterBarRef.current;
+        if (!el) return;
+        dragState.current = { isDown: true, startX: e.pageX - el.offsetLeft, scrollLeft: el.scrollLeft };
+        el.style.cursor = 'grabbing';
+        el.style.userSelect = 'none';
+    }, []);
+
+    const onFilterBarMouseLeaveOrUp = useCallback(() => {
+        const el = filterBarRef.current;
+        if (!el) return;
+        dragState.current.isDown = false;
+        el.style.cursor = 'grab';
+        el.style.removeProperty('user-select');
+    }, []);
+
+    const onFilterBarMouseMove = useCallback((e) => {
+        if (!dragState.current.isDown) return;
+        const el = filterBarRef.current;
+        if (!el) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - dragState.current.startX) * 1.2;
+        el.scrollLeft = dragState.current.scrollLeft - walk;
+    }, []);
 
     // Calculate active sidebar filter count
     const activeSidebarFilterCount = [
@@ -366,15 +396,15 @@ const Shop = () => {
                         transition: 'all 0.25s ease'
                     }}>
                         {/* Left Side: Scrollable Category Tabs with Custom Dropdowns */}
-                        <div className="shop-filter-bar" style={{ 
-                            flex: 1, 
-                            margin: 0,
-                            minWidth: 0,
-                            display: 'flex',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}>
+                        <div
+                            ref={filterBarRef}
+                            className="shop-filter-bar"
+                            style={{ flex: 1, margin: 0, minWidth: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '8px', cursor: 'grab' }}
+                            onMouseDown={onFilterBarMouseDown}
+                            onMouseLeave={onFilterBarMouseLeaveOrUp}
+                            onMouseUp={onFilterBarMouseLeaveOrUp}
+                            onMouseMove={onFilterBarMouseMove}
+                        >
                             {filterTabs.map(tab => {
                                 const count = !loading ? countForCategory(tab.cat) : null;
                                 const isEmpty = count !== null && count === 0;
@@ -562,47 +592,18 @@ const Shop = () => {
                             })}
                         </div>
 
-                        {/* Right Side: Amazon/Flipkart Style Filters Button */}
-                        <button 
+                        {/* Right Side: Filters Button — full on desktop, icon-only on mobile */}
+                        <button
                             type="button"
+                            className="shop-filters-btn"
                             onClick={() => setFilterDrawerOpen(true)}
-                            style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '12px 20px',
-                                backgroundColor: '#0f0f0f',
-                                color: '#fff',
-                                border: '1px solid #000',
-                                borderRadius: '4px',
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                letterSpacing: '0.08em',
-                                textTransform: 'uppercase',
-                                cursor: 'pointer',
-                                flexShrink: 0,
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
-                                transition: 'all 0.2s ease'
-                            }}
                         >
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                             </svg>
-                            <span>Filters</span>
+                            <span className="shop-filters-btn-text">Filters</span>
                             {activeSidebarFilterCount > 0 && (
-                                <span style={{
-                                    backgroundColor: '#d4af37',
-                                    color: '#000',
-                                    fontSize: '10px',
-                                    fontWeight: 800,
-                                    borderRadius: '50%',
-                                    width: '20px',
-                                    height: '20px',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    lineHeight: 1
-                                }}>
+                                <span className="shop-filters-badge">
                                     {activeSidebarFilterCount}
                                 </span>
                             )}
