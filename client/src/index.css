@@ -5563,4 +5563,512 @@ ul {
 }
 
 
+/* ==========================================================================
+   Our Story Page (About) — apage-* Design System
+   Matches the Contact page's sharp editorial aesthetic
+   ========================================================================== */
 
+.apage-root {
+    background-color: #ffffff;
+    color: #111111;
+}
+
+/* ── Stats Row ─────────────────────────────────── */
+.apage-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid #e8e8e8;
+    margin-bottom: 70px;
+}
+
+.apage-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 24px;
+    text-align: center;
+    border-right: 1px solid #e8e8e8;
+    transition: background 0.25s ease;
+}
+
+.apage-stat-card:last-child {
+    border-right: none;
+}
+
+.apage-stat-card:hover {
+    background: #fafafa;
+}
+
+.apage-stat-num {
+    font-size: clamp(30px, 3.5vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #111111;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.apage-stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #999999;
+}
+
+/* ── Section Wrapper ──────────────────────────── */
+.apage-section {
+    margin-bottom: 70px;
+}
+
+/* ── Vision Grid ──────────────────────────────── */
+.apage-vision-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    border: 1px solid #e8e8e8;
+    padding: 48px;
+}
+
+.apage-vision-heading {
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    color: #111111;
+    margin-bottom: 20px;
+}
+
+.apage-vision-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #555555;
+    margin-bottom: 24px;
+}
+
+.apage-blockquote {
+    border-left: 3px solid #c59b27;
+    padding-left: 18px;
+    font-style: italic;
+    font-size: 14px;
+    color: #333333;
+    line-height: 1.65;
+}
+
+.apage-vision-image {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+}
+
+.apage-vision-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apage-vision-image:hover img {
+    transform: scale(1.04);
+}
+
+.apage-vision-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+}
+
+/* ── Pillars Grid ──────────────────────────────── */
+.apage-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid #e8e8e8;
+}
+
+.apage-pillar-card {
+    padding: 32px 28px;
+    border-right: 1px solid #e8e8e8;
+    cursor: default;
+    transition: background 0.35s ease, color 0.35s ease;
+    position: relative;
+}
+
+.apage-pillar-card:last-child {
+    border-right: none;
+}
+
+.apage-pillar-card.active {
+    background: #111111;
+    color: #ffffff;
+}
+
+.apage-pillar-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #999999;
+    margin-bottom: 16px;
+    transition: color 0.35s ease;
+}
+
+.apage-pillar-card.active .apage-pillar-eyebrow {
+    color: #c59b27;
+}
+
+.apage-pillar-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: inherit;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.apage-pillar-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: inherit;
+    opacity: 0.7;
+    margin-bottom: 20px;
+    transition: opacity 0.35s ease;
+}
+
+.apage-pillar-card.active .apage-pillar-desc {
+    opacity: 0.85;
+}
+
+.apage-pillar-stat {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555555;
+    transition: color 0.35s ease;
+}
+
+.apage-pillar-card.active .apage-pillar-stat {
+    color: #c59b27;
+}
+
+/* ── Materials Grid ────────────────────────────── */
+.apage-materials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.apage-material-card {
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    transition: box-shadow 0.3s ease;
+}
+
+.apage-material-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+}
+
+.apage-material-img-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.apage-material-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apage-material-card:hover .apage-material-img-wrap img {
+    transform: scale(1.05);
+}
+
+.apage-material-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+}
+
+.apage-material-body {
+    padding: 24px;
+    flex: 1;
+}
+
+.apage-material-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #111111;
+    margin-bottom: 10px;
+}
+
+.apage-material-detail {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #666666;
+    margin: 0;
+}
+
+/* ── Milestones Grid ───────────────────────────── */
+.apage-milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.apage-milestone-card {
+    border: 1px solid #e8e8e8;
+    border-top: 3px solid #c59b27;
+    padding: 30px 28px;
+    background: #ffffff;
+    transition: box-shadow 0.3s ease;
+}
+
+.apage-milestone-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.apage-milestone-year {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #c59b27;
+    margin-bottom: 10px;
+}
+
+.apage-milestone-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #111111;
+    margin-bottom: 10px;
+}
+
+.apage-milestone-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #666666;
+    margin: 0;
+}
+
+/* ── CTA Dark Banner ───────────────────────────── */
+.apage-cta-banner {
+    background: #111111;
+    color: #ffffff;
+    padding: 52px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    flex-wrap: wrap;
+}
+
+.apage-cta-left {
+    flex: 1 1 480px;
+    max-width: 680px;
+}
+
+.apage-cta-eyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c59b27;
+    margin-bottom: 12px;
+}
+
+.apage-cta-heading {
+    font-size: clamp(22px, 2.8vw, 30px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.apage-cta-sub {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.apage-cta-right {
+    flex-shrink: 0;
+}
+
+.apage-cta-btn {
+    display: inline-block;
+    background: #ffffff;
+    color: #111111;
+    border: 1px solid #ffffff;
+    padding: 15px 36px;
+    font-family: var(--font-primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+}
+
+.apage-cta-btn:hover {
+    background: #c59b27;
+    border-color: #c59b27;
+    color: #ffffff;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 1100px) {
+    .apage-pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .apage-pillar-card:nth-child(2) {
+        border-right: none;
+    }
+    .apage-pillar-card:nth-child(3),
+    .apage-pillar-card:nth-child(4) {
+        border-top: 1px solid #e8e8e8;
+    }
+    .apage-pillar-card:nth-child(4) {
+        border-right: none;
+    }
+    .apage-vision-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+    .apage-vision-image {
+        height: 240px;
+    }
+}
+
+@media (max-width: 900px) {
+    .apage-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .apage-stat-card:nth-child(2) {
+        border-right: none;
+    }
+    .apage-stat-card:nth-child(3),
+    .apage-stat-card:nth-child(4) {
+        border-top: 1px solid #e8e8e8;
+    }
+    .apage-stat-card:nth-child(4) {
+        border-right: none;
+    }
+    .apage-materials-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .apage-milestones-grid {
+        grid-template-columns: 1fr;
+    }
+    .apage-vision-grid {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 680px) {
+    .apage-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .apage-pillars-grid {
+        grid-template-columns: 1fr;
+    }
+    .apage-pillar-card {
+        border-right: none;
+        border-bottom: 1px solid #e8e8e8;
+    }
+    .apage-pillar-card:last-child {
+        border-bottom: none;
+    }
+    .apage-materials-grid {
+        grid-template-columns: 1fr;
+    }
+    .apage-cta-banner {
+        padding: 36px 28px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .apage-cta-btn {
+        width: 100%;
+        text-align: center;
+    }
+    .apage-vision-grid {
+        padding: 24px;
+    }
+}
+
+
+
+/* ==========================================================================
+   Shop Filter Bar — Mobile Horizontal Swipe
+   Desktop: flex-wrap (normal), Mobile: single-row swipe strip
+   ========================================================================== */
+
+/* Desktop default — wrap allowed */
+.shop-filter-bar {
+    flex-wrap: wrap;
+    overflow: visible;
+}
+
+/* Mobile — single-row horizontal scroll */
+@media (max-width: 768px) {
+    .shop-filter-bar {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 4px;
+    }
+
+    /* Hide scrollbar — Chrome/Safari */
+    .shop-filter-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar — Firefox */
+    .shop-filter-bar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    /* Each filter chip — don't shrink */
+    .shop-filter-bar .cat-dropdown-wrapper {
+        flex-shrink: 0 !important;
+        scroll-snap-align: start;
+    }
+
+    /* Filter tab button — keep compact on mobile */
+    .shop-filter-bar .shop-filter-tab {
+        white-space: nowrap;
+    }
+}

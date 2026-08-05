@@ -368,13 +368,12 @@ const Shop = () => {
                         {/* Left Side: Scrollable Category Tabs with Custom Dropdowns */}
                         <div className="shop-filter-bar" style={{ 
                             flex: 1, 
-                            margin: 0, 
-                            overflow: 'visible',
+                            margin: 0,
+                            minWidth: 0,
                             display: 'flex',
                             justifyContent: 'flex-start',
                             alignItems: 'center',
-                            gap: '8px',
-                            flexWrap: 'wrap'
+                            gap: '8px'
                         }}>
                             {filterTabs.map(tab => {
                                 const count = !loading ? countForCategory(tab.cat) : null;

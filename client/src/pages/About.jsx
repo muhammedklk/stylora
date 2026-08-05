@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
-import { API_URL, resolveImageUrl } from '../config';
+import { resolveImageUrl } from '../config';
 
 const About = () => {
     const navigate = useNavigate();
     const { settings } = useSettings();
-    const [activePillar, setActivePillar] = useState(0);
+    const [activePillar, setActivePillar] = useState(null);
 
     const getHeroBg = (img) => {
         if (!img) return undefined;
@@ -15,338 +15,225 @@ const About = () => {
 
     const pillars = [
         {
-            num: "01",
-            title: "Minimalist Aesthetics",
-            subtitle: "Purity of form",
-            desc: "Clean silhouettes, neutral earth tones, and uncompromised structural cuts.",
-            stat: "100% Timeless"
+            num: '01',
+            title: 'Minimalist Aesthetics',
+            subtitle: 'Purity of Form',
+            desc: 'Clean silhouettes, neutral earth tones, and uncompromised structural cuts that transcend seasonal trends.',
+            stat: '100% Timeless',
         },
         {
-            num: "02",
-            title: "Master Craftsmanship",
-            subtitle: "Precision engineering",
-            desc: "Every stitch and pocket placement undergoes multi-phase quality audits.",
-            stat: "40+ Workshops"
+            num: '02',
+            title: 'Master Craftsmanship',
+            subtitle: 'Precision Engineering',
+            desc: 'Every stitch and pocket placement undergoes multi-phase quality audits by certified artisan workshops.',
+            stat: '40+ Workshops',
         },
         {
-            num: "03",
-            title: "Architectural Utility",
-            subtitle: "Apparel in motion",
-            desc: "Tailored trousers & hoodies featuring hidden storage and stretch weaves.",
-            stat: "360° Comfort"
+            num: '03',
+            title: 'Architectural Utility',
+            subtitle: 'Apparel in Motion',
+            desc: 'Tailored trousers and hoodies featuring hidden storage systems and four-way stretch weaves.',
+            stat: '360° Comfort',
         },
         {
-            num: "04",
-            title: "Ethical Transparency",
-            subtitle: "Sustainable future",
-            desc: "Organic cotton & zero-plastic packaging with radical supply chain transparency.",
-            stat: "Zero Waste"
-        }
+            num: '04',
+            title: 'Ethical Transparency',
+            subtitle: 'Sustainable Future',
+            desc: 'Organic cotton and zero-plastic packaging with radical supply chain transparency for conscious consumers.',
+            stat: 'Zero Waste',
+        },
     ];
 
     const materials = [
         {
-            name: "Heavyweight Organic Cotton",
-            detail: "380 GSM combed cotton spun for structural drape and pill-free durability.",
-            tag: "SUSTAINABLE FABRIC",
-            img: resolveImageUrl("https://images.unsplash.com/photo-1523381210434-271e8be1f52b")
+            name: 'Heavyweight Organic Cotton',
+            detail: '380 GSM combed cotton spun for structural drape and pill-free durability that improves with each wash.',
+            tag: 'SUSTAINABLE FABRIC',
+            img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80',
         },
         {
-            name: "Spun Breathable Linen",
-            detail: "Premium long-staple flax woven for lightweight airflow during warm summer days.",
-            tag: "NATURAL WEAVE",
-            img: resolveImageUrl("https://images.unsplash.com/photo-1596755094514-f87e34085b2c")
+            name: 'Spun Breathable Linen',
+            detail: 'Premium long-staple flax woven for lightweight airflow during warm summer days — naturally wrinkle-resistant.',
+            tag: 'NATURAL WEAVE',
+            img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80',
         },
         {
-            name: "Tailored Wool Blend",
-            detail: "Insulated wool composite offering refined outerwear warmth with cinematic drape.",
-            tag: "LUXURY TEXTILE",
-            img: resolveImageUrl("https://images.unsplash.com/photo-1539533018447-63fcce2678e3")
-        }
+            name: 'Tailored Wool Blend',
+            detail: 'Insulated wool composite offering refined outerwear warmth with cinematic drape and structured shoulders.',
+            tag: 'LUXURY TEXTILE',
+            img: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80',
+        },
     ];
 
     const milestones = [
         {
-            year: "2024",
-            title: "Conception & Spark",
-            desc: "STYLORA was founded to eliminate luxury markups while preserving architectural purity."
+            year: '2024',
+            title: 'Conception & Spark',
+            desc: 'STYLORA was founded to eliminate luxury markups while preserving absolute architectural purity in every garment.',
         },
         {
-            year: "2025",
-            title: "Sustainable Pipeline",
-            desc: "Transitioned entire production line to certified organic cotton and zero-plastic packaging."
+            year: '2025',
+            title: 'Sustainable Pipeline',
+            desc: 'Transitioned entire production to certified organic cotton and zero-plastic packaging across all product lines.',
         },
         {
-            year: "2026",
-            title: "Global Flagships",
-            desc: "Expanded into digital storefronts and physical showrooms serving customers in 40+ countries."
-        }
+            year: '2026',
+            title: 'Global Flagships',
+            desc: 'Expanded into digital storefronts and physical showrooms serving customers across 40+ countries worldwide.',
+        },
     ];
 
     return (
-        <div className="about-page-wrapper light-theme" style={{ backgroundColor: '#faf9f6', color: '#111' }}>
-            {/* 1. HERO BANNER - Exact Contact Page Alignment */}
-            <section className="cpage-hero" style={{ backgroundImage: getHeroBg(settings?.aboutHeroImage) }}>
-                <div className="cpage-hero-overlay"></div>
+        <div className="apage-root">
+
+            {/* ── Hero Banner ─────────────────────────────── */}
+            <section
+                className="cpage-hero"
+                style={settings?.aboutHeroImage ? { backgroundImage: getHeroBg(settings.aboutHeroImage) } : {}}
+            >
+                <div className="cpage-hero-overlay" />
                 <div className="cpage-hero-inner">
-                    <span className="cpage-hero-eyebrow">THE STYLORA NARRATIVE</span>
-                    <h1 className="cpage-hero-title">Crafted for Motion.<br />Born to Endure.</h1>
+                    <span className="cpage-hero-eyebrow">The Stylora Narrative</span>
+                    <h1 className="cpage-hero-title">
+                        {settings?.aboutHeading || 'Crafted for Motion.\nBorn to Endure.'}
+                    </h1>
                     <p className="cpage-hero-sub">
-                        Redefining modern menswear through understated luxury, ethical craftsmanship, and relentless attention to architectural detail.
+                        {settings?.aboutSubtitle ||
+                            'Redefining modern menswear through understated luxury, ethical craftsmanship, and relentless attention to architectural detail.'}
                     </p>
                 </div>
             </section>
 
-            {/* MAIN CONTENT BODY (Aligned to exact 60px margin grid) */}
-            <div className="cpage-body" style={{ paddingTop: '50px', paddingBottom: '70px' }}>
-                
-                {/* 2. STATS GRID */}
-                <div className="stats-grid" style={{ marginBottom: '50px' }}>
-                    <div className="stat-card" style={{ padding: '24px 18px' }}>
-                        <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>100%</span>
-                        <span className="stat-label" style={{ fontSize: '11px' }}>Organic & Recycled</span>
-                    </div>
-                    <div className="stat-card" style={{ padding: '24px 18px' }}>
-                        <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>40+</span>
-                        <span className="stat-label" style={{ fontSize: '11px' }}>Artisan Workshops</span>
-                    </div>
-                    <div className="stat-card" style={{ padding: '24px 18px' }}>
-                        <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>15K+</span>
-                        <span className="stat-label" style={{ fontSize: '11px' }}>Global Customers</span>
-                    </div>
-                    <div className="stat-card" style={{ padding: '24px 18px' }}>
-                        <span className="stat-number" style={{ fontSize: '36px', marginBottom: '4px' }}>0%</span>
-                        <span className="stat-label" style={{ fontSize: '11px' }}>Quality Compromise</span>
-                    </div>
+            {/* ── Main Body ──────────────────────────────── */}
+            <div className="cpage-body">
+
+                {/* ── Stats Row ─────────────────────────── */}
+                <div className="apage-stats-row">
+                    {[
+                        { num: '100%', label: 'Organic & Recycled' },
+                        { num: '40+',  label: 'Artisan Workshops' },
+                        { num: '15K+', label: 'Global Customers' },
+                        { num: '0%',   label: 'Quality Compromise' },
+                    ].map((s) => (
+                        <div key={s.label} className="apage-stat-card">
+                            <span className="apage-stat-num">{s.num}</span>
+                            <span className="apage-stat-label">{s.label}</span>
+                        </div>
+                    ))}
                 </div>
 
-                {/* 3. [ THE VISION ] - Perfectly Aligned Side-by-Side Grid */}
-                <section style={{ marginBottom: '60px' }}>
-                    <div className="cpage-strip" style={{ marginBottom: '24px' }}>
-                        <span className="cpage-strip-label">THE VISION</span>
+                {/* ── The Vision ────────────────────────── */}
+                <section className="apage-section">
+                    <div className="cpage-strip">
+                        <span className="cpage-strip-label">The Vision</span>
                         <div className="cpage-strip-line" />
                     </div>
-                    
-                    <div style={{
-                        background: '#ffffff',
-                        border: '1px solid #eaeaea',
-                        padding: '40px',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                        gap: '40px',
-                        alignItems: 'center',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
-                    }}>
-                        <div>
-                            <h2 style={{ fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', marginBottom: '16px', color: '#111', lineHeight: '1.25' }}>
+
+                    <div className="apage-vision-grid">
+                        <div className="apage-vision-text">
+                            <h2 className="apage-vision-heading">
                                 {settings?.aboutTitle || 'Free-spirited fashion for the modern individual.'}
                             </h2>
-                            <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#555', marginBottom: '20px' }}>
-                                {settings?.aboutContent || 'STYLORA was born from a desire to eliminate the traditional markups of luxury fashion while maintaining absolute architectural purity in every garment.'}
+                            <p className="apage-vision-body">
+                                {settings?.aboutContent ||
+                                    'STYLORA was born from a desire to eliminate the traditional markups of luxury fashion while maintaining absolute architectural purity in every garment. We believe premium clothing should feel empowering, not exclusive.'}
                             </p>
-                            <div style={{
-                                paddingLeft: '18px',
-                                borderLeft: '3px solid #c59b27',
-                                fontStyle: 'italic',
-                                fontSize: '14px',
-                                color: '#333',
-                                lineHeight: '1.6'
-                            }}>
+                            <blockquote className="apage-blockquote">
                                 "High fashion shouldn't feel cold or exclusive. It should feel empowering, relatable, and built for real life."
-                            </div>
+                            </blockquote>
                         </div>
 
-                        <div style={{ position: 'relative', height: '260px', overflow: 'hidden', border: '1px solid #eaeaea' }}>
-                            <img 
-                                src={resolveImageUrl("https://images.unsplash.com/photo-1490481651871-ab68de25d43d")} 
-                                alt="Stylora Editorial Vision" 
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        <div className="apage-vision-image">
+                            <img
+                                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80"
+                                alt="Stylora Editorial Vision"
                             />
-                            <div style={{
-                                position: 'absolute',
-                                bottom: '12px',
-                                right: '12px',
-                                background: 'rgba(0,0,0,0.85)',
-                                color: '#fff',
-                                padding: '6px 12px',
-                                fontSize: '10px',
-                                letterSpacing: '0.12em',
-                                textTransform: 'uppercase'
-                            }}>
-                                AW 2026 EDITION
-                            </div>
+                            <div className="apage-vision-badge">AW 2026 EDITION</div>
                         </div>
                     </div>
                 </section>
 
-                {/* 4. BRAND PHILOSOPHY PILLARS */}
-                <section style={{ marginBottom: '60px' }}>
-                    <div className="cpage-strip" style={{ marginBottom: '24px' }}>
-                        <span className="cpage-strip-label">BRAND PHILOSOPHY</span>
+                {/* ── Brand Philosophy Pillars ───────────── */}
+                <section className="apage-section">
+                    <div className="cpage-strip">
+                        <span className="cpage-strip-label">Brand Philosophy</span>
                         <div className="cpage-strip-line" />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
+                    <div className="apage-pillars-grid">
                         {pillars.map((pillar, idx) => (
-                            <div 
-                                key={pillar.num} 
-                                className="pillar-card-item"
+                            <div
+                                key={pillar.num}
+                                className={`apage-pillar-card ${activePillar === idx ? 'active' : ''}`}
                                 onMouseEnter={() => setActivePillar(idx)}
-                                style={{
-                                    background: activePillar === idx ? '#111111' : '#ffffff',
-                                    color: activePillar === idx ? '#ffffff' : '#111111',
-                                    padding: '30px 24px',
-                                    border: '1px solid #eaeaea',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                }}
+                                onMouseLeave={() => setActivePillar(null)}
                             >
-                                <div style={{
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.15em',
-                                    color: activePillar === idx ? '#c59b27' : '#999999',
-                                    marginBottom: '14px',
-                                    transition: 'color 0.4s ease'
-                                }}>
-                                    {pillar.num} / {pillar.subtitle.toUpperCase()}
+                                <div className="apage-pillar-eyebrow">
+                                    {pillar.num} &nbsp;/&nbsp; {pillar.subtitle.toUpperCase()}
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px' }}>{pillar.title}</h3>
-                                <p style={{ fontSize: '13px', lineHeight: '1.6', opacity: activePillar === idx ? 0.9 : 0.75, marginBottom: '18px', transition: 'opacity 0.4s ease' }}>
-                                    {pillar.desc}
-                                </p>
-                                <span style={{
-                                    fontSize: '10px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.1em',
-                                    textTransform: 'uppercase',
-                                    color: activePillar === idx ? '#c59b27' : '#555555',
-                                    transition: 'color 0.4s ease'
-                                }}>
-                                    {pillar.stat}
-                                </span>
+                                <h3 className="apage-pillar-title">{pillar.title}</h3>
+                                <p className="apage-pillar-desc">{pillar.desc}</p>
+                                <span className="apage-pillar-stat">{pillar.stat}</span>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* 5. [ TEXTILE EXCELLENCE ] */}
-                <section style={{ marginBottom: '60px' }}>
-                    <div className="cpage-strip" style={{ marginBottom: '24px' }}>
-                        <span className="cpage-strip-label">TEXTILE EXCELLENCE</span>
+                {/* ── Textile Excellence ─────────────────── */}
+                <section className="apage-section">
+                    <div className="cpage-strip">
+                        <span className="cpage-strip-label">Textile Excellence</span>
                         <div className="cpage-strip-line" />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-                        {materials.map((item, index) => (
-                            <div key={index} className="material-card" style={{
-                                background: '#ffffff',
-                                border: '1px solid #eaeaea',
-                                overflow: 'hidden',
-                                display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <div style={{ height: '180px', overflow: 'hidden', position: 'relative' }}>
-                                    <img 
-                                        src={item.img} 
-                                        alt={item.name} 
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                    />
-                                    <span style={{
-                                        position: 'absolute',
-                                        top: '12px',
-                                        left: '12px',
-                                        background: 'rgba(0,0,0,0.85)',
-                                        color: '#fff',
-                                        fontSize: '9px',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.12em',
-                                        padding: '4px 10px'
-                                    }}>
-                                        {item.tag}
-                                    </span>
+                    <div className="apage-materials-grid">
+                        {materials.map((item) => (
+                            <div key={item.name} className="apage-material-card">
+                                <div className="apage-material-img-wrap">
+                                    <img src={item.img} alt={item.name} />
+                                    <span className="apage-material-tag">{item.tag}</span>
                                 </div>
-                                <div style={{ padding: '24px' }}>
-                                    <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '8px' }}>{item.name}</h3>
-                                    <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6', margin: 0 }}>{item.detail}</p>
+                                <div className="apage-material-body">
+                                    <h3 className="apage-material-name">{item.name}</h3>
+                                    <p className="apage-material-detail">{item.detail}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* 6. [ EVOLUTION ] */}
-                <section style={{ marginBottom: '60px' }}>
-                    <div className="cpage-strip" style={{ marginBottom: '24px' }}>
-                        <span className="cpage-strip-label">EVOLUTION</span>
+                {/* ── Evolution / Timeline ───────────────── */}
+                <section className="apage-section">
+                    <div className="cpage-strip">
+                        <span className="cpage-strip-label">Evolution</span>
                         <div className="cpage-strip-line" />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
+                    <div className="apage-milestones-grid">
                         {milestones.map((ms, idx) => (
-                            <div key={idx} className="milestone-card-item" style={{
-                                background: '#ffffff',
-                                border: '1px solid #eaeaea',
-                                padding: '28px',
-                                borderTop: '3px solid #c59b27'
-                            }}>
-                                <div style={{ color: '#c59b27', fontSize: '22px', fontWeight: 800, marginBottom: '8px' }}>
-                                    {ms.year}
-                                </div>
-                                <h4 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '8px', color: '#111' }}>{ms.title}</h4>
-                                <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6', margin: 0 }}>{ms.desc}</p>
+                            <div key={idx} className="apage-milestone-card">
+                                <div className="apage-milestone-year">{ms.year}</div>
+                                <h4 className="apage-milestone-title">{ms.title}</h4>
+                                <p className="apage-milestone-desc">{ms.desc}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* 7. [ ARCHITECTURAL UTILITY ] */}
-                <section style={{
-                    background: '#111111',
-                    color: '#ffffff',
-                    padding: '40px 40px',
-                    border: '1px solid #222222',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        justify: 'space-between',
-                        alignItems: 'center',
-                        gap: '24px'
-                    }}>
-                        <div style={{ flex: '1 1 500px', maxWidth: '750px' }}>
-                            <span style={{ color: '#c59b27', fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
-                                ARCHITECTURAL UTILITY
-                            </span>
-                            <h2 style={{ fontSize: '26px', fontWeight: 600, color: '#ffffff', margin: '0 0 10px 0', letterSpacing: '-0.01em' }}>
-                                Crafted for life in motion.
-                            </h2>
-                            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.75)', margin: 0, lineHeight: '1.6' }}>
-                                From essential heavyweight hoodies to structured smart trousers, every piece undergoes multi-phase stress testing for fit, comfort, and longevity.
-                            </p>
-                        </div>
-
-                        <div>
-                            <button 
-                                className="about-cta-btn"
-                                onClick={() => navigate('/shop')}
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    color: '#111111',
-                                    border: '1px solid #ffffff',
-                                    padding: '14px 32px',
-                                    fontSize: '12px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.12em',
-                                    textTransform: 'uppercase',
-                                    cursor: 'pointer',
-                                    whiteSpace: 'nowrap'
-                                }}
-                            >
-                                EXPLORE COLLECTION →
-                            </button>
-                        </div>
+                {/* ── CTA Dark Banner ────────────────────── */}
+                <section className="apage-cta-banner">
+                    <div className="apage-cta-left">
+                        <span className="apage-cta-eyebrow">ARCHITECTURAL UTILITY</span>
+                        <h2 className="apage-cta-heading">Crafted for life in motion.</h2>
+                        <p className="apage-cta-sub">
+                            From essential heavyweight hoodies to structured smart trousers, every piece undergoes
+                            multi-phase stress testing for fit, comfort, and longevity.
+                        </p>
+                    </div>
+                    <div className="apage-cta-right">
+                        <button className="apage-cta-btn" onClick={() => navigate('/shop')}>
+                            EXPLORE COLLECTION →
+                        </button>
                     </div>
                 </section>
 
